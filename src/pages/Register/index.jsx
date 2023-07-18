@@ -1,0 +1,136 @@
+import { useState } from "react"
+import { Link } from "react-router-dom"
+import { useApi } from '../../hooks/useApi'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
+const swalAlert = withReactContent(Swal)
+
+export default function Register() {
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [passwordConfirm, setPasswordConfirm] = useState('')
+    const api = useApi()
+
+    const handleRegister = async (e) => {
+        e.preventDefault()
+        if (email && password && passwordConfirm) {
+            if (password === passwordConfirm) {
+                const user = {
+                    name,
+                    email,
+                    password
+                }
+
+                const response = await api.register(user)
+                if (response.user) {
+                    swalAlert.fire({
+                        icon: 'success',
+                        title: 'Cadastro criado com sucesso!',
+                        showConfirmButton: true,
+                        timer: 1000
+                    })
+
+                    clearFields()
+                } else {
+                    swalAlert.fire({
+                        icon: 'error',
+                        title: 'Não foi possível realizar seu cadastro.',
+                        showConfirmButton: true,
+                        timer: 1000
+                    })
+                }
+            } else {
+                swalAlert.fire({
+                    icon: 'error',
+                    title: 'Senhas não conferem.',
+                    showConfirmButton: true,
+                    timer: 1000
+                })
+            }
+            
+        } else {
+            swalAlert.fire({
+                icon: 'error',
+                title: 'Preencha todos os campos!',
+                showConfirmButton: true,
+                timer: 1000
+            })
+        }
+    }
+
+    const clearFields = () => {
+        setName('')
+        setEmail('')
+        setPassword('')
+        setPasswordConfirm('')
+    }
+
+    return (
+        <div className="container">
+            <div className="container-login">
+                <div className="wrap-login">
+                    <form className="login-form" onSubmit={handleRegister}>
+                        <span className="login-form-title">Cadastre-se</span>
+                        <div className="wrap-input">
+                            <input
+                                className={name !== '' ? 'has-val input' : 'input'}
+                                type="text"
+                                name="name"
+                                id="name"
+                                value={name}
+                                onChange={e => setName(e.target.value)}
+                            />
+                            <span className="focus-input" data-placeholder="Nome"></span>
+                        </div>
+                        <div className="wrap-input">
+                            <input
+                                className={email !== '' ? 'has-val input' : 'input'}
+                                type="email"
+                                name="email"
+                                id="email"
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
+                            />
+                            <span className="focus-input" data-placeholder="E-mail"></span>
+                        </div>
+                        <div className="wrap-input">
+                            <input
+                                className={password !== '' ? 'has-val input' : 'input'}
+                                type="password"
+                                name="password"
+                                id="password"
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                            />
+                            <span className="focus-input" data-placeholder="Senha"></span>
+                        </div>
+
+                        <div className="wrap-input">
+                            <input
+                                className={passwordConfirm !== '' ? 'has-val input' : 'input'}
+                                type="password"
+                                name="passwordConfirm"
+                                id="passwordConfirm"
+                                value={passwordConfirm}
+                                onChange={e => setPasswordConfirm(e.target.value)}
+                            />
+                            <span className="focus-input" data-placeholder="Confirmar senha"></span>
+                        </div>
+
+                        <div className="container-login-form-btn">
+                            <button className="login-form-btn">Cadastrar</button>
+                        </div>
+
+                        <div className="text-center">
+                            <span className="txt1">Já possui conta?</span>
+
+                            <Link to='/' className="txt2">Login.</Link>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    )
+}
