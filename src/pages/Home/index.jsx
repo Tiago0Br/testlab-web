@@ -5,9 +5,11 @@ export default function Home() {
     const auth = useContext(AuthContext)
 
     return (
-        <div>
-            <h2>Em progresso...</h2>
-            <p>Seja bem-vindo, {auth.user.name}!</p>
+        <div className='container'>
+            <div className='sub-container'>
+                <p className='text'>Seja bem-vindo, {auth.user.name}!</p>
+                <p className='text'>Tela em construção...</p>
+            </div>
         </div>
     )
 }

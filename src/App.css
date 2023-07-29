@@ -6,5 +6,28 @@
 
 .container {
     width: 100%;
+    height: 100%;
     margin: 0 auto;
+    background-color: #111;
+}
+
+.form-container {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.sub-container {
+    width: 100%;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.text {
+    color: azure;
 }

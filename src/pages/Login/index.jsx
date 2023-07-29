@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { AuthContext } from '../../contexts/Auth/AuthContext'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import Loading from '../../components/Loading'
 
 const swalAlert = withReactContent(Swal)
 
@@ -13,19 +14,15 @@ export default function Login() {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const handleLogin = async (e) => {
         e.preventDefault()
         if (email && password) {
+            setLoading(true)
             const { isLogged, error } = await auth.signIn(email, password)
-            if (isLogged) {
-                swalAlert.fire({
-                    icon: 'success',
-                    title: `Seja bem-vindo, ${auth.user.name}`,
-                    showConfirmButton: true,
-                    timer: 1000
-                })
-            } else {
+            setLoading(false)
+            if (!isLogged) {
                 swalAlert.fire({
                     icon: 'error',
                     title: error.response.data.error,
@@ -45,13 +42,15 @@ export default function Login() {
 
     return (
         <div className="container">
-            <div className="container-login">
+            { loading && <Loading /> }
+
+            <div className="form-container">
                 <div className="wrap-login">
                     <form className="login-form" onSubmit={handleLogin}>
                         <span className="login-form-title">
                             <img src={logo} alt="Logo do TestLab" />
                         </span>
-                        <span className="login-form-title">Bora testar!</span>
+                        <span className="login-form-title text">Bora testar!</span>
                         <div className="wrap-input">
                             <input
                                 className={email !== '' ? 'has-val input' : 'input'}

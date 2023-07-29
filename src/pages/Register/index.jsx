@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { useApi } from '../../hooks/useApi'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import Loading from "../../components/Loading"
 
 const swalAlert = withReactContent(Swal)
 
@@ -11,6 +12,7 @@ export default function Register() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [passwordConfirm, setPasswordConfirm] = useState('')
+    const [loading, setLoading] = useState(false)
     const api = useApi()
 
     const handleRegister = async (e) => {
@@ -23,7 +25,10 @@ export default function Register() {
                     password
                 }
 
+                setLoading(true)
                 const response = await api.register(user)
+                setLoading(false)
+
                 if (response.user) {
                     swalAlert.fire({
                         icon: 'success',
@@ -69,10 +74,11 @@ export default function Register() {
 
     return (
         <div className="container">
-            <div className="container-login">
+            { loading && <Loading /> }
+            <div className="form-container">
                 <div className="wrap-login">
                     <form className="login-form" onSubmit={handleRegister}>
-                        <span className="login-form-title">Cadastre-se</span>
+                        <span className="login-form-title text">Cadastre-se</span>
                         <div className="wrap-input">
                             <input
                                 className={name !== '' ? 'has-val input' : 'input'}
@@ -120,7 +126,7 @@ export default function Register() {
                         </div>
 
                         <div className="container-login-form-btn">
-                            <button className="login-form-btn">Cadastrar</button>
+                            <button className="login-form-btn text">Cadastrar</button>
                         </div>
 
                         <div className="text-center">
