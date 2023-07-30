@@ -26,10 +26,10 @@ export default function Register() {
                 }
 
                 setLoading(true)
-                const response = await api.register(user)
+                const res = await api.register(user)
                 setLoading(false)
 
-                if (response.user) {
+                if (res.user) {
                     swalAlert.fire({
                         icon: 'success',
                         title: 'Cadastro criado com sucesso!',
@@ -39,9 +39,12 @@ export default function Register() {
 
                     clearFields()
                 } else {
+                    const errorMessage = res.response.data.error === 'O campo "email" não pode ser repetido.' ?
+                        'Usuário já cadastrado!' :
+                        'Não foi possível realizar seu cadastro!'
                     swalAlert.fire({
                         icon: 'error',
-                        title: 'Não foi possível realizar seu cadastro.',
+                        title: errorMessage,
                         showConfirmButton: true,
                         timer: 1000
                     })
@@ -132,7 +135,7 @@ export default function Register() {
                         <div className="text-center">
                             <span className="txt1">Já possui conta?</span>
 
-                            <Link to='/' className="txt2">Login.</Link>
+                            <Link to='/login' className="txt2">Login.</Link>
                         </div>
                     </form>
                 </div>

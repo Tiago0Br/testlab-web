@@ -1,15 +1,29 @@
-import { useContext } from "react"
-import { AuthContext } from "../../contexts/Auth/AuthContext"
+import Dropdown from '../../components/Dropdown'
+import Navbar from '../../components/Navbar'
+
+const options = [
+    {
+        id: 1,
+        name: 'Saúde',
+        selected: true
+    },
+    {
+        id: 2,
+        name: 'Cidadão',
+        selected: true
+    },
+    {
+        id: 3,
+        name: 'Educação',
+        selected: true
+    }
+]
 
 export default function Home() {
-    const auth = useContext(AuthContext)
-
     return (
-        <div className='container'>
-            <div className='sub-container'>
-                <p className='text'>Seja bem-vindo, {auth.user.name}!</p>
-                <p className='text'>Tela em construção...</p>
-            </div>
+        <div>
+            <Navbar />
+            <Dropdown options={options} />
         </div>
     )
 }

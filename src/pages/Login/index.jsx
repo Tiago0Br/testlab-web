@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import logo from '../../assets/logo.png'
 import './styles.css'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../contexts/Auth/AuthContext'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -15,6 +15,7 @@ export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
 
     const handleLogin = async (e) => {
         e.preventDefault()
@@ -22,7 +23,10 @@ export default function Login() {
             setLoading(true)
             const { isLogged, error } = await auth.signIn(email, password)
             setLoading(false)
-            if (!isLogged) {
+            if (isLogged) {
+                navigate('/')
+            }
+            else {
                 swalAlert.fire({
                     icon: 'error',
                     title: error.response.data.error,

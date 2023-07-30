@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { AuthContext } from "./AuthContext"
 import { useApi } from "../../hooks/useApi"
 
@@ -6,12 +6,23 @@ import { useApi } from "../../hooks/useApi"
 export const AuthProvider = ({ children }) => {
     const [ user, setUser ] = useState(null)
     const api = useApi()
+    
+    useEffect(() => {
+        const verifyToken = () => {
+            const storageToken = localStorage.getItem('authToken')
+            const storageUser = localStorage.getItem('user')
+            if (storageToken && storageUser) {
+                setUser(JSON.parse(storageUser))
+            }
+        }
+        verifyToken()
+    }, [])
 
     const signIn = async (email, password) => {
         const response = await api.signIn(email, password)
         if (response.user && response.token) {
             setUser(response.user)
-            setToken(response.token)
+            storageData(response.user, response.token)
             return {
                 isLogged: true
             }
@@ -23,10 +34,12 @@ export const AuthProvider = ({ children }) => {
     }
     const signOut = () => {
         setUser(null)
+        storageData('', '')
     }
 
-    const setToken = (token) => {
-        localStorage.setItem('token', token)
+    const storageData = (user, token) => {
+        localStorage.setItem('user', JSON.stringify(user))
+        localStorage.setItem('authToken', token)
     }
 
     return (
