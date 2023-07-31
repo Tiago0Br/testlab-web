@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
 export const Img = styled.img`
     width: 50px;
@@ -26,7 +27,7 @@ export const Item = styled.li`
     position: relative;
 `
 
-export const ItemText = styled.a`
+export const ItemText = styled(Link)`
     text-decoration: none;
     font-size: 1.3rem;
     font-weight: 600;

@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react'
 import { AuthContext } from '../../contexts/Auth/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import logo from '../../assets/transparentLogo.png'
 import { Nav, NavbarList, Img, Item, ItemText } from './styles'
 
@@ -25,15 +25,15 @@ export default function Navbar({ activeItem='home' }) {
 
     return (
         <Nav>
-            <a href='/'>
+            <Link to='/'>
                 <Img src={logo} alt="Logo do sistema" />
-            </a>
+            </Link>
 
             <div>
                 <NavbarList>
-                    <Item><ItemText name='home' href='/'>Início</ItemText></Item>
-                    <Item><ItemText name='projects' href='/projects'>Projetos</ItemText></Item>
-                    <Item><ItemText name='profile' href='/profile'>Perfil</ItemText></Item>
+                    <Item><ItemText name='home' to='/'>Início</ItemText></Item>
+                    <Item><ItemText name='projects' to='/projects'>Projetos</ItemText></Item>
+                    <Item><ItemText name='profile' to='/profile'>Perfil</ItemText></Item>
                     <Item><ItemText onClick={handleLogout}>Sair</ItemText></Item>
                 </NavbarList>
             </div>
