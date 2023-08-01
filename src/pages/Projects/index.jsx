@@ -1,4 +1,4 @@
-import Navbar from '../../components/Navbar'
+import { Navbar } from '../../components'
 import { Information } from './styles'
 
 export default function Projects() {
@@ -6,7 +6,7 @@ export default function Projects() {
         <div>
             <Navbar activeItem='projects' />
             <Information>
-                Aqui serão exibidos os dados do usuário logado.
+                Aqui serão exibidos detalhes dos projetos vinculados ao usuário.
             </Information>
         </div>
     )

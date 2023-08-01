@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../contexts/Auth/AuthContext'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import Loading from '../../components/Loading'
+import { Loading } from '../../components'
 
 const swalAlert = withReactContent(Swal)
 

@@ -1,29 +1,21 @@
-import Dropdown from '../../components/Dropdown'
-import Navbar from '../../components/Navbar'
-
-const options = [
-    {
-        id: 1,
-        name: 'Saúde',
-        selected: true
-    },
-    {
-        id: 2,
-        name: 'Cidadão',
-        selected: true
-    },
-    {
-        id: 3,
-        name: 'Educação',
-        selected: true
-    }
-]
+import { useNavigate } from 'react-router-dom'
+import { Navbar, Dropdown, ButtonNew } from '../../components'
+import { Container } from './styles'
 
 export default function Home() {
+    const navigate = useNavigate()
+
+    const handleNewProject = () => {
+        navigate('/project/new')
+    }
+
     return (
         <div>
             <Navbar />
-            <Dropdown options={options} />
+            <Container>
+                <Dropdown options={[]} />
+                <ButtonNew onClickFn={handleNewProject} />
+            </Container>
         </div>
     )
 }

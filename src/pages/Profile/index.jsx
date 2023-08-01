@@ -6,7 +6,7 @@ export default function Profile() {
         <div>
             <Navbar activeItem='profile' />
             <Information>
-                Aqui serão exibidos detalhes dos projetos vinculados ao usuário.
+                Aqui serão exibidos os dados do usuário logado.
             </Information>
         </div>
     )

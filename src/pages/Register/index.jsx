@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { useApi } from '../../hooks/useApi'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import Loading from "../../components/Loading"
+import { Loading } from "../../components"
 
 const swalAlert = withReactContent(Swal)
 

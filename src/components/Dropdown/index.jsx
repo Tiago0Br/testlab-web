@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DropdownContainer, DropdownBtn, DropdownIcon, DropdownItem, DropdownContent, TestSuites } from './styles'
+import { DropdownContainer, DropdownBtn, DropdownIcon, DropdownItem, DropdownContent } from './styles'
 import dropdownIcon from '../../assets/dropdownIcon.svg'
 
 // eslint-disable-next-line react/prop-types
@@ -17,27 +17,20 @@ export default function Dropdown({ options }) {
     }
 
     return (
-        <>
-            <DropdownContainer>
-                <DropdownBtn onClick={handleIsActive}>
-                    { selectedOption || 'Selecione um projeto' }
-                    <DropdownIcon src={dropdownIcon} alt='dropdown icon' />
-                </DropdownBtn>
-                {isActive && (
-                    <DropdownContent>
-                        {options?.map(({ id, name }) => (
-                            <DropdownItem key={`option-${id}`} onClick={handleSelectedOption}>
-                                { name }
-                            </DropdownItem>
-                        ))}
-                    </DropdownContent>
-                )}
-            </DropdownContainer>
-            { selectedOption && (
-                <TestSuites>
-                    Aqui serão exibidas as suítes de testes do projeto { selectedOption }
-                </TestSuites>
+        <DropdownContainer>
+            <DropdownBtn onClick={handleIsActive}>
+                {selectedOption || 'Selecione um projeto'}
+                <DropdownIcon src={dropdownIcon} alt='dropdown icon' />
+            </DropdownBtn>
+            {(isActive && options?.length > 0) && (
+                <DropdownContent>
+                    {options.map(({ id, name }) => (
+                        <DropdownItem key={`option-${id}`} onClick={handleSelectedOption}>
+                            {name}
+                        </DropdownItem>
+                    ))}
+                </DropdownContent>
             )}
-        </>
+        </DropdownContainer>
     )
 }

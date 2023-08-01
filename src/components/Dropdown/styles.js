@@ -2,7 +2,6 @@ import styled from 'styled-components'
 
 export const DropdownContainer = styled.div`
     width: 400px;
-    margin: 50px auto;
     position: relative;
 `
 
@@ -43,9 +42,4 @@ export const DropdownItem = styled.div`
     &:hover {
         background-color: #f4f4f4;
     }
-`
-
-export const TestSuites = styled.div`
-    margin-top: 50px;
-    text-align: center;
 `

@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react'
 import { AuthContext } from '../../contexts/Auth/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
-import logo from '../../assets/transparentLogo.png'
+import logo from '../../assets/logo.png'
 import { Nav, NavbarList, Img, Item, ItemText } from './styles'
 
 // eslint-disable-next-line react/prop-types
