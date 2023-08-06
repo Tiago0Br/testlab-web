@@ -1,12 +1,67 @@
-import { Navbar } from '../../components'
-import { Information } from './styles'
+import { useNavigate } from 'react-router-dom'
+import { Navbar, Dropdown, ButtonNew, Loading } from '../../components'
+import { useApi } from '../../hooks/useApi'
+import { useContext, useEffect, useState } from 'react'
+import { AuthContext } from '../../contexts/Auth/AuthContext'
+import { Container, Information } from './styles'
 
-export default function Projects() {
+export default function Home() {
+    const api = useApi()
+    const navigate = useNavigate()
+    const auth = useContext(AuthContext)
+    const [projects, setProjects] = useState([])
+    const [project, setProject] = useState(null)
+    const [loading, setLoading] = useState(false)
+
+    const handleNewProject = () => {
+        navigate('/project/new')
+    }
+
+    const onProjectChange = (options, projectName) => {
+        const projectSelected = options.find(currentProject => projectName === currentProject.name)
+        setProject(projectSelected)
+        window.localStorage.setItem('currentProject', JSON.stringify(projectSelected))
+    }
+
+    const getCurrentProject = () => {
+        const project = window.localStorage.getItem('currentProject')
+        if (!project) return null
+
+        const projectName = JSON.parse(project).name
+        return projectName
+    }
+
+    useEffect(() => {
+        const getProjects = () => {
+            setLoading(true)
+            api.getUsersProjects(auth.user.id).then(({ projects }) => {
+                setProjects(projects)
+            })
+            setLoading(false)
+        }
+        
+        getProjects()
+        const currentProject = window.localStorage.getItem('currentProject')
+        if (currentProject) setProject(JSON.parse(currentProject))
+    }, [])
+
     return (
         <div>
+            { loading && <Loading /> }
             <Navbar activeItem='projects' />
+            <Container>
+                <Dropdown options={projects} currentOption={getCurrentProject()} onOptionChange={onProjectChange} />
+                <ButtonNew onClickFn={handleNewProject} />
+            </Container>
             <Information>
-                Aqui serão exibidos detalhes dos projetos vinculados ao usuário.
+                { project ? (
+                    <div>
+                        <h1>{ project.name }</h1>
+                        <p>{ project.description }</p>
+                    </div>
+                ) : (
+                    <h1>Nenhum projeto selecionado</h1>
+                )}
             </Information>
         </div>
     )

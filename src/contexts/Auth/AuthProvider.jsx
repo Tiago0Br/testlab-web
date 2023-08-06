@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react"
-import { AuthContext } from "./AuthContext"
-import { useApi } from "../../hooks/useApi"
+import { useEffect, useState } from 'react'
+import { AuthContext } from './AuthContext'
+import { useApi } from '../../hooks/useApi'
 
 // eslint-disable-next-line react/prop-types
 export const AuthProvider = ({ children }) => {
@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
     }
     const signOut = () => {
         setUser(null)
-        storageData('', '')
+        localStorage.clear()
     }
 
     const storageData = (user, token) => {

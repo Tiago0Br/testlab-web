@@ -79,9 +79,9 @@ export default function Register() {
         <div className="container">
             { loading && <Loading /> }
             <div className="form-container">
-                <div className="wrap-login">
-                    <form className="login-form" onSubmit={handleRegister}>
-                        <span className="login-form-title text">Cadastre-se</span>
+                <div className="wrap-form">
+                    <form className="form" onSubmit={handleRegister}>
+                        <span className="form-title text">Cadastre-se</span>
                         <div className="wrap-input">
                             <input
                                 className={name !== '' ? 'has-val input' : 'input'}
@@ -128,8 +128,8 @@ export default function Register() {
                             <span className="focus-input" data-placeholder="Confirmar senha"></span>
                         </div>
 
-                        <div className="container-login-form-btn">
-                            <button className="login-form-btn text">Cadastrar</button>
+                        <div className="container-form-btn">
+                            <button className="form-btn text">Cadastrar</button>
                         </div>
 
                         <div className="text-center">

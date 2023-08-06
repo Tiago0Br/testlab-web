@@ -49,12 +49,12 @@ export default function Login() {
             { loading && <Loading /> }
 
             <div className="form-container">
-                <div className="wrap-login">
-                    <form className="login-form" onSubmit={handleLogin}>
-                        <span className="login-form-title">
+                <div className="wrap-form">
+                    <form className="form" onSubmit={handleLogin}>
+                        <span className="form-title">
                             <img src={logo} alt="Logo do TestLab" />
                         </span>
-                        <span className="login-form-title text">Bora testar!</span>
+                        <span className="form-title text">Bora testar!</span>
                         <div className="wrap-input">
                             <input
                                 className={email !== '' ? 'has-val input' : 'input'}
@@ -78,8 +78,8 @@ export default function Login() {
                             <span className="focus-input" data-placeholder="Senha"></span>
                         </div>
 
-                        <div className="container-login-form-btn">
-                            <button className="login-form-btn">Login</button>
+                        <div className="container-form-btn">
+                            <button className="form-btn">Login</button>
                         </div>
 
                         <div className="text-center">

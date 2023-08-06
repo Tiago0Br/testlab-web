@@ -1,12 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import './App.css'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import Home from './pages/Home'
-import Profile from './pages/Profile'
-import Projects from './pages/Projects'
-import NewProject from './pages/NewProject'
+import { Login, Home, Profile, Register, Projects, NewProject } from './pages'
 import { RequireAuth } from './contexts/Auth/RequireAuth'
+import './App.css'
 
 function App() {
 
