@@ -2,9 +2,9 @@ import { useContext, useEffect } from 'react'
 import { AuthContext } from '../../contexts/Auth/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import logo from '../../assets/logo.png'
+import P from 'prop-types'
 import { Nav, NavbarList, Img, Item, ItemText } from './styles'
 
-// eslint-disable-next-line react/prop-types
 export default function Navbar({ activeItem='home' }) {
     const auth = useContext(AuthContext)
     const navigate = useNavigate()
@@ -39,4 +39,12 @@ export default function Navbar({ activeItem='home' }) {
             </div>
         </Nav>
     )
+}
+
+Navbar.defaultProps = {
+    activeItem: 'home'
+}
+
+Navbar.propTypes = {
+    activeItem: P.string.isRequired
 }

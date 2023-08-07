@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 import { Navbar, Dropdown, ButtonNew, Loading } from '../../components'
-import { Container } from './styles'
 import { useApi } from '../../hooks/useApi'
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../contexts/Auth/AuthContext'
+import { Container } from './styles'
 
 export default function Home() {
     const api = useApi()

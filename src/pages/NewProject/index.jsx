@@ -34,6 +34,9 @@ export default function NewProject() {
             description, 
             ownerUserId: auth.user.id
         })
+
+        setName('')
+        setDescription('')
         setIsLoading(false)
 
         if (res.project) {

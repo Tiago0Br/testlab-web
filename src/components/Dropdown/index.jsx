@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { DropdownContainer, DropdownBtn, DropdownIcon, DropdownItem, DropdownContent } from './styles'
 import dropdownIcon from '../../assets/dropdownIcon.svg'
+import P from 'prop-types'
 
-// eslint-disable-next-line react/prop-types
 export default function Dropdown({ options, currentOption, onOptionChange }) {
     const [isActive, setIsActive] = useState(false)
     const [selectedOption, setSelectedOption] = useState('')
@@ -38,4 +38,10 @@ export default function Dropdown({ options, currentOption, onOptionChange }) {
             )}
         </DropdownContainer>
     )
+}
+
+Dropdown.propTypes = {
+    options: P.array.isRequired,
+    currentOption: P.string,
+    onOptionChange: P.func.isRequired
 }
