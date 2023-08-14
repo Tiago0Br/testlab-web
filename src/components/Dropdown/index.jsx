@@ -1,20 +1,13 @@
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { DropdownContainer, DropdownBtn, DropdownIcon, DropdownItem, DropdownContent } from './styles'
-import dropdownIcon from '../../assets/dropdownIcon.svg'
 import P from 'prop-types'
 
-export default function Dropdown({ options, currentOption, onOptionChange }) {
-    const [isActive, setIsActive] = useState(false)
+export default function Dropdown2({ label, options, currentOption, onOptionChange }) {
     const [selectedOption, setSelectedOption] = useState('')
 
-    const handleIsActive = () => {
-        setIsActive(!isActive)
-    }
-
     const handleSelectedOption = e => {
-        setSelectedOption(e.target.textContent)
-        setIsActive(false)
-        onOptionChange(options, e.target.textContent)
+        setSelectedOption(e.target.value)
+        if (onOptionChange) onOptionChange(e.target.value)
     }
 
     useEffect(() => {
@@ -22,26 +15,26 @@ export default function Dropdown({ options, currentOption, onOptionChange }) {
     }, [])
 
     return (
-        <DropdownContainer>
-            <DropdownBtn onClick={handleIsActive}>
-                {selectedOption || 'Selecione um projeto'}
-                <DropdownIcon src={dropdownIcon} alt='dropdown icon' />
-            </DropdownBtn>
-            {(isActive && options?.length > 0) && (
-                <DropdownContent>
-                    {options.map(({ id, name }) => (
-                        <DropdownItem key={`option-${id}`} id={`project-${id}`} onClick={handleSelectedOption}>
-                            {name}
-                        </DropdownItem>
-                    ))}
-                </DropdownContent>
-            )}
-        </DropdownContainer>
+        <FormControl style={{ width: '400px' }}>
+            <InputLabel id={`${label}-label`}>{ label }</InputLabel>
+            <Select
+                labelId={`${label}-label`}
+                id={`${label}-dropdown`}
+                label={label}
+                onChange={handleSelectedOption}
+                value={selectedOption}
+            >
+                { options?.map(({ id, name }) => (
+                    <MenuItem key={`option-${id}`} value={ name }>{ name }</MenuItem>
+                ))}
+            </Select>
+        </FormControl>
     )
 }
 
-Dropdown.propTypes = {
+Dropdown2.propTypes = {
     options: P.array.isRequired,
+    label: P.string.isRequired,
     currentOption: P.string,
-    onOptionChange: P.func.isRequired
+    onOptionChange: P.func
 }

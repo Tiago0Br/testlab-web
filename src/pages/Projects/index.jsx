@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Navbar, Dropdown, ButtonNew, Loading } from '../../components'
+import { Navbar, ButtonNew, Loading, Dropdown } from '../../components'
 import { useApi } from '../../hooks/useApi'
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../contexts/Auth/AuthContext'
@@ -17,8 +17,8 @@ export default function Home() {
         navigate('/project/new')
     }
 
-    const onProjectChange = (options, projectName) => {
-        const projectSelected = options.find(currentProject => projectName === currentProject.name)
+    const onProjectChange = (projectName) => {
+        const projectSelected = projects.find(currentProject => projectName === currentProject.name)
         setProject(projectSelected)
         window.localStorage.setItem('currentProject', JSON.stringify(projectSelected))
     }
@@ -50,7 +50,12 @@ export default function Home() {
             { loading && <Loading /> }
             <Navbar activeItem='projects' />
             <Container>
-                <Dropdown options={projects} currentOption={getCurrentProject()} onOptionChange={onProjectChange} />
+                <Dropdown 
+                    label='Projeto' 
+                    options={projects} 
+                    currentOption={getCurrentProject()} 
+                    onOptionChange={onProjectChange} 
+                />
                 <ButtonNew onClickFn={handleNewProject} />
             </Container>
             <Information>
