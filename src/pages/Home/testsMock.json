@@ -1,0 +1,77 @@
+[
+    {
+        "name": "SAU-7441 - Telemedicina - Alterar layout de acesso",
+        "tests": [
+            {
+                "name": "01 - Consultar Documento | Layout",
+                "description": "Deve testar que ao realizar tal coisa deve acontecer outra coisa."
+            },
+            {
+                "name": "02 - Consultar Documento | Ortografia",
+                "description": "Deve testar que ao realizar tal coisa deve acontecer outra coisa."
+            },
+            {
+                "name": "03 - Consultar Documento | Radio Button | Por Codigo",
+                "description": "Deve testar que ao realizar tal coisa deve acontecer outra coisa."
+            },
+            {
+                "name": "04 - Consultar Documento | Codigo de Validação",
+                "description": "Deve testar que ao realizar tal coisa deve acontecer outra coisa."
+            },
+            {
+                "name": "05 - Consultar Documento | Codigo de Identificação",
+                "description": "Deve testar que ao realizar tal coisa deve acontecer outra coisa."
+            }
+        ]
+    },
+    {
+        "name": "SAU-7138 - Puericultura - Melhorias dos Campos Pré-natal, parto e nascimento",
+        "tests": [
+            {
+                "name": "01 - Receituário | QR Code",
+                "description": "Deve testar que ao realizar tal coisa deve acontecer outra coisa."
+            },
+            {
+                "name": "02 - Receituário | QR Code",
+                "description": "Deve testar que ao realizar tal coisa deve acontecer outra coisa."
+            },
+            {
+                "name": "03 - Receituário | QR Code",
+                "description": "Deve testar que ao realizar tal coisa deve acontecer outra coisa."
+            },
+            {
+                "name": "04 - Receituário | QR Code",
+                "description": "Deve testar que ao realizar tal coisa deve acontecer outra coisa."
+            },
+            {
+                "name": "05 - Receituário | QR Code",
+                "description": "Deve testar que ao realizar tal coisa deve acontecer outra coisa."
+            }
+        ]
+    },
+    {
+        "name": "SAU-7229 - PEC - Relatório Médico",
+        "tests": [
+            {
+                "name": "01 - Receituário | QR Code",
+                "description": "Deve testar que ao realizar tal coisa deve acontecer outra coisa."
+            },
+            {
+                "name": "02 - Receituário | QR Code",
+                "description": "Deve testar que ao realizar tal coisa deve acontecer outra coisa."
+            },
+            {
+                "name": "03 - Receituário | QR Code",
+                "description": "Deve testar que ao realizar tal coisa deve acontecer outra coisa."
+            },
+            {
+                "name": "04 - Receituário | QR Code",
+                "description": "Deve testar que ao realizar tal coisa deve acontecer outra coisa."
+            },
+            {
+                "name": "05 - Receituário | QR Code",
+                "description": "Deve testar que ao realizar tal coisa deve acontecer outra coisa."
+            }
+        ]
+    }
+]

@@ -4,7 +4,7 @@ import P from 'prop-types'
 
 export default function customAccordion({ title, children }) {
     return (
-        <Accordion>
+        <Accordion style={{ width: '800px' }}>
             <AccordionSummary
                 aria-controls='panel1a-content'
                 id={`accordion-${title}-header`}

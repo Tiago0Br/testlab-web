@@ -1,84 +1,18 @@
-import { useNavigate } from 'react-router-dom'
-import { Navbar, ButtonNew, Loading, Dropdown, Accordion } from '../../components'
+import { Navbar, Loading, Dropdown, Accordion } from '../../components'
 import { useApi } from '../../hooks/useApi'
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../contexts/Auth/AuthContext'
-import { Container } from './styles'
-
-const testCases = [
-    {
-        year: '2023',
-        folders: [
-            {
-                name: 'Junho',
-                suites: [
-                    {
-                        name: 'SAU-7441 - Telemedicina - Alterar layout de acesso',
-                        tests: [
-                            {
-                                name: '01 - Receituário | QR Code',
-                                description: 'Deve testar que ao realizar tal coisa deve acontecer outra coisa.'
-                            },
-                            {
-                                name: '02 - Receituário | QR Code',
-                                description: 'Deve testar que ao realizar tal coisa deve acontecer outra coisa.'
-                            },
-                            {
-                                name: '03 - Receituário | QR Code',
-                                description: 'Deve testar que ao realizar tal coisa deve acontecer outra coisa.'
-                            },
-                            {
-                                name: '04 - Receituário | QR Code',
-                                description: 'Deve testar que ao realizar tal coisa deve acontecer outra coisa.'
-                            },
-                            {
-                                name: '05 - Receituário | QR Code',
-                                description: 'Deve testar que ao realizar tal coisa deve acontecer outra coisa.'
-                            },
-                        ]
-                    }
-                ]
-            },
-            {
-                name: 'Julho',
-                suites: [
-                    {
-                        name: 'SAU-7441 - Telemedicina - Alterar layout de acesso',
-                        tests: [
-                            {
-                                name: '01 - Receituário | QR Code'
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                name: 'Agosto',
-                suites: [
-                    {
-                        name: 'SAU-7561 - Requisição de Suprimentos - Alterar cálculo da média',
-                        tests: [
-                            {
-                                name: '01 - Receituário | QR Code'
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    }
-]
+import { TextField, Autocomplete, ListItem, ListItemIcon, ListItemText, IconButton } from '@mui/material'
+import icon from '../../assets/test.svg'
+import checkIcon from '../../assets/checkIcon.svg'
+import { Container, Main, Img } from './styles'
+import testCases from './testsMock.json'
 
 export default function Home() {
     const api = useApi()
-    const navigate = useNavigate()
     const auth = useContext(AuthContext)
     const [projects, setProjects] = useState([])
     const [loading, setLoading] = useState(false)
-
-    const handleNewProject = () => {
-        navigate('/project/new')
-    }
 
     const onProjectChange = projectName => {
         const project = projects.find(currentProject => {
@@ -113,32 +47,43 @@ export default function Home() {
             <Navbar />
             <Container>
                 <Dropdown
-                    label='Projeto' 
-                    options={projects} 
-                    currentOption={getCurrentProject()} 
-                    onOptionChange={onProjectChange} 
+                    label='Projeto'
+                    options={projects}
+                    currentOption={getCurrentProject()}
+                    onOptionChange={onProjectChange}
                 />
-                <ButtonNew onClickFn={handleNewProject} />
             </Container>
             <Container>
-                { testCases.map(({ year, folders }) => (
-                    <Accordion key={year} title={year}>
-                        { folders.map(({ name, suites }) => (
-                            <Accordion key={name} title={name}>
-                                { suites.map(({ name, tests }) => (
-                                    <Accordion key={name} title={name}>
-                                        { tests.map(test => (
-                                            <Accordion key={test.name} title={test.name}>
-                                                <p>{ test.description }</p>
-                                            </Accordion>
-                                        ))}
-                                    </Accordion>
-                                ))}
-                            </Accordion>
+                <TextField id="year" label="Ano" variant="outlined" />
+                <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={['Junho', 'Julho', 'Agosto']}
+                    sx={{ width: 200 }}
+                    renderInput={(params) => <TextField {...params} label="Mês" />}
+                />
+            </Container>
+            <Main>
+                {testCases.map(({ name, tests }) => (
+                    <Accordion title={name} key={name}>
+                        {tests.map(({ name }) => (
+                            <ListItem
+                                key={name}
+                                secondaryAction={
+                                    <IconButton edge="end" aria-label="delete">
+                                        <Img src={checkIcon} alt="Check" />
+                                    </IconButton>
+                                }
+                            >
+                                <ListItemIcon>
+                                    <Img src={icon} alt="Logo" />
+                                </ListItemIcon>
+                                <ListItemText primary={name} />
+                            </ListItem>
                         ))}
                     </Accordion>
                 ))}
-            </Container>
+            </Main>
         </div>
     )
 }
