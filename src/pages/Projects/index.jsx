@@ -56,7 +56,7 @@ export default function Home() {
                     currentOption={getCurrentProject()} 
                     onOptionChange={onProjectChange} 
                 />
-                <ButtonNew onClickFn={handleNewProject} />
+                <ButtonNew id='btnNewProject' onClickFn={handleNewProject} />
             </Container>
             <Information>
                 { project ? (

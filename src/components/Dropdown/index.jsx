@@ -15,7 +15,7 @@ export default function Dropdown2({ label, options, currentOption, onOptionChang
     }, [])
 
     return (
-        <FormControl style={{ width: '460px' }}>
+        <FormControl style={{ width: '375px' }}>
             <InputLabel id={`${label}-label`}>{ label }</InputLabel>
             <Select
                 labelId={`${label}-label`}

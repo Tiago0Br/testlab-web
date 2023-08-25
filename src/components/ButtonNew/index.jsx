@@ -1,15 +1,22 @@
-import plusIcon from '../../assets/plusIcon.svg'
-import { Button, Img } from './styles'
+import Fab from '@mui/material/Fab'
+import AddIcon from '@mui/icons-material/Add'
 import P from 'prop-types'
 
-export default function ButtonNew({ onClickFn }) {
+export default function ButtonNew({ id, onClickFn, color }) {
     return (
-        <Button onClick={onClickFn}>
-            <Img src={plusIcon} alt='Novo cadastro' />
-        </Button>
+        <Fab 
+            id={id}
+            color={color || 'success'} 
+            aria-label='Adicionar' 
+            onClick={onClickFn}
+        >
+            <AddIcon />
+        </Fab>
     )
 }
 
 ButtonNew.propTypes = {
-    onClickFn: P.func.isRequired
+    id: P.string.isRequired,
+    onClickFn: P.func.isRequired,
+    color: P.string
 }
