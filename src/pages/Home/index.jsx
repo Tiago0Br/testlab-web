@@ -1,34 +1,34 @@
-import { Navbar, Loading, Dropdown, Accordion, ButtonNew } from '../../components'
+import { Navbar, Loading, Dropdown, Accordion, MenuButton } from '../../components'
 import { useApi } from '../../hooks/useApi'
 import { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../contexts/Auth/AuthContext'
-import {
-    TextField,
-    Autocomplete,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-    IconButton,
-    Menu,
-    MenuItem
-} from '@mui/material'
+import { TextField, Autocomplete, ListItem, ListItemIcon, ListItemText, IconButton } from '@mui/material'
+import { Folder, Task, RuleFolder, Assignment } from '@mui/icons-material'
+import { testCaseModal, testSuiteModal, folderModal } from '../../utils'
+import { Container, Main, Img } from './styles'
 import icon from '../../assets/test.svg'
 import noContent from '../../assets/no-content.jpg'
 import checkIcon from '../../assets/checkIcon.svg'
-import { Container, Main, Img } from './styles'
 import testCases from './testsMock.json'
 
 export default function Home() {
     const api = useApi()
     const auth = useContext(AuthContext)
+    const navigate = useNavigate()
+
     const [projects, setProjects] = useState([])
     const [project, setProject] = useState('')
     const [year, setYear] = useState('')
     const [month, setMonth] = useState('')
     const [loading, setLoading] = useState(false)
-    const [anchorEl, setAnchorEl] = useState(null)
 
-    const isOpen = Boolean(anchorEl)
+    const menuOptions = [
+        { name: 'Projeto', Icon: Assignment, onClick: () => navigate('/project/new') },
+        { name: 'Suíte de testes', Icon: RuleFolder, onClick: testSuiteModal },
+        { name: 'Caso de testes', Icon: Task, onClick: testCaseModal },
+        { name: 'Pasta', Icon: Folder, onClick: folderModal },
+    ]
 
     const onProjectChange = projectName => {
         const project = projects.find(currentProject => {
@@ -45,14 +45,6 @@ export default function Home() {
 
     const handleMonth = e => {
         setMonth(e.target.textContent)
-    }
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget)
-    }
-
-    const handleClose = () => {
-        setAnchorEl(null)
     }
 
     useEffect(() => {
@@ -90,29 +82,10 @@ export default function Home() {
                     currentOption={project}
                     onOptionChange={onProjectChange}
                 />
-                <ButtonNew id='btnAdd' onClickFn={handleClick} />
-                <Menu
-                    id='demo-customized-menu'
-                    MenuListProps={{
-                        'aria-labelledby': 'btnAdd',
-                    }}
-                    anchorEl={anchorEl}
-                    open={isOpen}
-                    onClose={handleClose}
-                >
-                    <MenuItem onClick={handleClose} disableRipple>
-                        Novo projeto
-                    </MenuItem>
-                    <MenuItem onClick={handleClose} disableRipple>
-                        Nova suíte de testes
-                    </MenuItem>
-                    <MenuItem onClick={handleClose} disableRipple>
-                        Novo caso de testes
-                    </MenuItem>
-                    <MenuItem onClick={handleClose} disableRipple>
-                        Nova pasta
-                    </MenuItem>
-                </Menu>
+                <MenuButton 
+                    id='add'
+                    options={menuOptions}
+                />
             </Container>
             <Container>
                 <Autocomplete
