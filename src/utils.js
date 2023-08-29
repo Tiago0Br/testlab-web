@@ -3,44 +3,56 @@ import withReactContent from 'sweetalert2-react-content'
 
 const swalAlert = withReactContent(Swal)
 
-export const testCaseModal = () => {
+export const formModal = (title, fields) => {
+    let html = ''
+
+    fields.forEach(({ id, description }) => {
+        html += `<input id="${id}" name="${id}" class="swal2-input" placeholder="${description}">`
+    })
+
     swalAlert.fire({
-        title: 'Novo caso de teste',
-        html:
-            '<input id="title" name="title" class="swal2-input" placeholder="Título">' +
-            '<input id="description" name="description" class="swal2-input" placeholder="Descrição">' +
-            '<input id="preconditions" name="preconditions" class="swal2-input" placeholder="Pré-condições">',
+        title,
+        html,
         focusConfirm: false,
+        confirmButtonText: 'Salvar',
+        confirmButtonColor: '#2e7d32',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        cancelButtonColor: '#d32f2f',
         preConfirm: () => {
-            return [
-                document.getElementById('title').value,
-                document.getElementById('description').value,
-                document.getElementById('preconditions').value
-            ]
+            const returnedValues = []
+            fields.forEach(({ id }) => {
+                let fieldValue = document.getElementById(id).value
+                if (!fieldValue) {
+                    Swal.showValidationMessage('Preencha todos os campos!')
+                }
+
+                returnedValues.push(fieldValue)
+            })
+
+            return returnedValues
         }
     })
+}
+
+export const testCaseModal = () => {
+    const fields = [
+        { id: 'testTitle', description: 'Título' },
+        { id: 'testDescription', description: 'Descrição' },
+        { id: 'testPreconditions', description: 'Pré-condições' },
+    ]
+
+    formModal('Novo caso de teste', fields)
 }
 
 export const testSuiteModal = () => {
-    swalAlert.fire({
-        title: 'Nova suíte de testes',
-        html:
-            '<input id="title" name="title" class="swal2-input" placeholder="Título">',
-        focusConfirm: false,
-        preConfirm: () => {
-            return document.getElementById('title').value
-        }
-    })
+    const fields = [
+        { id: 'testSuiteTitle', description: 'Título' }
+    ]
+
+    formModal('Nova suíte de testes', fields)
 }
 
 export const folderModal = () => {
-    swalAlert.fire({
-        title: 'Nova pasta',
-        html:
-            '<input id="folderName" class="swal2-input" placeholder="Nome">',
-        focusConfirm: false,
-        preConfirm: () => {
-            return document.getElementById('folderName').value
-        }
-    })
+    formModal('Nova pasta', [{ id: 'folderName', description: 'Nome' }])
 }
