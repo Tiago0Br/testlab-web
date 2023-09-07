@@ -24,7 +24,8 @@ export const AuthProvider = ({ children }) => {
             setUser(response.user)
             storageData(response.user, response.token)
             return {
-                isLogged: true
+                isLogged: true,
+                user: response.user
             }
         }
         return {

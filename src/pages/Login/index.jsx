@@ -6,6 +6,7 @@ import { AuthContext } from '../../contexts/Auth/AuthContext'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { Loading } from '../../components'
+import { showToast } from '../../utils'
 
 const swalAlert = withReactContent(Swal)
 
@@ -21,12 +22,12 @@ export default function Login() {
         e.preventDefault()
         if (email && password) {
             setLoading(true)
-            const { isLogged, error } = await auth.signIn(email, password)
+            const { isLogged, user, error } = await auth.signIn(email, password)
             setLoading(false)
             if (isLogged) {
                 navigate('/')
-            }
-            else {
+                showToast(`Bem-vindo, ${user.name}!`)
+            } else {
                 swalAlert.fire({
                     icon: 'error',
                     title: error.response.data.error,
@@ -46,7 +47,7 @@ export default function Login() {
 
     return (
         <div className="container">
-            { loading && <Loading /> }
+            {loading && <Loading />}
 
             <div className="form-container">
                 <div className="wrap-form">

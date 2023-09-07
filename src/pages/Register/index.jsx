@@ -4,6 +4,7 @@ import { useApi } from '../../hooks/useApi'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { Loading } from "../../components"
+import { showToast } from "../../utils"
 
 const swalAlert = withReactContent(Swal)
 
@@ -30,12 +31,7 @@ export default function Register() {
                 setLoading(false)
 
                 if (res.user) {
-                    swalAlert.fire({
-                        icon: 'success',
-                        title: 'Cadastro criado com sucesso!',
-                        showConfirmButton: true,
-                        timer: 1000
-                    })
+                    showToast('Cadastro criado com sucesso!')
 
                     clearFields()
                 } else {

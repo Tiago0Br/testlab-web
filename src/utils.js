@@ -3,6 +3,25 @@ import withReactContent from 'sweetalert2-react-content'
 
 const swalAlert = withReactContent(Swal)
 
+export const showToast = (message, icon='success') => {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    Toast.fire({
+        icon,
+        title: message
+    })
+}
+
 export const formModal = (title, fields) => {
     let html = ''
 
@@ -22,8 +41,10 @@ export const formModal = (title, fields) => {
         preConfirm: () => {
             const returnedValues = []
             fields.forEach(({ id }) => {
-                let fieldValue = document.getElementById(id).value
+                let currentElement = document.getElementById(id)
+                let fieldValue = currentElement.value
                 if (!fieldValue) {
+                    document.getElementById(id).classList.add('swal2-inputerror')
                     Swal.showValidationMessage('Preencha todos os campos!')
                 }
 
