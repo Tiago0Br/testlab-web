@@ -1,6 +1,6 @@
 import './styles.css'
 
-export default function Loading() {
+export const Loading = () => {
     return (
         <div className="loader-container">
             <div className="spinner"></div>

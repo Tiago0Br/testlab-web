@@ -2,7 +2,7 @@ import { FormControl, InputLabel, Select, MenuItem } from '@mui/material'
 import { useEffect, useState } from 'react'
 import P from 'prop-types'
 
-export default function Dropdown2({ label, options, currentOption, onOptionChange }) {
+export const Dropdown = ({ label, options, currentOption, onOptionChange }) => {
     const [selectedOption, setSelectedOption] = useState('')
 
     const handleSelectedOption = e => {
@@ -32,7 +32,7 @@ export default function Dropdown2({ label, options, currentOption, onOptionChang
     )
 }
 
-Dropdown2.propTypes = {
+Dropdown.propTypes = {
     options: P.array.isRequired,
     label: P.string.isRequired,
     currentOption: P.string,

@@ -5,7 +5,7 @@ import logo from '../../assets/logo.png'
 import P from 'prop-types'
 import { Nav, NavbarList, Img, Item, ItemText } from './styles'
 
-export default function Navbar({ activeItem='home' }) {
+export const Navbar = ({ activeItem='home' }) => {
     const auth = useContext(AuthContext)
     const navigate = useNavigate()
     

@@ -7,7 +7,7 @@ import withReactContent from 'sweetalert2-react-content'
 
 const swalAlert = withReactContent(Swal)
 
-export default function NewProject() {
+export const NewProject = () => {
     const api = useApi()
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')

@@ -5,14 +5,14 @@ import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../contexts/Auth/AuthContext'
 import { TextField, Autocomplete, ListItem, ListItemIcon, ListItemText, IconButton } from '@mui/material'
 import { Folder, Task, RuleFolder, Assignment } from '@mui/icons-material'
-import { testCaseModal, testSuiteModal, folderModal } from '../../utils'
+import { testCaseModal, folderModal } from '../../utils'
 import { Container, Main, Img } from './styles'
 import icon from '../../assets/test.svg'
 import noContent from '../../assets/no-content.jpg'
 import checkIcon from '../../assets/checkIcon.svg'
 import testCases from './testsMock.json'
 
-export default function Home() {
+export const Home = () => {
     const api = useApi()
     const auth = useContext(AuthContext)
     const navigate = useNavigate()
@@ -25,7 +25,7 @@ export default function Home() {
 
     const menuOptions = [
         { name: 'Projeto', Icon: Assignment, onClick: () => navigate('/project/new') },
-        { name: 'Suíte de testes', Icon: RuleFolder, onClick: testSuiteModal },
+        { name: 'Suíte de testes', Icon: RuleFolder, onClick: () => navigate('/project/test-suit/new') },
         { name: 'Caso de testes', Icon: Task, onClick: testCaseModal },
         { name: 'Pasta', Icon: Folder, onClick: folderModal },
     ]

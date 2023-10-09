@@ -8,7 +8,7 @@ import { showToast } from "../../utils"
 
 const swalAlert = withReactContent(Swal)
 
-export default function Register() {
+export const Register = () => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')

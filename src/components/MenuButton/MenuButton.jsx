@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Menu, MenuItem, ListItemIcon } from '@mui/material'
-import ButtonNew from '../ButtonNew'
+import { ButtonNew } from '..'
 import P from 'prop-types'
 
-export default function MenuButton({ id, options }) {
+export const MenuButton = ({ id, options }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const isOpen = Boolean(anchorEl)
 

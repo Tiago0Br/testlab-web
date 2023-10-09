@@ -2,7 +2,7 @@ import Fab from '@mui/material/Fab'
 import AddIcon from '@mui/icons-material/Add'
 import P from 'prop-types'
 
-export default function ButtonNew({ id, onClickFn, color }) {
+export const ButtonNew = ({ id, onClickFn, color }) => {
     return (
         <Fab 
             id={id}

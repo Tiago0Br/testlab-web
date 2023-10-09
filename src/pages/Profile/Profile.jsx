@@ -1,7 +1,7 @@
-import Navbar from '../../components/Navbar'
+import { Navbar } from '../../components'
 import { Information } from './styles'
 
-export default function Profile() {
+export const Profile = () => {
     return (
         <div>
             <Navbar activeItem='profile' />

@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../contexts/Auth/AuthContext'
 import { Container, Information } from './styles'
 
-export default function Home() {
+export const Projects = () => {
     const api = useApi()
     const navigate = useNavigate()
     const auth = useContext(AuthContext)

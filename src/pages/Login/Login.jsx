@@ -10,7 +10,7 @@ import { showToast } from '../../utils'
 
 const swalAlert = withReactContent(Swal)
 
-export default function Login() {
+export const Login = () => {
     const auth = useContext(AuthContext)
 
     const [email, setEmail] = useState('')
