@@ -1,6 +1,12 @@
 import { api } from "@/lib/axios"
+import { AxiosResponse } from "axios"
 
-export const useApi = () => ({
+interface useApiProps {
+  login: (email: string, password: string) => Promise<AxiosResponse>
+  register: (name: string, email: string, password: string) => Promise<AxiosResponse>
+}
+
+export const useApi = (): useApiProps => ({
   login: (email: string, password: string) => {
     return api.post('/login', { email, password })
   },
