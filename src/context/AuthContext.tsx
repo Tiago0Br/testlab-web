@@ -1,7 +1,7 @@
 import { useApi } from '@/hooks/useApi'
 import { AxiosError } from 'axios'
-import { ReactNode, createContext, useState } from 'react'
-import { setCookie } from 'nookies'
+import { ReactNode, createContext, useEffect, useState } from 'react'
+import { setCookie, parseCookies } from 'nookies'
 
 interface User {
   id: number
@@ -9,10 +9,16 @@ interface User {
   email: string
 }
 
+interface SignInResponseProps {
+  success: boolean,
+  user?: User,
+  error: string | null
+}
+
 interface AuthContextProps {
   user: User | null,
   isAuthenticated: boolean,
-  signIn: (email: string, password: string) => Promise<{ success: boolean, error: string | null}>,
+  signIn: (email: string, password: string) => Promise<SignInResponseProps>,
 }
 
 interface AuthProviderProps {
@@ -22,9 +28,33 @@ interface AuthProviderProps {
 export const AuthContext = createContext({} as AuthContextProps)
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<User | null>(function() {
+    const {'testlab.user': user} = parseCookies()
+
+    if (!user) return null
+    return JSON.parse(user) as User
+  })
+
   const isAuthenticated = user !== null
   const api = useApi()
+
+  useEffect(() => {
+    const { 'testlab.token': token } = parseCookies()
+
+    if (token && !user) {
+      api.recoverUserInfo(token)
+        .then(response => {
+          const user = response.data as User
+          setUser(user)
+          setCookie(null, 'testlab.user', JSON.stringify(user), {
+            maxAge: 60 * 60 * 24, // 1 day
+          })
+        })
+        .catch(() => {
+          setUser(null)
+        })
+    }
+  }, [])
 
   async function signIn(email: string, password: string) {
     try {
@@ -32,14 +62,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const user = response.data.user as User
       const token = response.data.token as string
 
-      setUser(user)
-
       setCookie(null, 'testlab.token', token, {
         maxAge: 60 * 60 * 24, // 1 day
       })
 
+      setCookie(null, 'testlab.user', JSON.stringify(user), {
+        maxAge: 60 * 60 * 24, // 1 day
+      })
+
+      setUser(user)
+
       return {
         success: true,
+        user: user,
         error: null
       }
     } catch (error) {

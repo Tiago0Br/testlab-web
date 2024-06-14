@@ -22,10 +22,10 @@ export default function Login() {
     }
 
     signIn(email, password)
-      .then(({ success, error }) => {
+      .then(({ success, error, user }) => {
         if (success) {
           router.push('/')
-          return toast.success('Login realizado com sucesso!')
+          return toast.success(`Seja bem-vindo ${user?.name}!`)
         }
 
         toast.error(error)

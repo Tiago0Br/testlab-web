@@ -3,7 +3,8 @@ import { AxiosResponse } from "axios"
 
 interface useApiProps {
   login: (email: string, password: string) => Promise<AxiosResponse>
-  register: (name: string, email: string, password: string) => Promise<AxiosResponse>
+  register: (name: string, email: string, password: string) => Promise<AxiosResponse>,
+  recoverUserInfo: (token: string) => Promise<AxiosResponse>
 }
 
 export const useApi = (): useApiProps => ({
@@ -12,5 +13,12 @@ export const useApi = (): useApiProps => ({
   },
   register: (name: string, email: string, password: string) => {
     return api.post('/users', { name, email, password })
+  },
+  recoverUserInfo: (token: string) => {
+    return api.get('/users/info', {
+      headers: {
+        Authorization: token
+      }
+    })
   }
 })
