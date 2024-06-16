@@ -73,5 +73,6 @@
 
   body {
     @apply text-foreground antialiased;
+    @apply text-white;
   }
 }

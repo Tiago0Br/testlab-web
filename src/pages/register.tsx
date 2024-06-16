@@ -1,12 +1,12 @@
-import Image from "next/image";
 import logo from "@/assets/logo.png";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
 import Head from "next/head";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
+import { CustomInput, Button } from "@/components";
 import { useApi } from "@/hooks/useApi";
 import { toast } from "sonner"
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -14,6 +14,7 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const api = useApi();
+  const router = useRouter();
 
   const clearFields = () => {
     setName('')
@@ -22,7 +23,8 @@ export default function Register() {
     setConfirmPassword('')
   }
 
-  const handleRegister = () => {
+  const handleRegister = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (!name.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
       toast.error('Preencha todos os campos')
       return;
@@ -35,6 +37,7 @@ export default function Register() {
       .then(() => {
         toast.success('Cadastro realizado com sucesso!')
         clearFields()
+        router.push('/login')
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message || 'Ocorreu um erro')
@@ -46,51 +49,46 @@ export default function Register() {
     <Head>
       <title>Testlab - Login</title>
     </Head>
-      <div className="w-screen h-screen bg-[#111111] flex flex-col items-center justify-center">
+      <div className="w-screen h-screen bg-gray-900 flex flex-col items-center justify-center">
       <div 
-        className="bg-[#333333] w-[390px] h-[512px] rounded-xl 
+        className="bg-gray-800 w-[390px] h-[512px] rounded-xl 
         flex flex-col gap-5 items-center py-5"
       >
         <div className="flex flex-col items-center gap-3">
           <Image src={logo} alt="Logo Testlab" width={0} height={0} className="w-[70px] h-[70px]" />
-          <h1 className="text-2xl text-white">Bora testar!</h1>
+          <h1 className="text-2xl">Bora testar!</h1>
         </div>
-        <div className="flex flex-col items-center gap-6 w-72">
-          <Input 
-            type="text" 
-            placeholder="Nome" 
-            className="bg-transparent text-white rounded-none border-0 border-b-2 placeholder:text-[#999]"
+        <form className="flex flex-col items-center gap-6 w-72" onSubmit={handleRegister}>
+          <CustomInput
+            type="text"
+            placeholder="Nome"
             value={name}
             onChange={e => setName(e.target.value)} 
           />
-          <Input 
-            type="email" 
-            placeholder="E-mail" 
-            className="bg-transparent text-white rounded-none border-0 border-b-2 placeholder:text-[#999]"
+          <CustomInput 
+            type="email"
+            placeholder="E-mail"
             value={email}
             onChange={e => setEmail(e.target.value)} 
           />
-          <Input 
-            type="password" 
-            placeholder="Senha" 
-            className="bg-transparent text-white rounded-none border-0 border-b-2 placeholder:text-[#999]"
+          <CustomInput 
+            type="password"
+            placeholder="Senha"
             value={password}
             onChange={e => setPassword(e.target.value)} 
           />
-          <Input 
-            type="password" 
-            placeholder="Confirmar senha" 
-            className="bg-transparent text-white rounded-none border-0 border-b-2 placeholder:text-[#999]"
+          <CustomInput 
+            type="password"
+            placeholder="Confirmar senha"
             value={confirmPassword}
             onChange={e => setConfirmPassword(e.target.value)} 
           />
           <Button 
             className="bg-gradient-to-l from-[#21d4fd] to-[#b721ff] w-full uppercase"
-            onClick={handleRegister}  
           >
             Cadastrar
           </Button>
-        </div>
+        </form>
         <div>
           <span className="text-white text-xs">
             Já possui conta? <Link href="/login" className="underline">Login</Link>
