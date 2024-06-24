@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Head from 'next/head'
 import { FormEvent, useState } from 'react'
-import { CustomInput, Button } from '@/components'
+import { CustomInput, Button, Loading } from '@/components'
 import { useApi } from '@/hooks/useApi'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
@@ -13,6 +13,7 @@ export default function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const api = useApi()
   const router = useRouter()
 
@@ -38,14 +39,18 @@ export default function Register() {
       toast.error('Senhas não coincidem! Por favor, verifique.')
       return
     }
+
+    setIsLoading(true)
     api
       .register(name, email, password)
       .then(() => {
+        setIsLoading(false)
         toast.success('Cadastro realizado com sucesso!')
         clearFields()
         router.push('/login')
       })
       .catch((err) => {
+        setIsLoading(false)
         toast.error(err?.response?.data?.message || 'Ocorreu um erro')
       })
   }
@@ -55,6 +60,7 @@ export default function Register() {
       <Head>
         <title>Testlab - Login</title>
       </Head>
+      <Loading isLoading={isLoading} />
       <div className="w-screen h-screen bg-gray-900 flex flex-col items-center justify-center">
         <div
           className="bg-gray-800 w-[390px] h-[512px] rounded-xl 
