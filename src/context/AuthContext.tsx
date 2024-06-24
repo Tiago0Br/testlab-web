@@ -10,15 +10,15 @@ interface User {
 }
 
 interface SignInResponseProps {
-  success: boolean,
-  user?: User,
+  success: boolean
+  user?: User
   error: string | null
 }
 
 interface AuthContextProps {
-  user: User | null,
-  isAuthenticated: boolean,
-  signIn: (email: string, password: string) => Promise<SignInResponseProps>,
+  user: User | null
+  isAuthenticated: boolean
+  signIn: (email: string, password: string) => Promise<SignInResponseProps>
 }
 
 interface AuthProviderProps {
@@ -28,8 +28,8 @@ interface AuthProviderProps {
 export const AuthContext = createContext({} as AuthContextProps)
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(function() {
-    const {'testlab.user': user} = parseCookies()
+  const [user, setUser] = useState<User | null>(function () {
+    const { 'testlab.user': user } = parseCookies()
 
     if (!user) return null
     return JSON.parse(user) as User
@@ -42,8 +42,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const { 'testlab.token': token } = parseCookies()
 
     if (token && !user) {
-      api.recoverUserInfo(token)
-        .then(response => {
+      api
+        .recoverUserInfo(token)
+        .then((response) => {
           const user = response.data as User
           setUser(user)
           setCookie(null, 'testlab.user', JSON.stringify(user), {
@@ -75,26 +76,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
       return {
         success: true,
         user: user,
-        error: null
+        error: null,
       }
     } catch (error) {
       if (error instanceof AxiosError) {
         const message = error.response?.data?.message as string
         return {
           success: false,
-          error: message
+          error: message,
         }
       }
 
       return {
         success: false,
-        error: 'Ocorreu um erro. Por favor, tente novamente mais tarde!'
+        error: 'Ocorreu um erro. Por favor, tente novamente mais tarde!',
       }
     }
   }
 
   return (
-    <AuthContext.Provider value={{user, isAuthenticated, signIn}}>
+    <AuthContext.Provider value={{ user, isAuthenticated, signIn }}>
       {children}
     </AuthContext.Provider>
   )

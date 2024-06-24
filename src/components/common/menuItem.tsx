@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from 'next/link'
 
 interface MenuItemProps {
   title: string
@@ -8,8 +8,10 @@ interface MenuItemProps {
 
 export function MenuItem({ title, redirect, selected }: MenuItemProps) {
   return (
-    <Link 
-      className={`font-bold text-xl transition ${selected && 'text-green-500'} hover:text-green-500`} 
+    <Link
+      className={`font-bold text-xl transition ${
+        selected && 'text-green-500'
+      } hover:text-green-500`}
       href={redirect ? redirect : '#'}
     >
       {title}

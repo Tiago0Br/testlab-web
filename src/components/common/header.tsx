@@ -1,6 +1,6 @@
-import logo from "@/assets/logo.png"
-import Image from "next/image";
-import { MenuItem } from "./menuItem";
+import logo from '@/assets/logo.png'
+import Image from 'next/image'
+import { MenuItem } from './menuItem'
 
 export function Header() {
   return (

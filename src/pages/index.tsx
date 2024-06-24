@@ -1,6 +1,6 @@
-import { verifyToken } from "@/utils/verifyToken"
-import { GetServerSideProps } from "next"
-import { Header } from "@/components"
+import { verifyToken } from '@/utils/verifyToken'
+import { GetServerSideProps } from 'next'
+import { Header } from '@/components'
 
 export default function Home() {
   return (
@@ -13,4 +13,5 @@ export default function Home() {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => verifyToken(ctx)
+export const getServerSideProps: GetServerSideProps = async (ctx) =>
+  verifyToken(ctx)

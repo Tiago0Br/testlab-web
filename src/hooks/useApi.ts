@@ -1,9 +1,13 @@
-import { api } from "@/lib/axios"
-import { AxiosResponse } from "axios"
+import { api } from '@/lib/axios'
+import { AxiosResponse } from 'axios'
 
 interface useApiProps {
   login: (email: string, password: string) => Promise<AxiosResponse>
-  register: (name: string, email: string, password: string) => Promise<AxiosResponse>,
+  register: (
+    name: string,
+    email: string,
+    password: string
+  ) => Promise<AxiosResponse>
   recoverUserInfo: (token: string) => Promise<AxiosResponse>
 }
 
@@ -17,8 +21,8 @@ export const useApi = (): useApiProps => ({
   recoverUserInfo: (token: string) => {
     return api.get('/users/info', {
       headers: {
-        Authorization: token
-      }
+        Authorization: token,
+      },
     })
-  }
+  },
 })
