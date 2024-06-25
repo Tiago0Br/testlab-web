@@ -104,7 +104,10 @@ export default function Register() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
-            <Button className="bg-gradient-to-l from-[#21d4fd] to-[#b721ff] w-full uppercase">
+            <Button
+              className="w-full border border-green-500 text-green-500 bg-transparent uppercase font-bold 
+            hover:bg-green-500 hover:text-white"
+            >
               Cadastrar
             </Button>
           </form>
