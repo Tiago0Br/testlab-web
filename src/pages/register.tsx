@@ -58,7 +58,7 @@ export default function Register() {
   return (
     <>
       <Head>
-        <title>Testlab - Login</title>
+        <title>Testlab - Cadastro</title>
       </Head>
       <Loading isLoading={isLoading} />
       <div className="w-screen h-screen bg-gray-900 flex flex-col items-center justify-center">
