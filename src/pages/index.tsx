@@ -1,62 +1,72 @@
 import { verifyToken } from '@/utils/verifyToken'
 import { GetServerSideProps } from 'next'
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
   Header,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  Loading,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components'
 import Head from 'next/head'
+import { useEffect, useState } from 'react'
+import { useApi } from '@/hooks/useApi'
 
-export default function Home() {
+type Project = {
+  id: number
+  name: string
+  description: string
+}
+
+export default function Home({ token }: { token: string }) {
+  const api = useApi()
+  const [projects, setProjects] = useState<Project[]>([])
+  const [currentProject, setCurrentProject] = useState<Project | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const onProjectChange = (projectId: string) => {
+    setCurrentProject(
+      projects.find((project) => project.id === Number(projectId)) ?? null
+    )
+  }
+
+  useEffect(() => {
+    setIsLoading(true)
+    api.getUserProjects(token).then((response) => {
+      setProjects(response.data)
+      setIsLoading(false)
+    })
+  }, [])
   return (
     <>
       <Head>
         <title>Testlab - Início</title>
       </Head>
+      <Loading isLoading={isLoading} />
       <div className="h-screen bg-gray-900">
         <Header />
         <div className="flex flex-col items-center">
-          <h1 className="mt-20 font-semibold text-xl">Projeto de testes</h1>
+          <h1 className="mt-20 font-semibold text-xl">
+            {currentProject?.name ?? 'Nenhum projeto selecionado'}
+          </h1>
 
-          <Accordion type="single" collapsible className="w-3/6">
-            <AccordionItem value="maio">
-              <AccordionTrigger>Maio</AccordionTrigger>
-              <AccordionContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[100px]">Invoice</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Method</TableHead>
-                      <TableHead className="text-right">Amount</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell className="font-medium">aaaa</TableCell>
-                      <TableCell>aaaa</TableCell>
-                      <TableCell>aaaa</TableCell>
-                      <TableCell className="text-right">aaaaa</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="junho">
-              <AccordionTrigger>Junho</AccordionTrigger>
-              <AccordionContent>
-                Yes. It adheres to the WAI-ARIA design pattern.
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+          <Select onValueChange={onProjectChange}>
+            <SelectTrigger className="mt-5 w-60 bg-gray-800">
+              <SelectValue placeholder="Projeto" />
+            </SelectTrigger>
+            <SelectContent className="bg-gray-800">
+              {projects.map((project) => (
+                <SelectItem
+                  key={project.id}
+                  value={`${project.id}`}
+                  className="text-white"
+                >
+                  {project.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
     </>

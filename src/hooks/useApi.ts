@@ -9,6 +9,7 @@ interface useApiProps {
     password: string
   ) => Promise<AxiosResponse>
   recoverUserInfo: (token: string) => Promise<AxiosResponse>
+  getUserProjects: (token: string) => Promise<AxiosResponse>
 }
 
 export const useApi = (): useApiProps => ({
@@ -20,6 +21,13 @@ export const useApi = (): useApiProps => ({
   },
   recoverUserInfo: (token: string) => {
     return api.get('/users/info', {
+      headers: {
+        Authorization: token,
+      },
+    })
+  },
+  getUserProjects: (token: string) => {
+    return api.get('/users/projects', {
       headers: {
         Authorization: token,
       },
