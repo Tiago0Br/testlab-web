@@ -10,6 +10,10 @@ interface useApiProps {
   ) => Promise<AxiosResponse>
   recoverUserInfo: (token: string) => Promise<AxiosResponse>
   getUserProjects: (token: string) => Promise<AxiosResponse>
+  getProjectFolders: (
+    token: string,
+    projectId: number
+  ) => Promise<AxiosResponse>
 }
 
 export const useApi = (): useApiProps => ({
@@ -28,6 +32,14 @@ export const useApi = (): useApiProps => ({
   },
   getUserProjects: (token: string) => {
     return api.get('/users/projects', {
+      headers: {
+        Authorization: token,
+      },
+    })
+  },
+
+  getProjectFolders(token, projectId) {
+    return api.get(`/projects/${projectId}/folders`, {
       headers: {
         Authorization: token,
       },
