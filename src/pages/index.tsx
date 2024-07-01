@@ -27,6 +27,7 @@ import Head from 'next/head'
 import { MouseEvent, useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
 import { toast } from 'sonner'
+import { Folder as FolderIcon, CirclePlus } from 'lucide-react'
 
 type Project = {
   id: number
@@ -179,7 +180,7 @@ export default function Home({ token }: { token: string }) {
             hover:bg-green-500 hover:text-white flex items-center gap-2"
               >
                 <span>Novo projeto</span>
-                {/* <PlusCircle size={22} /> */}
+                <CirclePlus size={22} />
               </Button>
             </div>
           )}
@@ -224,9 +225,9 @@ export default function Home({ token }: { token: string }) {
                 className="flex items-center gap-2 bg-gray-800 border-none hover:cursor-pointer"
                 onClick={onFolderSelect}
               >
-                {/* <div>
+                <div>
                   <FolderIcon size={24} className="fill-white" />
-                </div> */}
+                </div>
                 <AlertTitle className="text-white leading-normal mb-0">
                   {folder.title}
                 </AlertTitle>
