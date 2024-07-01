@@ -190,12 +190,9 @@ export default function Home({ token }: { token: string }) {
             <Breadcrumb className="mt-6">
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbLink
-                    className="text-white hover:text-green-500"
-                    href="/"
-                  >
+                  <BreadcrumbItem className="text-white hover:text-green-500">
                     Início
-                  </BreadcrumbLink>
+                  </BreadcrumbItem>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 {selectedFolder.folder && (
@@ -203,12 +200,9 @@ export default function Home({ token }: { token: string }) {
                     <BreadcrumbItem className="text-white">...</BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                      <BreadcrumbLink
-                        className="text-white hover:text-green-500"
-                        href="/docs/components"
-                      >
+                      <BreadcrumbItem className="text-white hover:text-green-500">
                         {selectedFolder.folder.title}
-                      </BreadcrumbLink>
+                      </BreadcrumbItem>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                   </>
