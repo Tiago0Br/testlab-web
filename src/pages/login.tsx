@@ -41,8 +41,8 @@ export default function Login() {
         <title>Testlab - Login</title>
       </Head>
       <Loading isLoading={isLoading} />
-      <div className="w-screen h-screen bg-gray-900 flex flex-col items-center justify-center">
-        <div className="bg-gray-800 w-[390px] h-[512px] rounded-xl flex flex-col gap-10 items-center py-20">
+      <div className="w-screen h-screen bg-background flex flex-col items-center justify-center">
+        <div className="bg-foreground w-[390px] h-[512px] rounded-xl flex flex-col gap-10 items-center py-20">
           <div className="flex flex-col items-center gap-3">
             <Image
               src={logo}
@@ -70,8 +70,8 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
             />
             <Button
-              className="w-full border border-green-500 text-green-500 bg-transparent uppercase font-bold 
-            hover:bg-green-500 hover:text-white"
+              className="w-full border border-primary text-primary bg-transparent uppercase font-bold 
+            hover:bg-primary hover:text-white"
             >
               Login
             </Button>

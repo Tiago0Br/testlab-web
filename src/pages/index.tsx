@@ -150,7 +150,7 @@ export default function Home({ token }: { token: string }) {
         <title>Testlab - Início</title>
       </Head>
       <Loading isLoading={isLoading} />
-      <div className="h-screen bg-gray-900">
+      <div className="h-screen bg-background">
         <Header />
         <div className="flex flex-col items-center">
           {!selectedFolder && (
@@ -160,10 +160,10 @@ export default function Home({ token }: { token: string }) {
                 onValueChange={onProjectChange}
                 value={currentProject ? `${currentProject.id}` : undefined}
               >
-                <SelectTrigger className="w-60 bg-gray-800">
+                <SelectTrigger className="w-60 bg-foreground">
                   <SelectValue placeholder="Selecione um projeto" />
                 </SelectTrigger>
-                <SelectContent className="bg-gray-800">
+                <SelectContent className="bg-foreground">
                   {projects.map((project) => (
                     <SelectItem
                       key={project.id}
@@ -176,8 +176,8 @@ export default function Home({ token }: { token: string }) {
                 </SelectContent>
               </Select>
               <Button
-                className="border border-green-500 text-green-500 bg-transparent font-bold 
-            hover:bg-green-500 hover:text-white flex items-center gap-2"
+                className="border border-primary text-primary bg-transparent font-bold 
+            hover:bg-primary hover:text-white flex items-center gap-2"
               >
                 <span>Novo projeto</span>
                 <CirclePlus size={22} />
@@ -189,7 +189,7 @@ export default function Home({ token }: { token: string }) {
             <Breadcrumb className="mt-6">
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbItem className="text-white hover:text-green-500">
+                  <BreadcrumbItem className="text-white hover:text-primary">
                     Início
                   </BreadcrumbItem>
                 </BreadcrumbItem>
@@ -199,7 +199,7 @@ export default function Home({ token }: { token: string }) {
                     <BreadcrumbItem className="text-white">...</BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                      <BreadcrumbItem className="text-white hover:text-green-500">
+                      <BreadcrumbItem className="text-white hover:text-primary">
                         {selectedFolder.folder.title}
                       </BreadcrumbItem>
                     </BreadcrumbItem>
@@ -207,7 +207,7 @@ export default function Home({ token }: { token: string }) {
                   </>
                 )}
                 <BreadcrumbItem>
-                  <BreadcrumbPage className="text-green-500">
+                  <BreadcrumbPage className="text-primary">
                     {selectedFolder.title}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
@@ -222,11 +222,11 @@ export default function Home({ token }: { token: string }) {
               <Alert
                 key={folder.id}
                 id={`${folder.id}-${folder.title}`}
-                className="flex items-center gap-2 bg-gray-800 border-none hover:cursor-pointer"
+                className="flex items-center gap-2 bg-foreground border-none hover:cursor-pointer"
                 onClick={onFolderSelect}
               >
                 <div>
-                  <FolderIcon size={24} className="fill-white" />
+                  <FolderIcon size={24} className="fill-gray-400" />
                 </div>
                 <AlertTitle className="text-white leading-normal mb-0">
                   {folder.title}

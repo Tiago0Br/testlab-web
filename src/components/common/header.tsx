@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 export function Header() {
   return (
-    <header className="bg-gray-800 w-full h-24 flex justify-between items-center px-20">
+    <header className="bg-foreground w-full h-24 flex justify-between items-center px-20">
       <Link href="/">
         <Image src={logo} alt="logo" width={60} height={60} />
       </Link>
