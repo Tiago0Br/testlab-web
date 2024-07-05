@@ -1,14 +1,13 @@
 import { verifyToken } from '@/utils/verifyToken'
 import { GetServerSideProps } from 'next'
 import {
-  Alert,
-  AlertTitle,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
   Button,
+  Folder as FolderComponent,
   Header,
   Loading,
   Select,
@@ -16,50 +15,29 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  Testcases,
 } from '@/components'
 import Head from 'next/head'
 import { MouseEvent, useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
 import { toast } from 'sonner'
-import { Folder as FolderIcon, CirclePlus } from 'lucide-react'
-
-type Project = {
-  id: number
-  name: string
-  description: string
-}
-
-type Folder = {
-  id: number
-  title: string
-  folder?: Folder
-}
-
-type TestCase = {
-  id: number
-  title: string
-  summary: string
-  preconditions?: string
-}
-
-type ProjectContent = {
-  folders: Folder[]
-  testCases: TestCase[]
-}
+import { CirclePlus } from 'lucide-react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Folder, Project, ProjectContent } from '@/types'
 
 export default function Home({ token }: { token: string }) {
   const api = useApi()
+  const searchParams = useSearchParams()
+
   const [projects, setProjects] = useState<Project[]>([])
   const [content, setContent] = useState<ProjectContent | null>(null)
   const [currentProject, setCurrentProject] = useState<Project | null>(null)
-  const [selectedFolder, setSelectedFolder] = useState<Folder | null>(null)
+  const [folderId, setFolderId] = useState(() => {
+    return searchParams.get('folder_id') ?? ''
+  })
+  const [currentFolder, setCurrentFolder] = useState<Folder | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
 
   const onProjectChange = (projectId: string) => {
     const project =
@@ -91,28 +69,8 @@ export default function Home({ token }: { token: string }) {
 
   const onFolderSelect = (event: MouseEvent<HTMLDivElement>) => {
     const id = event.currentTarget.id
-    const [folderId, folderTitle] = id.split('-')
-    setSelectedFolder({
-      id: Number(folderId),
-      title: folderTitle,
-      folder: selectedFolder ?? undefined,
-    })
-
-    setIsLoading(true)
-
-    api
-      .getProjectContent(token, currentProject?.id!, Number(folderId))
-      .then((response) => {
-        setContent({
-          folders: response.data.folders,
-          testCases: response.data.test_cases,
-        })
-      })
-      .catch((err) => {
-        toast.error('Ocorreu um erro ao buscar o conteúdo da pasta')
-        console.log(err)
-      })
-      .finally(() => setIsLoading(false))
+    const [NewFolderId] = id.split('-')
+    setFolderId(NewFolderId)
   }
 
   useEffect(() => {
@@ -144,6 +102,38 @@ export default function Home({ token }: { token: string }) {
       })
       .finally(() => setIsLoading(false))
   }, [])
+
+  useEffect(() => {
+    if (currentProject) {
+      setIsLoading(true)
+
+      api
+        .getProjectContent(token, currentProject.id, currentFolder?.id)
+        .then((response) => {
+          setContent({
+            folders: response.data.folders,
+            testCases: response.data.test_cases,
+          })
+        })
+        .catch(() => {
+          toast.error('Ocorreu um erro ao buscar o conteúdo')
+        })
+        .finally(() => setIsLoading(false))
+    }
+  }, [currentProject, currentFolder])
+
+  useEffect(() => {
+    if (folderId) {
+      const params = new URLSearchParams(searchParams.toString())
+      params.set('folder_id', folderId)
+
+      setCurrentFolder(
+        content?.folders.find((folder) => folder.id === Number(folderId)) ??
+          null
+      )
+    }
+  }, [folderId])
+
   return (
     <>
       <Head>
@@ -153,7 +143,7 @@ export default function Home({ token }: { token: string }) {
       <div className="h-screen bg-background">
         <Header />
         <div className="flex flex-col items-center">
-          {!selectedFolder && (
+          {!currentFolder && (
             <div className="flex justify-center items-center mt-6 gap-6">
               <h1 className="font-semibold text-xl">Selecione o projeto:</h1>
               <Select
@@ -185,22 +175,25 @@ export default function Home({ token }: { token: string }) {
             </div>
           )}
 
-          {selectedFolder ? (
+          {currentFolder ? (
             <Breadcrumb className="mt-6">
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbItem className="text-white hover:text-primary">
+                  <BreadcrumbItem
+                    className="text-white hover:text-primary hover:cursor-pointer"
+                    onClick={() => router.refresh()}
+                  >
                     Início
                   </BreadcrumbItem>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
-                {selectedFolder.folder && (
+                {currentFolder.folder && (
                   <>
                     <BreadcrumbItem className="text-white">...</BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
                       <BreadcrumbItem className="text-white hover:text-primary">
-                        {selectedFolder.folder.title}
+                        {currentFolder.folder.title}
                       </BreadcrumbItem>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
@@ -208,7 +201,7 @@ export default function Home({ token }: { token: string }) {
                 )}
                 <BreadcrumbItem>
                   <BreadcrumbPage className="text-primary">
-                    {selectedFolder.title}
+                    {currentFolder.title}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
@@ -219,49 +212,20 @@ export default function Home({ token }: { token: string }) {
 
           <div className="w-full mt-6 px-10 grid grid-cols-4 gap-5">
             {content?.folders.map((folder) => (
-              <Alert
+              <FolderComponent
                 key={folder.id}
-                id={`${folder.id}-${folder.title}`}
-                className="flex items-center gap-2 bg-foreground border-none hover:cursor-pointer"
-                onClick={onFolderSelect}
-              >
-                <div>
-                  <FolderIcon size={24} className="fill-gray-400" />
-                </div>
-                <AlertTitle className="text-white leading-normal mb-0">
-                  {folder.title}
-                </AlertTitle>
-              </Alert>
+                folder={folder}
+                onFolderSelect={onFolderSelect}
+              />
             ))}
           </div>
 
           {content && content.testCases.length > 0 && (
             <div className="mt-6">
-              <h1 className="font-semibold text-lg">Testes</h1>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[100px]">Título</TableHead>
-                    <TableHead>Resumo</TableHead>
-                    <TableHead>Pré-condições</TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {content.testCases.map((testCase) => (
-                    <TableRow key={testCase.id}>
-                      <TableCell className="font-medium">
-                        {testCase.title}
-                      </TableCell>
-                      <TableCell>{testCase.summary}</TableCell>
-                      <TableCell>{testCase.preconditions}</TableCell>
-                      <TableCell className="text-right">
-                        {testCase.title}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              <h1 className="font-semibold text-lg text-center">
+                Casos de testes
+              </h1>
+              <Testcases testCases={content.testCases} />
             </div>
           )}
         </div>
