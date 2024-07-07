@@ -10,19 +10,15 @@ import {
   Folder as FolderComponent,
   Header,
   Loading,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Testcases,
+  ProjectDropdown,
 } from '@/components'
 import Head from 'next/head'
 import { MouseEvent, useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
 import { toast } from 'sonner'
 import { CirclePlus } from 'lucide-react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { Folder, Project, ProjectContent } from '@/types'
 
 export default function Home({ token }: { token: string }) {
@@ -36,8 +32,8 @@ export default function Home({ token }: { token: string }) {
     return searchParams.get('folder_id') ?? ''
   })
   const [currentFolder, setCurrentFolder] = useState<Folder | null>(null)
+  const [parentFolder, setParentFolder] = useState<Folder | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
 
   const onProjectChange = (projectId: string) => {
     const project =
@@ -82,19 +78,6 @@ export default function Home({ token }: { token: string }) {
 
         setProjects(projectsResponse)
         setCurrentProject(projectsResponse[0] ?? null)
-
-        if (projectsResponse[0]) {
-          api
-            .getProjectContent(token, projectsResponse[0].id)
-            .then((response) => {
-              setContent({
-                folders: response.data.folders,
-                testCases: response.data.test_cases,
-              })
-            })
-        }
-
-        setIsLoading(false)
       })
       .catch((err) => {
         toast.error('Ocorreu um erro ao buscar os projetos')
@@ -123,15 +106,20 @@ export default function Home({ token }: { token: string }) {
   }, [currentProject, currentFolder])
 
   useEffect(() => {
-    if (folderId) {
-      const params = new URLSearchParams(searchParams.toString())
-      params.set('folder_id', folderId)
-
-      setCurrentFolder(
-        content?.folders.find((folder) => folder.id === Number(folderId)) ??
-          null
-      )
+    if (!folderId) {
+      setCurrentFolder(null)
+      setParentFolder(null)
+      return
     }
+
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('folder_id', folderId)
+
+    const folder =
+      content?.folders.find((folder) => folder.id === Number(folderId)) ?? null
+
+    setParentFolder(currentFolder)
+    setCurrentFolder(folder)
   }, [folderId])
 
   return (
@@ -146,25 +134,11 @@ export default function Home({ token }: { token: string }) {
           {!currentFolder && (
             <div className="flex justify-center items-center mt-6 gap-6">
               <h1 className="font-semibold text-xl">Selecione o projeto:</h1>
-              <Select
-                onValueChange={onProjectChange}
-                value={currentProject ? `${currentProject.id}` : undefined}
-              >
-                <SelectTrigger className="w-60 bg-foreground">
-                  <SelectValue placeholder="Selecione um projeto" />
-                </SelectTrigger>
-                <SelectContent className="bg-foreground">
-                  {projects.map((project) => (
-                    <SelectItem
-                      key={project.id}
-                      value={`${project.id}`}
-                      className="text-white"
-                    >
-                      {project.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <ProjectDropdown
+                currentProject={currentProject}
+                projects={projects}
+                onProjectChange={onProjectChange}
+              />
               <Button
                 className="border border-primary text-primary bg-transparent font-bold 
             hover:bg-primary hover:text-white flex items-center gap-2"
@@ -181,19 +155,19 @@ export default function Home({ token }: { token: string }) {
                 <BreadcrumbItem>
                   <BreadcrumbItem
                     className="text-white hover:text-primary hover:cursor-pointer"
-                    onClick={() => router.refresh()}
+                    onClick={() => setFolderId('')}
                   >
                     Início
                   </BreadcrumbItem>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
-                {currentFolder.folder && (
+                {parentFolder && (
                   <>
                     <BreadcrumbItem className="text-white">...</BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
                       <BreadcrumbItem className="text-white hover:text-primary">
-                        {currentFolder.folder.title}
+                        {parentFolder.title}
                       </BreadcrumbItem>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />

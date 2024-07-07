@@ -7,7 +7,6 @@ export type Project = {
 export type Folder = {
   id: number
   title: string
-  folder?: Folder
 }
 
 export type TestCase = {
