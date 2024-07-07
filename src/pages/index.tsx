@@ -140,7 +140,7 @@ export default function Home({ token }: { token: string }) {
         <title>Testlab - Início</title>
       </Head>
       <Loading isLoading={isLoading} />
-      <div className="h-screen bg-background">
+      <div className="min-h-screen bg-background pb-6">
         <Header />
         <div className="flex flex-col items-center">
           {!currentFolder && (

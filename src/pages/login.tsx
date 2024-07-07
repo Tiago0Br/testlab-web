@@ -30,7 +30,10 @@ export default function Login() {
         return toast.success(`Seja bem-vindo ${user?.name}!`)
       }
 
-      toast.error(error)
+      const defaultErrorMessage =
+        'Erro de conexão com o servidor. Por favor, tente novamente mais tarde.'
+
+      toast.error(error ?? defaultErrorMessage)
       setIsLoading(false)
     })
   }
