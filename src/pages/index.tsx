@@ -18,21 +18,16 @@ import { MouseEvent, useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
 import { toast } from 'sonner'
 import { CirclePlus } from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
 import { Folder, Project, ProjectContent } from '@/types'
 
 export default function Home({ token }: { token: string }) {
   const api = useApi()
-  const searchParams = useSearchParams()
 
   const [projects, setProjects] = useState<Project[]>([])
-  const [content, setContent] = useState<ProjectContent | null>(null)
   const [currentProject, setCurrentProject] = useState<Project | null>(null)
-  const [folderId, setFolderId] = useState(() => {
-    return searchParams.get('folder_id') ?? ''
-  })
   const [currentFolder, setCurrentFolder] = useState<Folder | null>(null)
   const [parentFolder, setParentFolder] = useState<Folder | null>(null)
+  const [content, setContent] = useState<ProjectContent | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
   const onProjectChange = (projectId: string) => {
@@ -65,8 +60,10 @@ export default function Home({ token }: { token: string }) {
 
   const onFolderSelect = (event: MouseEvent<HTMLDivElement>) => {
     const id = event.currentTarget.id
-    const [NewFolderId] = id.split('-')
-    setFolderId(NewFolderId)
+    const [folderId] = id.split('-')
+    const folder = content?.folders.find((f) => f.id === +folderId) ?? null
+
+    setCurrentFolder(folder)
   }
 
   useEffect(() => {
@@ -97,6 +94,8 @@ export default function Home({ token }: { token: string }) {
             folders: response.data.folders,
             testCases: response.data.test_cases,
           })
+
+          setParentFolder(response.data.parent_folder)
         })
         .catch(() => {
           toast.error('Ocorreu um erro ao buscar o conteúdo')
@@ -104,23 +103,6 @@ export default function Home({ token }: { token: string }) {
         .finally(() => setIsLoading(false))
     }
   }, [currentProject, currentFolder])
-
-  useEffect(() => {
-    if (!folderId) {
-      setCurrentFolder(null)
-      setParentFolder(null)
-      return
-    }
-
-    const params = new URLSearchParams(searchParams.toString())
-    params.set('folder_id', folderId)
-
-    const folder =
-      content?.folders.find((folder) => folder.id === Number(folderId)) ?? null
-
-    setParentFolder(currentFolder)
-    setCurrentFolder(folder)
-  }, [folderId])
 
   return (
     <>
@@ -141,7 +123,7 @@ export default function Home({ token }: { token: string }) {
               />
               <Button
                 className="border border-primary text-primary bg-transparent font-bold 
-            hover:bg-primary hover:text-white flex items-center gap-2"
+                hover:bg-primary hover:text-white flex items-center gap-2"
               >
                 <span>Novo projeto</span>
                 <CirclePlus size={22} />
@@ -155,7 +137,7 @@ export default function Home({ token }: { token: string }) {
                 <BreadcrumbItem>
                   <BreadcrumbItem
                     className="text-white hover:text-primary hover:cursor-pointer"
-                    onClick={() => setFolderId('')}
+                    onClick={() => setCurrentFolder(null)}
                   >
                     Início
                   </BreadcrumbItem>
@@ -166,7 +148,10 @@ export default function Home({ token }: { token: string }) {
                     <BreadcrumbItem className="text-white">...</BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                      <BreadcrumbItem className="text-white hover:text-primary">
+                      <BreadcrumbItem
+                        className="text-white hover:text-primary hover:cursor-pointer"
+                        onClick={() => setCurrentFolder(parentFolder)}
+                      >
                         {parentFolder.title}
                       </BreadcrumbItem>
                     </BreadcrumbItem>
