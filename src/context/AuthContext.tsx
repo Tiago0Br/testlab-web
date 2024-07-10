@@ -17,6 +17,7 @@ interface SignInResponseProps {
 
 interface AuthContextProps {
   user: User | null
+  token: string | null
   isAuthenticated: boolean
   signIn: (email: string, password: string) => Promise<SignInResponseProps>
 }
@@ -28,6 +29,7 @@ interface AuthProviderProps {
 export const AuthContext = createContext({} as AuthContextProps)
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  const [token, setToken] = useState<string | null>(null)
   const [user, setUser] = useState<User | null>(function () {
     const { 'testlab.user': user } = parseCookies()
 
@@ -40,6 +42,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const { 'testlab.token': token } = parseCookies()
+
+    setToken(token !== '' ? token : null)
 
     if (token && !user) {
       api
@@ -95,7 +99,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, signIn }}>
+    <AuthContext.Provider value={{ user, token, isAuthenticated, signIn }}>
       {children}
     </AuthContext.Provider>
   )

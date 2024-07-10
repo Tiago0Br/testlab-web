@@ -3,10 +3,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Head from 'next/head'
 import { Button, CustomInput, Loading } from '@/components'
-import { FormEvent, useContext, useState } from 'react'
+import { FormEvent, useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { AuthContext } from '@/context/AuthContext'
+import { destroyCookie } from 'nookies'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -37,6 +38,10 @@ export default function Login() {
       setIsLoading(false)
     })
   }
+
+  useEffect(() => {
+    destroyCookie(null, 'testlab.token')
+  }, [])
 
   return (
     <>

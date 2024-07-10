@@ -6,18 +6,17 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-  Button,
   Folder as FolderComponent,
   Header,
   Loading,
-  Testcases,
+  TestCases,
   ProjectDropdown,
+  ModalNewProject,
 } from '@/components'
 import Head from 'next/head'
 import { MouseEvent, useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
 import { toast } from 'sonner'
-import { CirclePlus } from 'lucide-react'
 import { Folder, Project, ProjectContent } from '@/types'
 
 export default function Home({ token }: { token: string }) {
@@ -121,13 +120,7 @@ export default function Home({ token }: { token: string }) {
                 projects={projects}
                 onProjectChange={onProjectChange}
               />
-              <Button
-                className="border border-primary text-primary bg-transparent font-bold 
-                hover:bg-primary hover:text-white flex items-center gap-2"
-              >
-                <span>Novo projeto</span>
-                <CirclePlus size={22} />
-              </Button>
+              <ModalNewProject />
             </div>
           )}
 
@@ -184,7 +177,7 @@ export default function Home({ token }: { token: string }) {
               <h1 className="font-semibold text-lg text-center">
                 Casos de testes
               </h1>
-              <Testcases testCases={content.testCases} />
+              <TestCases testCases={content.testCases} />
             </div>
           )}
         </div>

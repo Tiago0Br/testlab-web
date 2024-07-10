@@ -15,6 +15,11 @@ interface useApiProps {
     projectId: number,
     folderId?: number
   ) => Promise<AxiosResponse>
+  createNewProject: (
+    token: string,
+    name: string,
+    description: string
+  ) => Promise<AxiosResponse>
 }
 
 export const useApi = (): useApiProps => ({
@@ -44,6 +49,18 @@ export const useApi = (): useApiProps => ({
       `/projects/${projectId}/folders${
         folderId ? `?folder_id=${folderId}` : ''
       }`,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    )
+  },
+
+  createNewProject(token, name, description) {
+    return api.post(
+      '/projects/new',
+      { name, description },
       {
         headers: {
           Authorization: token,
