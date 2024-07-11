@@ -20,6 +20,7 @@ interface useApiProps {
     name: string,
     description: string
   ) => Promise<AxiosResponse>
+  deleteTestCase: (token: string, testCaseId: number) => Promise<AxiosResponse>
 }
 
 export const useApi = (): useApiProps => ({
@@ -67,5 +68,13 @@ export const useApi = (): useApiProps => ({
         },
       }
     )
+  },
+
+  deleteTestCase(token, testCaseId) {
+    return api.delete(`/test_cases/${testCaseId}`, {
+      headers: {
+        Authorization: token,
+      },
+    })
   },
 })
