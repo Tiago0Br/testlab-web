@@ -28,7 +28,7 @@ export const useApi = (): useApiProps => ({
     return api.post('/login', { email, password })
   },
   register: (name: string, email: string, password: string) => {
-    return api.post('/users', { name, email, password })
+    return api.post('/users/new', { name, email, password })
   },
   recoverUserInfo: (token: string) => {
     return api.get('/users/info', {
