@@ -12,6 +12,7 @@ import {
   TestCases,
   ProjectDropdown,
   ModalNewProject,
+  ModalNewFolder,
 } from '@/components'
 import Head from 'next/head'
 import { MouseEvent, useEffect, useState } from 'react'
@@ -80,7 +81,7 @@ export default function Home({ token }: { token: string }) {
         console.log(err)
       })
       .finally(() => setIsLoading(false))
-  }, [])
+  }, []) //eslint-disable-line
 
   useEffect(() => {
     if (currentProject) {
@@ -101,7 +102,7 @@ export default function Home({ token }: { token: string }) {
         })
         .finally(() => setIsLoading(false))
     }
-  }, [currentProject, currentFolder])
+  }, [currentProject, currentFolder]) //eslint-disable-line
 
   return (
     <>
@@ -113,7 +114,7 @@ export default function Home({ token }: { token: string }) {
         <Header />
         <div className="flex flex-col items-center">
           {!currentFolder && (
-            <div className="flex justify-center items-center mt-6 gap-6">
+            <div className="flex justify-center items-center mt-6 gap-2">
               <h1 className="font-semibold text-xl">Selecione o projeto:</h1>
               <ProjectDropdown
                 currentProject={currentProject}
@@ -124,42 +125,55 @@ export default function Home({ token }: { token: string }) {
             </div>
           )}
 
-          {currentFolder ? (
-            <Breadcrumb className="mt-6">
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbItem
-                    className="text-white hover:text-primary hover:cursor-pointer"
-                    onClick={() => setCurrentFolder(null)}
-                  >
-                    Início
-                  </BreadcrumbItem>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                {parentFolder && (
-                  <>
-                    <BreadcrumbItem className="text-white">...</BreadcrumbItem>
-                    <BreadcrumbSeparator />
+          {currentProject && (
+            <>
+              {currentFolder ? (
+                <Breadcrumb className="mt-6">
+                  <BreadcrumbList>
                     <BreadcrumbItem>
                       <BreadcrumbItem
                         className="text-white hover:text-primary hover:cursor-pointer"
-                        onClick={() => setCurrentFolder(parentFolder)}
+                        onClick={() => setCurrentFolder(null)}
                       >
-                        {parentFolder.title}
+                        Início
                       </BreadcrumbItem>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
-                  </>
-                )}
-                <BreadcrumbItem>
-                  <BreadcrumbPage className="text-primary">
-                    {currentFolder.title}
-                  </BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          ) : (
-            <h1 className="mt-6 font-semibold text-lg">Pastas do projeto</h1>
+                    {parentFolder && (
+                      <>
+                        <BreadcrumbItem className="text-white">
+                          ...
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator />
+                        <BreadcrumbItem>
+                          <BreadcrumbItem
+                            className="text-white hover:text-primary hover:cursor-pointer"
+                            onClick={() => setCurrentFolder(parentFolder)}
+                          >
+                            {parentFolder.title}
+                          </BreadcrumbItem>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator />
+                      </>
+                    )}
+                    <BreadcrumbItem>
+                      <BreadcrumbPage className="text-primary">
+                        {currentFolder.title}
+                      </BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+              ) : (
+                <div className="mt-6 flex items-center">
+                  <h1 className="font-semibold text-lg">Pastas do projeto</h1>
+
+                  <ModalNewFolder
+                    currentProject={currentProject}
+                    currentFolder={currentFolder}
+                  />
+                </div>
+              )}
+            </>
           )}
 
           <div className="w-full mt-6 px-10 grid grid-cols-4 gap-5">

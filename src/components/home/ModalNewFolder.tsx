@@ -11,43 +11,54 @@ import {
   Input,
   DialogFooter,
   Loading,
-  Textarea,
 } from '..'
 import { toast } from 'sonner'
 import { useApi } from '@/hooks/useApi'
 import { AuthContext } from '@/context/AuthContext'
 import { useRouter } from 'next/navigation'
+import { Folder, Project } from '@/types'
 
-export function ModalNewProject() {
-  const [projectName, setProjectName] = useState('')
-  const [projectDescription, setProjectDescription] = useState('')
+interface ModalNewFolderProps {
+  currentProject: Project
+  currentFolder?: Folder | null
+}
+
+export function ModalNewFolder({
+  currentProject,
+  currentFolder,
+}: ModalNewFolderProps) {
+  const [folderName, setFolderName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const { token } = useContext(AuthContext)
   const router = useRouter()
   const api = useApi()
 
   function handleSubmit() {
-    if (projectName.trim() === '' || projectDescription.trim() === '') {
+    if (folderName.trim() === '') {
       return toast.error('Preencha todos os campos')
     }
 
     setIsLoading(true)
 
     api
-      .createNewProject(token ?? '', projectName.trim(), projectDescription)
+      .createNewFolder({
+        token: token ?? '',
+        title: folderName.trim(),
+        project_id: currentProject.id,
+        folder_id: currentFolder?.id,
+      })
       .then(() => {
-        toast.success('Projeto criado com sucesso!')
+        toast.success('Pasta criada com sucesso!')
       })
       .catch((err) => {
         toast.error(
-          err.response?.data?.message || 'Não foi possiível criar o projeto.'
+          err.response?.data?.message || 'Não foi possiível criar a pasta.'
         )
       })
       .finally(() => {
         setIsLoading(false)
 
-        setProjectName('')
-        setProjectDescription('')
+        setFolderName('')
 
         setTimeout(() => {
           router.refresh()
@@ -67,34 +78,20 @@ export function ModalNewProject() {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Novo projeto</DialogTitle>
-            <DialogDescription>
-              Cadastro de um novo projeto de testes
-            </DialogDescription>
+            <DialogTitle>Nova pasta</DialogTitle>
+            <DialogDescription>Cadastro de uma nova pasta</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <label htmlFor="project-name" className="text-right">
-                Projeto
+              <label htmlFor="folder-name" className="text-right">
+                Nome
               </label>
               <Input
-                id="project-name"
+                id="folder-name"
                 className="col-span-3"
-                placeholder="Nome do projeto"
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <label htmlFor="project-description" className="text-right">
-                Descrição
-              </label>
-              <Textarea
-                id="project-description"
-                placeholder="Breve descrição do projeto"
-                className="col-span-3 resize-none"
-                value={projectDescription}
-                onChange={(e) => setProjectDescription(e.target.value)}
+                placeholder="Nome da pasta"
+                value={folderName}
+                onChange={(e) => setFolderName(e.target.value)}
               />
             </div>
           </div>

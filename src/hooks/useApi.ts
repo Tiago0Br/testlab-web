@@ -20,6 +20,17 @@ interface useApiProps {
     name: string,
     description: string
   ) => Promise<AxiosResponse>
+  createNewFolder: ({
+    token,
+    project_id,
+    title,
+    folder_id
+  } : {
+    token: string
+    project_id: number
+    title: string,
+    folder_id?: number
+  }) => Promise<AxiosResponse>
   deleteTestCase: (token: string, testCaseId: number) => Promise<AxiosResponse>
 }
 
@@ -76,5 +87,22 @@ export const useApi = (): useApiProps => ({
         Authorization: token,
       },
     })
+  },
+
+  createNewFolder({ token, project_id, title, folder_id }) {
+    return api.post(
+      `/folders/new`,
+      {
+        title,
+        folder_id: folder_id ?? null,
+        project_id,
+        is_test_suite: 1
+      },
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    )
   },
 })
