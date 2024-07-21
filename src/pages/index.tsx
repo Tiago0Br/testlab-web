@@ -13,8 +13,10 @@ import {
   ProjectDropdown,
   ModalNewProject,
   ModalNewFolder,
+  ButtonAddContent,
 } from '@/components'
 import Head from 'next/head'
+import Image from 'next/image'
 import { MouseEvent, useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
 import { toast } from 'sonner'
@@ -127,7 +129,7 @@ export default function Home({ token }: { token: string }) {
 
           {currentProject && (
             <>
-              {currentFolder ? (
+              {currentFolder && (
                 <Breadcrumb className="mt-6">
                   <BreadcrumbList>
                     <BreadcrumbItem>
@@ -163,9 +165,27 @@ export default function Home({ token }: { token: string }) {
                     </BreadcrumbItem>
                   </BreadcrumbList>
                 </Breadcrumb>
-              ) : (
+              )}
+
+              {!content ||
+                (content.folders.length === 0 &&
+                  content.testCases.length === 0 && (
+                    <div className="flex flex-col items-center">
+                      <Image
+                        src="/no-content.png"
+                        alt="empty folder"
+                        width={300}
+                        height={300}
+                      />
+                      <ButtonAddContent />
+                    </div>
+                  ))}
+
+              {content?.folders && content.folders.length > 0 && (
                 <div className="mt-6 flex items-center">
-                  <h1 className="font-semibold text-lg">Pastas do projeto</h1>
+                  <h1 className="font-semibold text-lg">
+                    Pastas {!currentFolder && 'do projeto'}
+                  </h1>
 
                   <ModalNewFolder
                     currentProject={currentProject}

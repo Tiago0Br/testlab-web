@@ -26,8 +26,12 @@ export function ModalNewProject() {
   const router = useRouter()
   const api = useApi()
 
+  function hasEmptyField() {
+    return projectName.trim() === '' || projectDescription.trim() === ''
+  }
+
   function handleSubmit() {
-    if (projectName.trim() === '' || projectDescription.trim() === '') {
+    if (hasEmptyField()) {
       return toast.error('Preencha todos os campos')
     }
 
@@ -99,7 +103,11 @@ export function ModalNewProject() {
             </div>
           </div>
           <DialogFooter>
-            <Button className="hover:bg-secondary" onClick={handleSubmit}>
+            <Button
+              className="hover:bg-secondary"
+              onClick={handleSubmit}
+              disabled={hasEmptyField()}
+            >
               Cadastrar
             </Button>
           </DialogFooter>

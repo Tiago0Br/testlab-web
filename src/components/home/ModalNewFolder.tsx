@@ -33,8 +33,12 @@ export function ModalNewFolder({
   const router = useRouter()
   const api = useApi()
 
+  function hasEmptyField() {
+    return folderName.trim() === ''
+  }
+
   function handleSubmit() {
-    if (folderName.trim() === '') {
+    if (hasEmptyField()) {
       return toast.error('Preencha todos os campos')
     }
 
@@ -49,6 +53,10 @@ export function ModalNewFolder({
       })
       .then(() => {
         toast.success('Pasta criada com sucesso!')
+
+        setTimeout(() => {
+          router.refresh()
+        }, 800)
       })
       .catch((err) => {
         toast.error(
@@ -59,10 +67,6 @@ export function ModalNewFolder({
         setIsLoading(false)
 
         setFolderName('')
-
-        setTimeout(() => {
-          router.refresh()
-        }, 800)
       })
   }
 
@@ -96,7 +100,11 @@ export function ModalNewFolder({
             </div>
           </div>
           <DialogFooter>
-            <Button className="hover:bg-secondary" onClick={handleSubmit}>
+            <Button
+              className="hover:bg-secondary"
+              onClick={handleSubmit}
+              disabled={hasEmptyField()}
+            >
               Cadastrar
             </Button>
           </DialogFooter>
