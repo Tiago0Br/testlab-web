@@ -79,7 +79,7 @@ export function ModalNewProject() {
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <label htmlFor="project-name" className="text-right">
-                Projeto
+                Projeto*
               </label>
               <Input
                 id="project-name"
@@ -91,7 +91,7 @@ export function ModalNewProject() {
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <label htmlFor="project-description" className="text-right">
-                Descrição
+                Descrição*
               </label>
               <Textarea
                 id="project-description"

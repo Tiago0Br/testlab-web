@@ -13,7 +13,8 @@ import {
   ProjectDropdown,
   ModalNewProject,
   ModalNewFolder,
-  ButtonAddContent,
+  Button,
+  ModalNewTestCase,
 } from '@/components'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -21,6 +22,7 @@ import { MouseEvent, useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
 import { toast } from 'sonner'
 import { Folder, Project, ProjectContent } from '@/types'
+import { CirclePlus, FolderIcon, CircleCheckBig } from 'lucide-react'
 
 export default function Home({ token }: { token: string }) {
   const api = useApi()
@@ -177,9 +179,66 @@ export default function Home({ token }: { token: string }) {
                         width={300}
                         height={300}
                       />
-                      <ButtonAddContent />
+                      <h1>Adicione um conteúdo:</h1>
+                      <div className="mt-4 flex gap-2">
+                        <ModalNewFolder
+                          currentProject={currentProject}
+                          currentFolder={currentFolder}
+                        >
+                          <Button
+                            className="w-44 border border-primary text-primary bg-transparent uppercase font-bold 
+                          hover:bg-primary hover:text-white flex gap-2"
+                          >
+                            <FolderIcon size={24} />
+                            Pasta
+                          </Button>
+                        </ModalNewFolder>
+                        {currentFolder && (
+                          <ModalNewTestCase currentFolder={currentFolder}>
+                            <Button
+                              className="w-44 border border-primary text-primary bg-transparent uppercase font-bold 
+                            hover:bg-primary hover:text-white flex gap-2"
+                            >
+                              <CircleCheckBig size={24} />
+                              Caso de testes
+                            </Button>
+                          </ModalNewTestCase>
+                        )}
+                      </div>
                     </div>
                   ))}
+
+              {content &&
+                (content.folders.length > 0 || content.testCases.length > 0) &&
+                currentFolder && (
+                  <div className="flex flex-col items-center">
+                    <div className="mt-4 flex gap-2">
+                      <ModalNewFolder
+                        currentProject={currentProject}
+                        currentFolder={currentFolder}
+                      >
+                        <Button
+                          className="w-52 border border-primary text-primary bg-transparent uppercase font-bold 
+                        hover:bg-primary hover:text-white flex gap-2"
+                        >
+                          <FolderIcon size={24} />
+                          Nova pasta
+                        </Button>
+                      </ModalNewFolder>
+                      {currentFolder && (
+                        <ModalNewTestCase currentFolder={currentFolder}>
+                          <Button
+                            className="w-52 border border-primary text-primary bg-transparent uppercase font-bold 
+                          hover:bg-primary hover:text-white flex gap-2"
+                          >
+                            <CircleCheckBig size={24} />
+                            Novo caso de testes
+                          </Button>
+                        </ModalNewTestCase>
+                      )}
+                    </div>
+                  </div>
+                )}
 
               {content?.folders && content.folders.length > 0 && (
                 <div className="mt-6 flex items-center">
@@ -187,10 +246,19 @@ export default function Home({ token }: { token: string }) {
                     Pastas {!currentFolder && 'do projeto'}
                   </h1>
 
-                  <ModalNewFolder
-                    currentProject={currentProject}
-                    currentFolder={currentFolder}
-                  />
+                  {!currentFolder && (
+                    <ModalNewFolder
+                      currentProject={currentProject}
+                      currentFolder={currentFolder}
+                    >
+                      <Button
+                        className="text-primary text-sm bg-transparent font-bold py-2 px-4 hover:text-secondary 
+                      transition-colors"
+                      >
+                        <CirclePlus size={40} />
+                      </Button>
+                    </ModalNewFolder>
+                  )}
                 </div>
               )}
             </>

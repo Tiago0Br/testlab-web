@@ -1,5 +1,4 @@
-import { useContext, useState } from 'react'
-import { CirclePlus } from 'lucide-react'
+import { ReactNode, useContext, useState } from 'react'
 import {
   Dialog,
   DialogTrigger,
@@ -21,11 +20,13 @@ import { Folder, Project } from '@/types'
 interface ModalNewFolderProps {
   currentProject: Project
   currentFolder?: Folder | null
+  children: ReactNode
 }
 
 export function ModalNewFolder({
   currentProject,
   currentFolder,
+  children,
 }: ModalNewFolderProps) {
   const [folderName, setFolderName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -74,12 +75,7 @@ export function ModalNewFolder({
     <>
       <Loading isLoading={isLoading} />
       <Dialog>
-        <DialogTrigger
-          className="text-primary text-sm bg-transparent font-bold py-2 px-4
-          hover:text-secondary transition-colors"
-        >
-          <CirclePlus size={40} />
-        </DialogTrigger>
+        <DialogTrigger asChild>{children}</DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Nova pasta</DialogTitle>
@@ -88,7 +84,7 @@ export function ModalNewFolder({
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <label htmlFor="folder-name" className="text-right">
-                Nome
+                Nome*
               </label>
               <Input
                 id="folder-name"

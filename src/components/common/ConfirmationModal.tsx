@@ -32,8 +32,15 @@ export function ConfirmationModal({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm}>Confirmar</AlertDialogAction>
+          <AlertDialogCancel className="bg-primary hover:bg-secondary">
+            Cancelar
+          </AlertDialogCancel>
+          <AlertDialogAction
+            className="bg-red-700 hover:bg-red-500"
+            onClick={onConfirm}
+          >
+            Confirmar
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

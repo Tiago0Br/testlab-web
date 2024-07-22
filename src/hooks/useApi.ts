@@ -31,6 +31,17 @@ interface useApiProps {
     title: string,
     folder_id?: number
   }) => Promise<AxiosResponse>
+  createTestCase: ({
+    token,
+    title,
+    test_suite_id
+  } : {
+    token: string
+    title: string,
+    summary: string,
+    preconditions?: string
+    test_suite_id: number
+  }) => Promise<AxiosResponse>
   deleteTestCase: (token: string, testCaseId: number) => Promise<AxiosResponse>
 }
 
@@ -97,6 +108,23 @@ export const useApi = (): useApiProps => ({
         folder_id: folder_id ?? null,
         project_id,
         is_test_suite: 1
+      },
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    )
+  },
+
+  createTestCase({ token, title, summary, preconditions, test_suite_id }) {
+    return api.post(
+      `/test_cases/new`,
+      {
+        title,
+        summary,
+        preconditions,
+        test_suite_id
       },
       {
         headers: {

@@ -8,9 +8,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  ModalNewFolder,
 } from '..'
+import { Folder, Project } from '@/types'
 
-export function ButtonAddContent() {
+interface ButtonAddContentProps {
+  currentProject: Project
+  currentFolder?: Folder | null
+}
+
+export function ButtonAddContent({
+  currentProject,
+  currentFolder,
+}: ButtonAddContentProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -19,13 +29,20 @@ export function ButtonAddContent() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 border-primary">
-        <DropdownMenuLabel>Novo Item</DropdownMenuLabel>
+        <DropdownMenuLabel className="text-primary">
+          Novo Item
+        </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-primary" />
         <DropdownMenuGroup>
-          <DropdownMenuItem className="hover:text-primary cursor-pointer">
-            <FolderIcon className="mr-2 h-4 w-4" />
-            <span>Pasta</span>
-          </DropdownMenuItem>
+          <ModalNewFolder
+            currentProject={currentProject}
+            currentFolder={currentFolder}
+          >
+            <DropdownMenuItem className="hover:text-primary cursor-pointer">
+              <FolderIcon className="mr-2 h-4 w-4" />
+              <span>Pasta</span>
+            </DropdownMenuItem>
+          </ModalNewFolder>
           <DropdownMenuItem className="hover:text-primary cursor-pointer">
             <CircleCheckBig className="mr-2 h-4 w-4" />
             <span>Caso de teste</span>
