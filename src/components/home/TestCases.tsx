@@ -13,6 +13,7 @@ import { TestCase, TestCaseStatus } from '@/types'
 import { Eye, Pencil, Trash2 } from 'lucide-react'
 import { useContext } from 'react'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 interface TestCasesProps {
   testCases: TestCase[]
@@ -21,6 +22,7 @@ interface TestCasesProps {
 export function TestCases({ testCases }: TestCasesProps) {
   const api = useApi()
   const { token } = useContext(AuthContext)
+  const router = useRouter()
 
   function getStatusColor(status: TestCaseStatus) {
     switch (status) {
@@ -55,6 +57,10 @@ export function TestCases({ testCases }: TestCasesProps) {
       })
   }
 
+  function handleGetTestCase(testCaseId: number) {
+    router.push(`/testcases/?id=${testCaseId}`)
+  }
+
   return (
     <Table className="bg-foreground rounded-lg mt-6 min-w-[600px]">
       <TableHeader>
@@ -78,7 +84,10 @@ export function TestCases({ testCases }: TestCasesProps) {
               </div>
             </TableCell>
             <TableCell className="flex items-center gap-2">
-              <button className="p-1 bg-blue-500 rounded-md hover:bg-blue-400">
+              <button
+                className="p-1 bg-blue-500 rounded-md hover:bg-blue-400"
+                onClick={() => handleGetTestCase(testCase.id)}
+              >
                 <Eye size={24} className="text-white" />
               </button>
               <button className="p-1 bg-orange-400 rounded-md hover:bg-orange-300">
