@@ -24,25 +24,26 @@ interface useApiProps {
     token,
     project_id,
     title,
-    folder_id
-  } : {
+    folder_id,
+  }: {
     token: string
     project_id: number
-    title: string,
+    title: string
     folder_id?: number
   }) => Promise<AxiosResponse>
   createTestCase: ({
     token,
     title,
-    test_suite_id
-  } : {
+    test_suite_id,
+  }: {
     token: string
-    title: string,
-    summary: string,
+    title: string
+    summary: string
     preconditions?: string
     test_suite_id: number
   }) => Promise<AxiosResponse>
   deleteTestCase: (token: string, testCaseId: number) => Promise<AxiosResponse>
+  getTestCaseById: (token: string, testCaseId: number) => Promise<AxiosResponse>
 }
 
 export const useApi = (): useApiProps => ({
@@ -107,7 +108,7 @@ export const useApi = (): useApiProps => ({
         title,
         folder_id: folder_id ?? null,
         project_id,
-        is_test_suite: 1
+        is_test_suite: 1,
       },
       {
         headers: {
@@ -124,7 +125,7 @@ export const useApi = (): useApiProps => ({
         title,
         summary,
         preconditions,
-        test_suite_id
+        test_suite_id,
       },
       {
         headers: {
@@ -132,5 +133,13 @@ export const useApi = (): useApiProps => ({
         },
       }
     )
+  },
+
+  getTestCaseById(token, testCaseId) {
+    return api.get(`/test_cases/${testCaseId}`, {
+      headers: {
+        Authorization: token,
+      },
+    })
   },
 })

@@ -29,7 +29,10 @@ interface AuthProviderProps {
 export const AuthContext = createContext({} as AuthContextProps)
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [token, setToken] = useState<string | null>(null)
+  const [token, setToken] = useState<string | null>(function () {
+    const { 'testlab.token': token } = parseCookies()
+    return token !== '' ? token : null
+  })
   const [user, setUser] = useState<User | null>(function () {
     const { 'testlab.user': user } = parseCookies()
 
@@ -41,9 +44,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const api = useApi()
 
   useEffect(() => {
-    const { 'testlab.token': token } = parseCookies()
-
-    setToken(token !== '' ? token : null)
+    if (!token) {
+      const { 'testlab.token': token } = parseCookies()
+      setToken(token !== '' ? token : null)
+    }
 
     if (token && !user) {
       api

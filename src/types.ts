@@ -23,12 +23,22 @@ export type TestCase = {
   id: number
   title: string
   summary: string
-  status: {
-    note: string
-    created_at: string
-    status: TestCaseStatus
-  }
+  status: Status
   preconditions?: string
+}
+
+export type TestCaseWithAllStatus = {
+  id: number
+  title: string
+  summary: string
+  status: Status[]
+  preconditions?: string
+}
+
+export type Status = {
+  note: string
+  created_at: string
+  status: TestCaseStatus
 }
 
 export type ProjectContent = {

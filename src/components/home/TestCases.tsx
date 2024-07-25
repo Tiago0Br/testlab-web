@@ -9,11 +9,12 @@ import {
 } from '@/components'
 import { AuthContext } from '@/context/AuthContext'
 import { useApi } from '@/hooks/useApi'
-import { TestCase, TestCaseStatus } from '@/types'
+import { TestCase } from '@/types'
 import { Eye, Pencil, Trash2 } from 'lucide-react'
 import { useContext } from 'react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { getStatusColor } from '@/utils/testCasesStatusColor'
 
 interface TestCasesProps {
   testCases: TestCase[]
@@ -23,25 +24,6 @@ export function TestCases({ testCases }: TestCasesProps) {
   const api = useApi()
   const { token } = useContext(AuthContext)
   const router = useRouter()
-
-  function getStatusColor(status: TestCaseStatus) {
-    switch (status) {
-      case TestCaseStatus.Available:
-        return 'bg-cyan-500'
-      case TestCaseStatus.Blocked:
-        return 'bg-purple-800'
-      case TestCaseStatus.Cancelled:
-        return 'bg-gray-700'
-      case TestCaseStatus.Executing:
-        return 'bg-blue-500'
-      case TestCaseStatus.Fail:
-        return 'bg-red-500'
-      case TestCaseStatus.NotExecuted:
-        return 'bg-gray-500'
-      case TestCaseStatus.Pass:
-        return 'bg-green-500'
-    }
-  }
 
   function handleDeleteTestCase(testCaseId: number) {
     api
@@ -54,6 +36,11 @@ export function TestCases({ testCases }: TestCasesProps) {
           err.response?.data?.message ||
             'Ocorreu um erro ao excluir o caso de teste'
         )
+      })
+      .finally(() => {
+        setTimeout(() => {
+          router.refresh()
+        }, 800)
       })
   }
 
