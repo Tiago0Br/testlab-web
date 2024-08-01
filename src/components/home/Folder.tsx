@@ -1,5 +1,5 @@
-import { Folder as FolderType } from '@/types'
-import { Alert, AlertTitle } from '..'
+import { Folder as FolderType } from '@/utils/types'
+import { Alert, AlertTitle } from '@/components'
 import { FolderIcon } from 'lucide-react'
 import { MouseEvent } from 'react'
 

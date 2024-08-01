@@ -1,3 +1,5 @@
+'use client'
+
 import { useApi } from '@/hooks/useApi'
 import { AxiosError } from 'axios'
 import { ReactNode, createContext, useEffect, useState } from 'react'
@@ -63,7 +65,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           setUser(null)
         })
     }
-  }, [])
+  }, []) // eslint-disable-line
 
   async function signIn(email: string, password: string) {
     try {

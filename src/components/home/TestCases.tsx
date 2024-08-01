@@ -1,3 +1,5 @@
+'use client'
+
 import {
   ConfirmationModal,
   Table,
@@ -9,7 +11,7 @@ import {
 } from '@/components'
 import { AuthContext } from '@/context/AuthContext'
 import { useApi } from '@/hooks/useApi'
-import { TestCase } from '@/types'
+import { TestCase } from '@/utils/types'
 import { Eye, Pencil, Trash2 } from 'lucide-react'
 import { useContext } from 'react'
 import { toast } from 'sonner'

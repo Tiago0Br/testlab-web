@@ -1,10 +1,10 @@
-import { TestCaseWithAllStatus } from '@/types'
+'use client'
+
+import { TestCaseWithAllStatus } from '@/utils/types'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
-import NotFound from './404'
-import { GetServerSideProps } from 'next'
-import { verifyToken } from '@/utils/verifyToken'
+import NotFound from '../not-found'
 import { Header, Loading } from '@/components'
 import { getStatusColor } from '@/utils/testCasesStatusColor'
 import Head from 'next/head'
@@ -79,6 +79,3 @@ export default function TestCases({ token }: { token: string }) {
     </>
   )
 }
-
-export const getServerSideProps: GetServerSideProps = async (ctx) =>
-  verifyToken(ctx)

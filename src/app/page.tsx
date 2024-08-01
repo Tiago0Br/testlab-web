@@ -1,5 +1,5 @@
-import { verifyToken } from '@/utils/verifyToken'
-import { GetServerSideProps } from 'next'
+'use client'
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -21,10 +21,19 @@ import Image from 'next/image'
 import { MouseEvent, useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
 import { toast } from 'sonner'
-import { Folder, Project, ProjectContent } from '@/types'
+import { Folder, Project, ProjectContent } from '@/utils/types'
 import { CirclePlus, FolderIcon, CircleCheckBig } from 'lucide-react'
+import { parseCookies } from 'nookies'
+import { useRouter } from 'next/navigation'
 
-export default function Home({ token }: { token: string }) {
+export default function Home() {
+  const router = useRouter()
+  const { ['testlab.token']: token } = parseCookies()
+
+  if (!token) {
+    router.push('/login')
+  }
+
   const api = useApi()
 
   const [projects, setProjects] = useState<Project[]>([])
@@ -287,6 +296,3 @@ export default function Home({ token }: { token: string }) {
     </>
   )
 }
-
-export const getServerSideProps: GetServerSideProps = async (ctx) =>
-  verifyToken(ctx)

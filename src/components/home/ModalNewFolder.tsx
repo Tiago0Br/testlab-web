@@ -1,3 +1,5 @@
+'use client'
+
 import { ReactNode, useContext, useState } from 'react'
 import {
   Dialog,
@@ -10,12 +12,12 @@ import {
   Input,
   DialogFooter,
   Loading,
-} from '..'
+} from '@/components'
 import { toast } from 'sonner'
 import { useApi } from '@/hooks/useApi'
 import { AuthContext } from '@/context/AuthContext'
 import { useRouter } from 'next/navigation'
-import { Folder, Project } from '@/types'
+import { Folder, Project } from '@/utils/types'
 
 interface ModalNewFolderProps {
   currentProject: Project
