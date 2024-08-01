@@ -1,7 +1,8 @@
+'use client'
+
 import logo from '@/assets/logo.png'
 import Image from 'next/image'
 import Link from 'next/link'
-import Head from 'next/head'
 import { Button, CustomInput, Loading } from '@/components'
 import { FormEvent, useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
@@ -45,9 +46,6 @@ export default function Login() {
 
   return (
     <>
-      <Head>
-        <title>Testlab - Login</title>
-      </Head>
       <Loading isLoading={isLoading} />
       <div className="w-screen h-screen bg-background flex flex-col items-center justify-center">
         <div className="bg-foreground w-[390px] h-[512px] rounded-xl flex flex-col gap-10 items-center py-20">

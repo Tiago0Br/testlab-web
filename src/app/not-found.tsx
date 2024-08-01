@@ -1,14 +1,10 @@
 import { Button } from '@/components'
-import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 
 export default function NotFound() {
   return (
     <>
-      <Head>
-        <title>Testlab - Não encontrado</title>
-      </Head>
       <div className="min-h-screen w-full bg-background flex flex-col items-center">
         <Image
           src="/no-content.png"

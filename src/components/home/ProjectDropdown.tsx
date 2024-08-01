@@ -1,11 +1,11 @@
-import { Project } from '@/types'
+import { Project } from '@/utils/types'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '..'
+} from '@/components'
 
 interface ProjectDropdownProps {
   projects: Project[]

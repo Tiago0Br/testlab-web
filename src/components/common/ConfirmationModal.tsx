@@ -8,7 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '..'
+} from '@/components'
 
 interface ConfirmationModalProps {
   children: React.ReactNode

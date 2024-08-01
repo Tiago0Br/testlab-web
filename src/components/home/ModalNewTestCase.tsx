@@ -1,3 +1,5 @@
+'use client'
+
 import { ReactNode, useContext, useState } from 'react'
 import {
   Dialog,
@@ -11,12 +13,12 @@ import {
   DialogFooter,
   Loading,
   Textarea,
-} from '..'
+} from '@/components'
 import { toast } from 'sonner'
 import { useApi } from '@/hooks/useApi'
 import { AuthContext } from '@/context/AuthContext'
 import { useRouter } from 'next/navigation'
-import { Folder } from '@/types'
+import { Folder } from '@/utils/types'
 
 interface ModalNewTestCaseProps {
   currentFolder: Folder

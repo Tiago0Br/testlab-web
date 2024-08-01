@@ -1,3 +1,5 @@
+'use client'
+
 import { useContext, useState } from 'react'
 import { CirclePlus } from 'lucide-react'
 import {
@@ -12,7 +14,7 @@ import {
   DialogFooter,
   Loading,
   Textarea,
-} from '..'
+} from '@/components'
 import { toast } from 'sonner'
 import { useApi } from '@/hooks/useApi'
 import { AuthContext } from '@/context/AuthContext'

@@ -1,24 +1,30 @@
-import { TestCaseWithAllStatus } from '@/types'
-import { useSearchParams } from 'next/navigation'
+'use client'
+
+import { TestCaseWithAllStatus } from '@/utils/types'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
-import NotFound from './404'
-import { GetServerSideProps } from 'next'
-import { verifyToken } from '@/utils/verifyToken'
 import { Header, Loading } from '@/components'
 import { getStatusColor } from '@/utils/testCasesStatusColor'
-import Head from 'next/head'
+import { parseCookies } from 'nookies'
+import NotFound from '../not-found'
 
-export default function TestCases({ token }: { token: string }) {
-  const searchParams = useSearchParams()
+export default function TestCases() {
   const [testCase, setTestCase] = useState<TestCaseWithAllStatus | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const api = useApi()
 
+  const router = useRouter()
+  const { ['testlab.token']: token } = parseCookies()
+
+  if (!token) {
+    router.push('/login')
+  }
+
   useEffect(() => {
     function getTestCase() {
       setIsLoading(true)
-      const testId = Number(searchParams.get('id'))
+      const testId = 1
 
       api
         .getTestCaseById(token, testId)
@@ -38,9 +44,6 @@ export default function TestCases({ token }: { token: string }) {
 
   return (
     <>
-      <Head>
-        <title>Testlab - Caso de teste</title>
-      </Head>
       <Loading isLoading={isLoading} />
       <Header />
       {testCase ? (
@@ -79,6 +82,3 @@ export default function TestCases({ token }: { token: string }) {
     </>
   )
 }
-
-export const getServerSideProps: GetServerSideProps = async (ctx) =>
-  verifyToken(ctx)

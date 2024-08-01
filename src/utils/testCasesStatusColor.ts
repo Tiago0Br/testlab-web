@@ -1,4 +1,4 @@
-import { TestCaseStatus } from '@/types'
+import { TestCaseStatus } from '@/utils/types'
 
 export function getStatusColor(status: TestCaseStatus) {
   switch (status) {

@@ -1,7 +1,8 @@
+'use client'
+
 import logo from '@/assets/logo.png'
 import Image from 'next/image'
 import Link from 'next/link'
-import Head from 'next/head'
 import { FormEvent, useState } from 'react'
 import { CustomInput, Button, Loading } from '@/components'
 import { useApi } from '@/hooks/useApi'
@@ -57,9 +58,6 @@ export default function Register() {
 
   return (
     <>
-      <Head>
-        <title>Testlab - Cadastro</title>
-      </Head>
       <Loading isLoading={isLoading} />
       <div className="w-screen h-screen bg-background flex flex-col items-center justify-center">
         <div

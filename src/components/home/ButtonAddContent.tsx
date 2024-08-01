@@ -9,8 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   ModalNewFolder,
-} from '..'
-import { Folder, Project } from '@/types'
+} from '@/components'
+import { Folder, Project } from '@/utils/types'
 
 interface ButtonAddContentProps {
   currentProject: Project
