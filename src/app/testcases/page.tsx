@@ -1,19 +1,27 @@
 'use client'
 
 import { TestCaseWithAllStatus } from '@/utils/types'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
-import NotFound from '../not-found'
 import { Header, Loading } from '@/components'
 import { getStatusColor } from '@/utils/testCasesStatusColor'
 import Head from 'next/head'
+import { parseCookies } from 'nookies'
+import NotFound from '../not-found'
 
-export default function TestCases({ token }: { token: string }) {
+export default function TestCases() {
   const searchParams = useSearchParams()
   const [testCase, setTestCase] = useState<TestCaseWithAllStatus | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const api = useApi()
+
+  const router = useRouter()
+  const { ['testlab.token']: token } = parseCookies()
+
+  if (!token) {
+    router.push('/login')
+  }
 
   useEffect(() => {
     function getTestCase() {
