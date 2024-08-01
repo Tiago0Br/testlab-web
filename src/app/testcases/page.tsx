@@ -44,44 +44,42 @@ export default function TestCases() {
   }, []) //eslint-disable-line
 
   return (
-    <>
-      <Suspense>
-        <Loading isLoading={isLoading} />
-        <Header />
-        {testCase ? (
-          <div className="min-h-screen bg-background flex flex-col items-center pb-6 pt-20">
-            <div>
-              <div className="flex justify-center items-center gap-4">
-                <h1 className="text-3xl font-semibold">{testCase.title}</h1>
+    <Suspense>
+      <Loading isLoading={isLoading} />
+      <Header />
+      {testCase ? (
+        <div className="min-h-screen bg-background flex flex-col items-center pb-6 pt-20">
+          <div>
+            <div className="flex justify-center items-center gap-4">
+              <h1 className="text-3xl font-semibold">{testCase.title}</h1>
 
-                <div
-                  className={`py-1 px-2 rounded-md text-center font-semibold ${getStatusColor(
-                    testCase.status[0].status
-                  )}`}
-                >
-                  {testCase.status[0].status}
-                </div>
+              <div
+                className={`py-1 px-2 rounded-md text-center font-semibold ${getStatusColor(
+                  testCase.status[0].status
+                )}`}
+              >
+                {testCase.status[0].status}
               </div>
-
-              <div className="mt-10">
-                <h3 className="text-xl font-semibold">Sumário:</h3>
-                <p>{testCase.summary}</p>
-              </div>
-
-              {testCase.preconditions && (
-                <div>
-                  <h3>Precondições:</h3>
-                  <p>{testCase.preconditions}</p>
-                </div>
-              )}
             </div>
 
-            <h3 className="mt-10 font-semibold text-xl">Em progresso...</h3>
+            <div className="mt-10">
+              <h3 className="text-xl font-semibold">Sumário:</h3>
+              <p>{testCase.summary}</p>
+            </div>
+
+            {testCase.preconditions && (
+              <div>
+                <h3>Precondições:</h3>
+                <p>{testCase.preconditions}</p>
+              </div>
+            )}
           </div>
-        ) : (
-          <NotFound />
-        )}
-      </Suspense>
-    </>
+
+          <h3 className="mt-10 font-semibold text-xl">Em progresso...</h3>
+        </div>
+      ) : (
+        <NotFound />
+      )}
+    </Suspense>
   )
 }
