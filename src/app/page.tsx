@@ -119,9 +119,6 @@ export default function Home() {
 
   return (
     <>
-      <Head>
-        <title>Testlab - Início</title>
-      </Head>
       <Loading isLoading={isLoading} />
       <div className="min-h-screen bg-background pb-6">
         <Header />
