@@ -1,8 +1,8 @@
 'use client'
 
 import { TestCaseWithAllStatus } from '@/utils/types'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { Suspense, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
 import { Header, Loading } from '@/components'
 import { getStatusColor } from '@/utils/testCasesStatusColor'
@@ -10,7 +10,6 @@ import { parseCookies } from 'nookies'
 import NotFound from '../not-found'
 
 export default function TestCases() {
-  const searchParams = useSearchParams()
   const [testCase, setTestCase] = useState<TestCaseWithAllStatus | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const api = useApi()
@@ -25,7 +24,7 @@ export default function TestCases() {
   useEffect(() => {
     function getTestCase() {
       setIsLoading(true)
-      const testId = Number(searchParams.get('id'))
+      const testId = 1
 
       api
         .getTestCaseById(token, testId)
@@ -44,7 +43,7 @@ export default function TestCases() {
   }, []) //eslint-disable-line
 
   return (
-    <Suspense>
+    <>
       <Loading isLoading={isLoading} />
       <Header />
       {testCase ? (
@@ -80,6 +79,6 @@ export default function TestCases() {
       ) : (
         <NotFound />
       )}
-    </Suspense>
+    </>
   )
 }
