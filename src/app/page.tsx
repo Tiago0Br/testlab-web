@@ -18,22 +18,15 @@ import {
 } from '@/components'
 import Head from 'next/head'
 import Image from 'next/image'
-import { MouseEvent, useEffect, useState } from 'react'
+import { MouseEvent, useContext, useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
 import { toast } from 'sonner'
 import { Folder, Project, ProjectContent } from '@/utils/types'
 import { CirclePlus, FolderIcon, CircleCheckBig } from 'lucide-react'
-import { parseCookies } from 'nookies'
-import { useRouter } from 'next/navigation'
+import { AuthContext } from '@/context/AuthContext'
 
 export default function Home() {
-  const router = useRouter()
-  const { ['testlab.token']: token } = parseCookies()
-
-  if (!token) {
-    router.push('/login')
-  }
-
+  const { token } = useContext(AuthContext)
   const api = useApi()
 
   const [projects, setProjects] = useState<Project[]>([])
@@ -57,7 +50,7 @@ export default function Home() {
     setIsLoading(true)
 
     api
-      .getProjectContent(token, project.id)
+      .getProjectContent(token!, project.id)
       .then((response) => {
         setContent({
           folders: response.data.folders,
@@ -82,7 +75,7 @@ export default function Home() {
   useEffect(() => {
     setIsLoading(true)
     api
-      .getUserProjects(token)
+      .getUserProjects(token!)
       .then((response) => {
         const projectsResponse = response.data as Project[]
 
@@ -101,7 +94,7 @@ export default function Home() {
       setIsLoading(true)
 
       api
-        .getProjectContent(token, currentProject.id, currentFolder?.id)
+        .getProjectContent(token!, currentProject.id, currentFolder?.id)
         .then((response) => {
           setContent({
             folders: response.data.folders,

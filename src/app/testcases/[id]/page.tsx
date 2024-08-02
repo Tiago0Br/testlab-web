@@ -2,12 +2,12 @@
 
 import { TestCaseWithAllStatus } from '@/utils/types'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
 import { Header, Loading } from '@/components'
 import { getStatusColor } from '@/utils/testCasesStatusColor'
-import { parseCookies } from 'nookies'
 import NotFound from '@/app/not-found'
+import { AuthContext } from '@/context/AuthContext'
 
 interface TestCasesPageProps {
   params: {
@@ -19,13 +19,7 @@ export default function TestCases({ params: { id } }: TestCasesPageProps) {
   const [testCase, setTestCase] = useState<TestCaseWithAllStatus | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const api = useApi()
-
-  const router = useRouter()
-  const { ['testlab.token']: token } = parseCookies()
-
-  if (!token) {
-    router.push('/login')
-  }
+  const { token } = useContext(AuthContext)
 
   useEffect(() => {
     function getTestCase() {
@@ -33,7 +27,7 @@ export default function TestCases({ params: { id } }: TestCasesPageProps) {
       const testId = parseInt(id)
 
       api
-        .getTestCaseById(token, testId)
+        .getTestCaseById(token!, testId)
         .then((response) => {
           const testCase = response.data as TestCaseWithAllStatus
 
