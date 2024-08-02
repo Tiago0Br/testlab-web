@@ -7,9 +7,15 @@ import { useApi } from '@/hooks/useApi'
 import { Header, Loading } from '@/components'
 import { getStatusColor } from '@/utils/testCasesStatusColor'
 import { parseCookies } from 'nookies'
-import NotFound from '../not-found'
+import NotFound from '@/app/not-found'
 
-export default function TestCases() {
+interface TestCasesPageProps {
+  params: {
+    id: string
+  }
+}
+
+export default function TestCases({ params: { id } }: TestCasesPageProps) {
   const [testCase, setTestCase] = useState<TestCaseWithAllStatus | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const api = useApi()
@@ -24,7 +30,7 @@ export default function TestCases() {
   useEffect(() => {
     function getTestCase() {
       setIsLoading(true)
-      const testId = 1
+      const testId = parseInt(id)
 
       api
         .getTestCaseById(token, testId)

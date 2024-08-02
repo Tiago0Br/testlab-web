@@ -47,7 +47,7 @@ export function TestCases({ testCases }: TestCasesProps) {
   }
 
   function handleGetTestCase(testCaseId: number) {
-    router.push(`/testcases/?id=${testCaseId}`)
+    router.push(`/testcases/${testCaseId}`)
   }
 
   return (
