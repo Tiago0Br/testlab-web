@@ -1,6 +1,6 @@
 'use client'
 
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { CirclePlus } from 'lucide-react'
 import {
   Dialog,
@@ -17,14 +17,13 @@ import {
 } from '@/components'
 import { toast } from 'sonner'
 import { useApi } from '@/hooks/useApi'
-import { AuthContext } from '@/context/AuthContext'
 import { useRouter } from 'next/navigation'
+import { getSessionToken } from '@/services/authService'
 
 export function ModalNewProject() {
   const [projectName, setProjectName] = useState('')
   const [projectDescription, setProjectDescription] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const { token } = useContext(AuthContext)
   const router = useRouter()
   const api = useApi()
 
@@ -39,26 +38,28 @@ export function ModalNewProject() {
 
     setIsLoading(true)
 
-    api
-      .createNewProject(token ?? '', projectName.trim(), projectDescription)
-      .then(() => {
-        toast.success('Projeto criado com sucesso!')
-      })
-      .catch((err) => {
-        toast.error(
-          err.response?.data?.message || 'Não foi possiível criar o projeto.'
-        )
-      })
-      .finally(() => {
-        setIsLoading(false)
+    getSessionToken().then((token) => {
+      api
+        .createNewProject(token, projectName.trim(), projectDescription)
+        .then(() => {
+          toast.success('Projeto criado com sucesso!')
+        })
+        .catch((err) => {
+          toast.error(
+            err.response?.data?.message || 'Não foi possiível criar o projeto.'
+          )
+        })
+        .finally(() => {
+          setIsLoading(false)
 
-        setProjectName('')
-        setProjectDescription('')
+          setProjectName('')
+          setProjectDescription('')
 
-        setTimeout(() => {
-          router.refresh()
-        }, 800)
-      })
+          setTimeout(() => {
+            router.refresh()
+          }, 800)
+        })
+    })
   }
 
   return (

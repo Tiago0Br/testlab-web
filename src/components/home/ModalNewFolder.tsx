@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useContext, useState } from 'react'
+import { ReactNode, useState } from 'react'
 import {
   Dialog,
   DialogTrigger,
@@ -15,9 +15,9 @@ import {
 } from '@/components'
 import { toast } from 'sonner'
 import { useApi } from '@/hooks/useApi'
-import { AuthContext } from '@/context/AuthContext'
 import { useRouter } from 'next/navigation'
 import { Folder, Project } from '@/utils/types'
+import { getSessionToken } from '@/services/authService'
 
 interface ModalNewFolderProps {
   currentProject: Project
@@ -32,7 +32,6 @@ export function ModalNewFolder({
 }: ModalNewFolderProps) {
   const [folderName, setFolderName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const { token } = useContext(AuthContext)
   const router = useRouter()
   const api = useApi()
 
@@ -47,30 +46,32 @@ export function ModalNewFolder({
 
     setIsLoading(true)
 
-    api
-      .createNewFolder({
-        token: token ?? '',
-        title: folderName.trim(),
-        project_id: currentProject.id,
-        folder_id: currentFolder?.id,
-      })
-      .then(() => {
-        toast.success('Pasta criada com sucesso!')
+    getSessionToken().then((token) => {
+      api
+        .createNewFolder({
+          token,
+          title: folderName.trim(),
+          project_id: currentProject.id,
+          folder_id: currentFolder?.id,
+        })
+        .then(() => {
+          toast.success('Pasta criada com sucesso!')
 
-        setTimeout(() => {
-          router.refresh()
-        }, 800)
-      })
-      .catch((err) => {
-        toast.error(
-          err.response?.data?.message || 'Não foi possiível criar a pasta.'
-        )
-      })
-      .finally(() => {
-        setIsLoading(false)
+          setTimeout(() => {
+            router.refresh()
+          }, 800)
+        })
+        .catch((err) => {
+          toast.error(
+            err.response?.data?.message || 'Não foi possiível criar a pasta.'
+          )
+        })
+        .finally(() => {
+          setIsLoading(false)
 
-        setFolderName('')
-      })
+          setFolderName('')
+        })
+    })
   }
 
   return (

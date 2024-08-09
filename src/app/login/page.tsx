@@ -4,18 +4,16 @@ import logo from '@/assets/logo.png'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Button, CustomInput, Loading } from '@/components'
-import { FormEvent, useContext, useEffect, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
-import { AuthContext } from '@/context/AuthContext'
-import { destroyCookie } from 'nookies'
+import { signIn, logout } from '@/services/authService'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const { signIn } = useContext(AuthContext)
 
   const handleLogin = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -41,7 +39,7 @@ export default function Login() {
   }
 
   useEffect(() => {
-    destroyCookie(null, 'testlab.token')
+    logout()
   }, [])
 
   return (

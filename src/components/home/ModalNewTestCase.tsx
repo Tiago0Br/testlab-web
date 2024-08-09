@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useContext, useState } from 'react'
+import { ReactNode, useState } from 'react'
 import {
   Dialog,
   DialogTrigger,
@@ -16,9 +16,9 @@ import {
 } from '@/components'
 import { toast } from 'sonner'
 import { useApi } from '@/hooks/useApi'
-import { AuthContext } from '@/context/AuthContext'
 import { useRouter } from 'next/navigation'
 import { Folder } from '@/utils/types'
+import { getSessionToken } from '@/services/authService'
 
 interface ModalNewTestCaseProps {
   currentFolder: Folder
@@ -33,7 +33,6 @@ export function ModalNewTestCase({
   const [testCaseSummary, setTestCaseSummary] = useState('')
   const [testCasePreconditions, setTestCasePreconditions] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const { token } = useContext(AuthContext)
   const router = useRouter()
   const api = useApi()
 
@@ -48,36 +47,38 @@ export function ModalNewTestCase({
 
     setIsLoading(true)
 
-    api
-      .createTestCase({
-        token: token ?? '',
-        title: testCaseTitle.trim(),
-        summary: testCaseSummary.trim(),
-        preconditions: testCasePreconditions.trim()
-          ? testCasePreconditions.trim()
-          : undefined,
-        test_suite_id: currentFolder.id,
-      })
-      .then(() => {
-        toast.success('Caso de testes criado com sucesso!')
-      })
-      .catch((err) => {
-        toast.error(
-          err.response?.data?.message ||
-            'Não foi possiível criar o caso de testes.'
-        )
-      })
-      .finally(() => {
-        setIsLoading(false)
+    getSessionToken().then((token) => {
+      api
+        .createTestCase({
+          token,
+          title: testCaseTitle.trim(),
+          summary: testCaseSummary.trim(),
+          preconditions: testCasePreconditions.trim()
+            ? testCasePreconditions.trim()
+            : undefined,
+          test_suite_id: currentFolder.id,
+        })
+        .then(() => {
+          toast.success('Caso de testes criado com sucesso!')
+        })
+        .catch((err) => {
+          toast.error(
+            err.response?.data?.message ||
+              'Não foi possiível criar o caso de testes.'
+          )
+        })
+        .finally(() => {
+          setIsLoading(false)
 
-        setTestCaseTitle('')
-        setTestCaseSummary('')
-        setTestCasePreconditions('')
+          setTestCaseTitle('')
+          setTestCaseSummary('')
+          setTestCasePreconditions('')
 
-        setTimeout(() => {
-          router.refresh()
-        }, 800)
-      })
+          setTimeout(() => {
+            router.refresh()
+          }, 800)
+        })
+    })
   }
 
   return (

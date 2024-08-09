@@ -9,14 +9,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components'
-import { AuthContext } from '@/context/AuthContext'
 import { useApi } from '@/hooks/useApi'
 import { TestCase } from '@/utils/types'
 import { Eye, Pencil, Trash2 } from 'lucide-react'
-import { useContext } from 'react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { getStatusColor } from '@/utils/testCasesStatusColor'
+import { getSessionToken } from '@/services/authService'
 
 interface TestCasesProps {
   testCases: TestCase[]
@@ -24,26 +23,27 @@ interface TestCasesProps {
 
 export function TestCases({ testCases }: TestCasesProps) {
   const api = useApi()
-  const { token } = useContext(AuthContext)
   const router = useRouter()
 
   function handleDeleteTestCase(testCaseId: number) {
-    api
-      .deleteTestCase(token ?? '', testCaseId)
-      .then(() => {
-        toast.success('Caso de teste excluído com sucesso!')
-      })
-      .catch((err) => {
-        toast.error(
-          err.response?.data?.message ||
-            'Ocorreu um erro ao excluir o caso de teste'
-        )
-      })
-      .finally(() => {
-        setTimeout(() => {
-          router.refresh()
-        }, 800)
-      })
+    getSessionToken().then((token) => {
+      api
+        .deleteTestCase(token, testCaseId)
+        .then(() => {
+          toast.success('Caso de teste excluído com sucesso!')
+        })
+        .catch((err) => {
+          toast.error(
+            err.response?.data?.message ||
+              'Ocorreu um erro ao excluir o caso de teste'
+          )
+        })
+        .finally(() => {
+          setTimeout(() => {
+            router.refresh()
+          }, 800)
+        })
+    })
   }
 
   function handleGetTestCase(testCaseId: number) {

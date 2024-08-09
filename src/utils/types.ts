@@ -45,3 +45,9 @@ export type ProjectContent = {
   folders: Folder[]
   testCases: TestCase[]
 }
+
+export type User = {
+  id: number
+  name: string
+  email: string
+}

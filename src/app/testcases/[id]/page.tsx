@@ -1,13 +1,12 @@
 'use client'
 
 import { TestCaseWithAllStatus } from '@/utils/types'
-import { useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
 import { Header, Loading } from '@/components'
 import { getStatusColor } from '@/utils/testCasesStatusColor'
 import NotFound from '@/app/not-found'
-import { AuthContext } from '@/context/AuthContext'
+import { getSessionToken } from '@/services/authService'
 
 interface TestCasesPageProps {
   params: {
@@ -19,24 +18,25 @@ export default function TestCases({ params: { id } }: TestCasesPageProps) {
   const [testCase, setTestCase] = useState<TestCaseWithAllStatus | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const api = useApi()
-  const { token } = useContext(AuthContext)
 
   useEffect(() => {
     function getTestCase() {
       setIsLoading(true)
       const testId = parseInt(id)
 
-      api
-        .getTestCaseById(token!, testId)
-        .then((response) => {
-          const testCase = response.data as TestCaseWithAllStatus
+      getSessionToken().then((token) => {
+        api
+          .getTestCaseById(token, testId)
+          .then((response) => {
+            const testCase = response.data as TestCaseWithAllStatus
 
-          setTestCase(testCase)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-        .finally(() => setIsLoading(false))
+            setTestCase(testCase)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+          .finally(() => setIsLoading(false))
+      })
     }
 
     getTestCase()

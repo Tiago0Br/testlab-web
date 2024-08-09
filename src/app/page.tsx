@@ -16,25 +16,66 @@ import {
   Button,
   ModalNewTestCase,
 } from '@/components'
-import Head from 'next/head'
 import Image from 'next/image'
-import { MouseEvent, useContext, useEffect, useState } from 'react'
+import { MouseEvent, useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
 import { toast } from 'sonner'
 import { Folder, Project, ProjectContent } from '@/utils/types'
 import { CirclePlus, FolderIcon, CircleCheckBig } from 'lucide-react'
-import { AuthContext } from '@/context/AuthContext'
+import { getSessionToken } from '@/services/authService'
 
 export default function Home() {
-  const { token } = useContext(AuthContext)
   const api = useApi()
-
   const [projects, setProjects] = useState<Project[]>([])
   const [currentProject, setCurrentProject] = useState<Project | null>(null)
   const [currentFolder, setCurrentFolder] = useState<Folder | null>(null)
   const [parentFolder, setParentFolder] = useState<Folder | null>(null)
   const [content, setContent] = useState<ProjectContent | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    getSessionToken().then((sessionToken) => {
+      setIsLoading(true)
+
+      api
+        .getUserProjects(sessionToken)
+        .then((response) => {
+          const projectsResponse = response.data as Project[]
+
+          setProjects(projectsResponse)
+          setCurrentProject(projectsResponse[0] ?? null)
+        })
+        .catch((err) => {
+          toast.error('Ocorreu um erro ao buscar os projetos')
+          console.log(err)
+        })
+        .finally(() => setIsLoading(false))
+    })
+    // console.log(token)
+  }, []) //eslint-disable-line
+
+  useEffect(() => {
+    if (currentProject) {
+      setIsLoading(true)
+
+      getSessionToken().then((token) => {
+        api
+          .getProjectContent(token, currentProject.id, currentFolder?.id)
+          .then((response) => {
+            setContent({
+              folders: response.data.folders,
+              testCases: response.data.test_cases,
+            })
+
+            setParentFolder(response.data.parent_folder)
+          })
+          .catch(() => {
+            toast.error('Ocorreu um erro ao buscar o conteúdo')
+          })
+          .finally(() => setIsLoading(false))
+      })
+    }
+  }, [currentProject, currentFolder]) //eslint-disable-line
 
   const onProjectChange = (projectId: string) => {
     const project =
@@ -49,19 +90,21 @@ export default function Home() {
 
     setIsLoading(true)
 
-    api
-      .getProjectContent(token!, project.id)
-      .then((response) => {
-        setContent({
-          folders: response.data.folders,
-          testCases: response.data.test_cases,
+    getSessionToken().then((token) => {
+      api
+        .getProjectContent(token, project.id)
+        .then((response) => {
+          setContent({
+            folders: response.data.folders,
+            testCases: response.data.test_cases,
+          })
         })
-      })
-      .catch((err) => {
-        toast.error('Ocorreu um erro ao buscar o conteúdo do projeto')
-        console.log(err)
-      })
-      .finally(() => setIsLoading(false))
+        .catch((err) => {
+          toast.error('Ocorreu um erro ao buscar o conteúdo do projeto')
+          console.log(err)
+        })
+        .finally(() => setIsLoading(false))
+    })
   }
 
   const onFolderSelect = (event: MouseEvent<HTMLDivElement>) => {
@@ -71,44 +114,6 @@ export default function Home() {
 
     setCurrentFolder(folder)
   }
-
-  useEffect(() => {
-    setIsLoading(true)
-    api
-      .getUserProjects(token!)
-      .then((response) => {
-        const projectsResponse = response.data as Project[]
-
-        setProjects(projectsResponse)
-        setCurrentProject(projectsResponse[0] ?? null)
-      })
-      .catch((err) => {
-        toast.error('Ocorreu um erro ao buscar os projetos')
-        console.log(err)
-      })
-      .finally(() => setIsLoading(false))
-  }, []) //eslint-disable-line
-
-  useEffect(() => {
-    if (currentProject) {
-      setIsLoading(true)
-
-      api
-        .getProjectContent(token!, currentProject.id, currentFolder?.id)
-        .then((response) => {
-          setContent({
-            folders: response.data.folders,
-            testCases: response.data.test_cases,
-          })
-
-          setParentFolder(response.data.parent_folder)
-        })
-        .catch(() => {
-          toast.error('Ocorreu um erro ao buscar o conteúdo')
-        })
-        .finally(() => setIsLoading(false))
-    }
-  }, [currentProject, currentFolder]) //eslint-disable-line
 
   return (
     <>
