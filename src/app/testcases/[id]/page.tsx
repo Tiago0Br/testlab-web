@@ -1,12 +1,9 @@
-'use client'
-
 import { TestCaseWithAllStatus } from '@/utils/types'
-import { useContext, useEffect, useState } from 'react'
-import { useApi } from '@/hooks/useApi'
-import { Header, Loading } from '@/components'
+import { Header } from '@/components'
 import { getStatusColor } from '@/utils/testCasesStatusColor'
 import NotFound from '@/app/not-found'
 import { getSessionToken } from '@/services/authService'
+import { apiService as api } from '@/services/apiService'
 
 interface TestCasesPageProps {
   params: {
@@ -14,37 +11,21 @@ interface TestCasesPageProps {
   }
 }
 
-export default function TestCases({ params: { id } }: TestCasesPageProps) {
-  const [testCase, setTestCase] = useState<TestCaseWithAllStatus | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const api = useApi()
+export default async function TestCases({
+  params: { id },
+}: TestCasesPageProps) {
+  const token = await getSessionToken()
+  let testCase = null
 
-  useEffect(() => {
-    function getTestCase() {
-      setIsLoading(true)
-      const testId = parseInt(id)
-
-      getSessionToken().then((token) => {
-        api
-          .getTestCaseById(token, testId)
-          .then((response) => {
-            const testCase = response.data as TestCaseWithAllStatus
-
-            setTestCase(testCase)
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-          .finally(() => setIsLoading(false))
-      })
-    }
-
-    getTestCase()
-  }, []) //eslint-disable-line
+  try {
+    const response = await api.getTestCaseById(token, parseInt(id))
+    testCase = response.data as TestCaseWithAllStatus
+  } catch (error) {
+    console.log(error)
+  }
 
   return (
     <>
-      <Loading isLoading={isLoading} />
       <Header />
       {testCase ? (
         <div className="min-h-screen bg-background flex flex-col items-center pb-6 pt-20">
