@@ -20,7 +20,7 @@ export default function RootLayout({
       <head>
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-background min-h-screen`}>
         <Toaster richColors closeButton position="top-center" />
         {children}
       </body>

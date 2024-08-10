@@ -28,7 +28,7 @@ export default async function TestCases({
     <>
       <Header />
       {testCase ? (
-        <div className="min-h-screen bg-background flex flex-col items-center pb-6 pt-20">
+        <div className="flex flex-col items-center pb-6 pt-20">
           <div>
             <div className="flex justify-center items-center gap-4">
               <h1 className="text-3xl font-semibold">{testCase.title}</h1>

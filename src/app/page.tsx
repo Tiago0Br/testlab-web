@@ -118,7 +118,7 @@ export default function Home() {
   return (
     <>
       <Loading isLoading={isLoading} />
-      <div className="min-h-screen bg-background pb-6">
+      <div className="pb-6">
         <Header />
         <div className="flex flex-col items-center">
           {!currentFolder && (

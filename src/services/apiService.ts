@@ -1,7 +1,7 @@
 import { api } from '@/lib/axios'
 import { AxiosResponse } from 'axios'
 
-interface ApiServiceProps {
+export interface ApiProps {
   login: (email: string, password: string) => Promise<AxiosResponse>
   register: (
     name: string,
@@ -46,7 +46,7 @@ interface ApiServiceProps {
   getTestCaseById: (token: string, testCaseId: number) => Promise<AxiosResponse>
 }
 
-export const apiService: ApiServiceProps = {
+export const apiService: ApiProps = {
   login: (email: string, password: string) => {
     return api.post('/login', { email, password })
   },

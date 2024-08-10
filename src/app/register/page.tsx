@@ -59,7 +59,7 @@ export default function Register() {
   return (
     <>
       <Loading isLoading={isLoading} />
-      <div className="w-screen h-screen bg-background flex flex-col items-center justify-center">
+      <div className="w-screen flex flex-col items-center justify-center">
         <div
           className="bg-foreground w-[390px] h-[512px] rounded-xl 
         flex flex-col gap-5 items-center py-5"
