@@ -44,8 +44,8 @@ export default function Login() {
 
   return (
     <>
-      <Loading isLoading={isLoading} />
-      <div className="w-screen flex flex-col items-center justify-center">
+      <div className="w-screen min-h-screen flex flex-col items-center justify-center">
+        <Loading isLoading={isLoading} />
         <div className="bg-foreground w-[390px] h-[512px] rounded-xl flex flex-col gap-10 items-center py-20">
           <div className="flex flex-col items-center gap-3">
             <Image

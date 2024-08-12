@@ -12,9 +12,9 @@ export interface ApiProps {
   getUserProjects: (token: string) => Promise<AxiosResponse>
   getProjectContent: (
     token: string,
-    projectId: number,
-    folderId?: number
+    projectId: number
   ) => Promise<AxiosResponse>
+  getFolderContent: (token: string, folderId: number) => Promise<AxiosResponse>
   createNewProject: (
     token: string,
     name: string,
@@ -68,17 +68,20 @@ export const apiService: ApiProps = {
     })
   },
 
-  getProjectContent(token, projectId, folderId) {
-    return api.get(
-      `/projects/${projectId}/folders${
-        folderId ? `?folder_id=${folderId}` : ''
-      }`,
-      {
-        headers: {
-          Authorization: token,
-        },
-      }
-    )
+  getProjectContent(token, projectId) {
+    return api.get(`/projects/${projectId}/content`, {
+      headers: {
+        Authorization: token,
+      },
+    })
+  },
+
+  getFolderContent(token, folderId) {
+    return api.get(`/folders/${folderId}/content`, {
+      headers: {
+        Authorization: token,
+      },
+    })
   },
 
   createNewProject(token, name, description) {
