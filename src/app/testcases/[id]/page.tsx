@@ -1,7 +1,6 @@
 import { TestCaseWithAllStatus } from '@/utils/types'
-import { Header } from '@/components'
+import { Header, NotFound } from '@/components'
 import { getStatusColor } from '@/utils/testCasesStatusColor'
-import NotFound from '@/app/not-found'
 import { getSessionToken } from '@/services/authService'
 import { apiService as api } from '@/services/apiService'
 

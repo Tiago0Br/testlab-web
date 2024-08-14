@@ -7,6 +7,8 @@ export type Project = {
 export type Folder = {
   id: number
   title: string
+  parent_folder?: Folder
+  project?: Project
 }
 
 export enum TestCaseStatus {
@@ -41,9 +43,10 @@ export type Status = {
   status: TestCaseStatus
 }
 
-export type ProjectContent = {
+export type Content = {
+  parent_folder?: Folder
   folders: Folder[]
-  testCases: TestCase[]
+  test_cases: TestCase[]
 }
 
 export type User = {

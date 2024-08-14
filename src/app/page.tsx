@@ -14,7 +14,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
 import { toast } from 'sonner'
-import { Project, ProjectContent } from '@/utils/types'
+import { Project, Content } from '@/utils/types'
 import { CirclePlus, FolderIcon } from 'lucide-react'
 import { getSessionToken } from '@/services/authService'
 import { useRouter } from 'next/navigation'
@@ -23,7 +23,7 @@ export default function Home() {
   const api = useApi()
   const [projects, setProjects] = useState<Project[]>([])
   const [currentProject, setCurrentProject] = useState<Project | null>(null)
-  const [content, setContent] = useState<ProjectContent | null>(null)
+  const [content, setContent] = useState<Content | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
@@ -60,10 +60,7 @@ export default function Home() {
         api
           .getProjectContent(token, currentProject.id)
           .then((response) => {
-            setContent({
-              folders: response.data.folders,
-              testCases: response.data.test_cases,
-            })
+            setContent(response.data)
           })
           .catch(() => {
             toast.error('Ocorreu um erro ao buscar o conteúdo')
@@ -90,10 +87,7 @@ export default function Home() {
       api
         .getProjectContent(token, project.id)
         .then((response) => {
-          setContent({
-            folders: response.data.folders,
-            testCases: response.data.test_cases,
-          })
+          setContent(response.data)
         })
         .catch((err) => {
           toast.error('Ocorreu um erro ao buscar o conteúdo do projeto')
@@ -123,7 +117,7 @@ export default function Home() {
             <>
               {!content ||
                 (content.folders.length === 0 &&
-                  content.testCases.length === 0 && (
+                  content.test_cases.length === 0 && (
                     <div className="flex flex-col items-center">
                       <Image
                         src="/no-content.png"
@@ -173,12 +167,12 @@ export default function Home() {
             ))}
           </div>
 
-          {content && content.testCases.length > 0 && (
+          {content && content.test_cases.length > 0 && (
             <div className="mt-6">
               <h1 className="font-semibold text-lg text-center">
                 Casos de testes
               </h1>
-              <TestCases testCases={content.testCases} />
+              <TestCases testCases={content.test_cases} />
             </div>
           )}
         </div>

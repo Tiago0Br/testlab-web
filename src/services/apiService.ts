@@ -31,6 +31,7 @@ export interface ApiProps {
     title: string
     folder_id?: number
   }) => Promise<AxiosResponse>
+  getFolderById: (token: string, folderId: number) => Promise<AxiosResponse>
   createTestCase: ({
     token,
     title,
@@ -119,6 +120,14 @@ export const apiService: ApiProps = {
         },
       }
     )
+  },
+
+  getFolderById(token, folderId) {
+    return api.get(`/folders/${folderId}`, {
+      headers: {
+        Authorization: token,
+      },
+    })
   },
 
   createTestCase({ token, title, summary, preconditions, test_suite_id }) {
