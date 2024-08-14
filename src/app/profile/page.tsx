@@ -1,19 +1,16 @@
 import { Button, Header } from '@/components'
-import Image from 'next/image'
+import { MonitorCog } from 'lucide-react'
 import Link from 'next/link'
 
-export default function NotFound() {
+export default function Profile() {
   return (
     <>
-      <Header />
+      <Header option="perfil" />
       <div className="w-full flex flex-col items-center">
-        <Image
-          src="/no-content.png"
-          width={400}
-          height={400}
-          alt="Página não encontrada"
-        />
-        <h1 className="text-3xl font-bold">Página não encontrada D:</h1>
+        <MonitorCog className="mt-12 size-[200px]" />
+        <h1 className="mt-6 text-3xl font-bold">
+          Página em desenvolvimento...
+        </h1>
         <Link href="/" className="mt-4">
           <Button
             className="border border-primary text-primary bg-transparent uppercase font-bold 
