@@ -19,6 +19,7 @@ const config = {
     },
     extend: {
       colors: {
+        'font-color': 'var(--font-color)',
         background: 'var(--background)',
         foreground: 'var(--foreground)',
         primary: 'var(--primary)',

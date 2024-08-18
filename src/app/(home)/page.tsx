@@ -49,7 +49,6 @@ export default function Home() {
         })
         .finally(() => setIsLoading(false))
     })
-    // console.log(token)
   }, []) //eslint-disable-line
 
   useEffect(() => {
@@ -101,7 +100,6 @@ export default function Home() {
     <>
       <Loading isLoading={isLoading} />
       <div className="pb-6">
-        <Header />
         <div className="flex flex-col items-center">
           <div className="flex justify-center items-center mt-6 gap-2">
             <h1 className="font-semibold text-xl">Selecione o projeto:</h1>

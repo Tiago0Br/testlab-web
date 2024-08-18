@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    --font-color: #fff;
     --background: #121214;
     --foreground: #202024;
     --primary: #00875F;
@@ -23,6 +24,6 @@
   }
 
   body {
-    @apply text-white bg-background antialiased;
+    @apply text-font-color bg-background antialiased;
   }
 }

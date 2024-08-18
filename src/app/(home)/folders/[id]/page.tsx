@@ -8,7 +8,6 @@ import {
   BreadcrumbSeparator,
   Button,
   Folder as FolderComponent,
-  Header,
   Loading,
   ModalNewFolder,
   TestCases,
@@ -53,7 +52,6 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
           api
             .getFolderContent(token, folder.id)
             .then((response) => {
-              console.log(response.data)
               const content = response.data as Content
               setContent(content)
             })
@@ -74,7 +72,6 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
 
   return (
     <>
-      <Header />
       {isLoading ? (
         <Loading isLoading={isLoading} />
       ) : (

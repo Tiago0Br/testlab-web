@@ -1,5 +1,5 @@
 import { TestCaseWithAllStatus } from '@/utils/types'
-import { Header, NotFound } from '@/components'
+import { NotFound } from '@/components'
 import { getStatusColor } from '@/utils/testCasesStatusColor'
 import { getSessionToken } from '@/services/authService'
 import { apiService as api } from '@/services/apiService'
@@ -25,7 +25,6 @@ export default async function TestCases({
 
   return (
     <>
-      <Header />
       {testCase ? (
         <div className="flex flex-col items-center pb-6 pt-20">
           <div>
