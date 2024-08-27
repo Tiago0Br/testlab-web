@@ -155,7 +155,7 @@ export default function Home() {
             </>
           )}
 
-          <div className="w-full mt-6 px-10 grid grid-cols-4 gap-5">
+          <div className="w-full mt-6 px-10 grid gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {content?.folders.map((folder) => (
               <FolderComponent
                 key={folder.id}

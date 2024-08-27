@@ -74,12 +74,16 @@ export function TestCases({ testCases }: TestCasesProps) {
             </TableCell>
             <TableCell className="flex items-center gap-2">
               <button
-                className="p-1 bg-blue-500 rounded-md hover:bg-blue-400"
+                title="Visualizar"
+                className="p-1 bg-blue-500 rounded-md hover:bg-blue-400 transition-colors"
                 onClick={() => handleGetTestCase(testCase.id)}
               >
                 <Eye size={24} className="text-white" />
               </button>
-              <button className="p-1 bg-orange-400 rounded-md hover:bg-orange-300">
+              <button
+                title="Editar"
+                className="p-1 bg-orange-400 rounded-md hover:bg-orange-300 transition-colors"
+              >
                 <Pencil size={24} className="text-white" />
               </button>
               <ConfirmationModal
@@ -87,7 +91,10 @@ export function TestCases({ testCases }: TestCasesProps) {
                 description="Essa operação não pode ser desfeita."
                 onConfirm={() => handleDeleteTestCase(testCase.id)}
               >
-                <button className="p-1 bg-red-500 rounded-md hover:bg-red-400">
+                <button
+                  title="Excluir"
+                  className="p-1 bg-red-500 rounded-md hover:bg-red-400 transition-colors"
+                >
                   <Trash2 size={24} className="text-white" />
                 </button>
               </ConfirmationModal>

@@ -54,6 +54,7 @@ export default function Login() {
               width={0}
               height={0}
               className="w-[70px] h-[70px]"
+              draggable={false}
             />
             <h1 className="text-2xl">Bora testar!</h1>
           </div>
