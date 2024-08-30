@@ -18,7 +18,7 @@ import { apiService as api } from '@/services/apiService'
 import { getSessionToken } from '@/services/authService'
 import { Folder, Content } from '@/utils/types'
 import { AxiosError } from 'axios'
-import { CirclePlus, FolderIcon, CircleCheckBig } from 'lucide-react'
+import { FolderIcon, CircleCheckBig } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -36,6 +36,10 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
   const [isLoading, setIsLoading] = useState(false)
 
   const router = useRouter()
+
+  const hasContent = content !== null
+  const hasAnyFolder = hasContent && content.folders.length > 0
+  const hasAnyTestCase = hasContent && content.test_cases.length > 0
 
   useEffect(() => {
     setIsLoading(true)
@@ -68,7 +72,7 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
         .catch(() => {})
         .finally(() => setIsLoading(false))
     })
-  }, []) // eslint-disable-line
+  }, [id])
 
   return (
     <>
@@ -116,70 +120,85 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
                 </BreadcrumbList>
               </Breadcrumb>
 
-              {!content ||
-                (content.folders.length === 0 &&
-                  content.test_cases.length === 0 && (
-                    <div className="flex flex-col items-center">
-                      <Image
-                        src="/no-content.png"
-                        alt="empty folder"
-                        width={300}
-                        height={300}
-                      />
-                      <h1>Sem conteúdo D:</h1>
-                      <div className="mt-4 flex gap-2">
-                        <ModalNewFolder
-                          currentProject={currentFolder.project!}
-                          currentFolder={currentFolder}
-                        >
-                          <Button
-                            className="w-44 border border-primary text-primary bg-transparent uppercase font-bold 
+              {!hasAnyFolder && !hasAnyTestCase ? (
+                <div className="flex flex-col items-center">
+                  <Image
+                    src="/no-content.png"
+                    alt="empty folder"
+                    width={300}
+                    height={300}
+                  />
+                  <h1>Sem conteúdo D:</h1>
+                  <div className="mt-4 flex gap-2">
+                    <ModalNewFolder
+                      currentProject={currentFolder.project!}
+                      currentFolder={currentFolder}
+                    >
+                      <Button
+                        className="w-44 border border-primary text-primary bg-transparent uppercase font-bold 
                           hover:bg-primary hover:text-white flex gap-2"
-                          >
-                            <FolderIcon size={24} />
-                            Nova Pasta
-                          </Button>
-                        </ModalNewFolder>
+                      >
+                        <FolderIcon size={24} />
+                        Nova Pasta
+                      </Button>
+                    </ModalNewFolder>
 
-                        <ModalNewTestCase currentFolder={currentFolder}>
-                          <Button
-                            className="w-44 border border-primary text-primary bg-transparent uppercase font-bold 
+                    <ModalNewTestCase currentFolder={currentFolder}>
+                      <Button
+                        className="w-44 border border-primary text-primary bg-transparent uppercase font-bold 
                           hover:bg-primary hover:text-white flex gap-2"
-                          >
-                            <CircleCheckBig size={24} />
-                            Novo Teste
-                          </Button>
-                        </ModalNewTestCase>
-                      </div>
-                    </div>
-                  ))}
-
-              {content?.folders && content.folders.length > 0 && (
-                <div className="mt-6 flex items-center">
-                  <h1 className="font-semibold text-lg">Pastas</h1>
-
+                      >
+                        <CircleCheckBig size={24} />
+                        Novo Teste
+                      </Button>
+                    </ModalNewTestCase>
+                  </div>
+                </div>
+              ) : (
+                <div className="mt-4 flex gap-2">
                   <ModalNewFolder
                     currentProject={currentFolder.project!}
                     currentFolder={currentFolder}
                   >
-                    <Button className="text-primary text-sm bg-transparent font-bold py-2 px-4 hover:text-secondary transition-colors">
-                      <CirclePlus size={40} />
+                    <Button
+                      className="w-44 border border-primary text-primary bg-transparent uppercase font-bold 
+                          hover:bg-primary hover:text-white flex gap-2"
+                    >
+                      <FolderIcon size={24} />
+                      Nova Pasta
                     </Button>
                   </ModalNewFolder>
+
+                  <ModalNewTestCase currentFolder={currentFolder}>
+                    <Button
+                      className="w-44 border border-primary text-primary bg-transparent uppercase font-bold 
+                          hover:bg-primary hover:text-white flex gap-2"
+                    >
+                      <CircleCheckBig size={24} />
+                      Novo Teste
+                    </Button>
+                  </ModalNewTestCase>
                 </div>
               )}
 
-              <div className="w-full mt-6 px-10 grid gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {content?.folders.map((folder) => (
-                  <FolderComponent
-                    key={folder.id}
-                    folder={folder}
-                    onFolderSelect={() => router.push(`/folders/${folder.id}`)}
-                  />
-                ))}
-              </div>
+              {hasAnyFolder && (
+                <div className="w-full mt-6 flex flex-col items-center gap-4">
+                  <h1 className="font-semibold text-lg">Pastas</h1>
+                  <div className="w-full px-10 grid gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                    {content?.folders.map((folder) => (
+                      <FolderComponent
+                        key={folder.id}
+                        folder={folder}
+                        onFolderSelect={() =>
+                          router.push(`/folders/${folder.id}`)
+                        }
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
 
-              {content && content.test_cases.length > 0 && (
+              {hasAnyTestCase && (
                 <div className="mt-6">
                   <h1 className="font-semibold text-lg text-center">
                     Casos de testes

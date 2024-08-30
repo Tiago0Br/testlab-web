@@ -2,9 +2,7 @@
 
 import {
   Folder as FolderComponent,
-  Header,
   Loading,
-  TestCases,
   ProjectDropdown,
   ModalNewProject,
   ModalNewFolder,
@@ -15,7 +13,7 @@ import { useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
 import { toast } from 'sonner'
 import { Project, Content } from '@/utils/types'
-import { CirclePlus, FolderIcon } from 'lucide-react'
+import { FolderIcon } from 'lucide-react'
 import { getSessionToken } from '@/services/authService'
 import { useRouter } from 'next/navigation'
 
@@ -26,6 +24,9 @@ export default function Home() {
   const [content, setContent] = useState<Content | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+
+  const hasContent = content !== null
+  const hasAnyFolder = hasContent && content.folders.length > 0
 
   function selectFolder(folderId: number) {
     router.push(`/folders/${folderId}`)
@@ -113,41 +114,40 @@ export default function Home() {
 
           {currentProject && (
             <>
-              {!content ||
-                (content.folders.length === 0 &&
-                  content.test_cases.length === 0 && (
-                    <div className="flex flex-col items-center">
-                      <Image
-                        src="/no-content.png"
-                        alt="empty folder"
-                        width={300}
-                        height={300}
-                      />
-                      <h1>Sem conteúdo D:</h1>
-                      <div className="mt-4 flex gap-2">
-                        <ModalNewFolder currentProject={currentProject}>
-                          <Button
-                            className="w-44 border border-primary text-primary bg-transparent uppercase font-bold 
+              {!hasAnyFolder && (
+                <div className="flex flex-col items-center">
+                  <Image
+                    src="/no-content.png"
+                    alt="empty folder"
+                    width={300}
+                    height={300}
+                  />
+                  <h1>Sem conteúdo D:</h1>
+                  <div className="mt-4 flex gap-2">
+                    <ModalNewFolder currentProject={currentProject}>
+                      <Button
+                        className="w-44 border border-primary text-primary bg-transparent uppercase font-bold 
                           hover:bg-primary hover:text-white flex gap-2"
-                          >
-                            <FolderIcon size={24} />
-                            Nova Pasta
-                          </Button>
-                        </ModalNewFolder>
-                      </div>
-                    </div>
-                  ))}
+                      >
+                        <FolderIcon size={24} />
+                        Nova Pasta
+                      </Button>
+                    </ModalNewFolder>
+                  </div>
+                </div>
+              )}
 
-              {content?.folders && content.folders.length > 0 && (
-                <div className="mt-6 flex items-center">
+              {hasAnyFolder && (
+                <div className="mt-6 flex flex-col items-center gap-4">
                   <h1 className="font-semibold text-lg">Pastas do projeto</h1>
 
                   <ModalNewFolder currentProject={currentProject}>
                     <Button
-                      className="text-primary text-sm bg-transparent font-bold py-2 px-4 hover:text-secondary 
-                      transition-colors"
+                      className="w-44 border border-primary text-primary bg-transparent uppercase font-bold 
+                          hover:bg-primary hover:text-white flex gap-2"
                     >
-                      <CirclePlus size={40} />
+                      <FolderIcon size={24} />
+                      Nova Pasta
                     </Button>
                   </ModalNewFolder>
                 </div>
@@ -164,15 +164,6 @@ export default function Home() {
               />
             ))}
           </div>
-
-          {content && content.test_cases.length > 0 && (
-            <div className="mt-6">
-              <h1 className="font-semibold text-lg text-center">
-                Casos de testes
-              </h1>
-              <TestCases testCases={content.test_cases} />
-            </div>
-          )}
         </div>
       </div>
     </>
