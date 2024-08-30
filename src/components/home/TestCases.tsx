@@ -62,10 +62,10 @@ export function TestCases({ testCases }: TestCasesProps) {
       <TableBody>
         {testCases.map((testCase) => (
           <TableRow key={testCase.id}>
-            <TableCell>{testCase.title}</TableCell>
+            <TableCell className="max-w-[400px]">{testCase.title}</TableCell>
             <TableCell>
               <div
-                className={`py-1 rounded-md text-center font-semibold ${getStatusColor(
+                className={`py-1 px-2 rounded-md text-center font-semibold ${getStatusColor(
                   testCase.status.status
                 )}`}
               >
