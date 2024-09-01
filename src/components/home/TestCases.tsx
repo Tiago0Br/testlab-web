@@ -66,10 +66,10 @@ export function TestCases({ testCases }: TestCasesProps) {
             <TableCell>
               <div
                 className={`py-1 px-2 rounded-md text-center font-semibold ${getStatusColor(
-                  testCase.status.status
+                  testCase.status.description
                 )}`}
               >
-                {testCase.status.status}
+                {testCase.status.description}
               </div>
             </TableCell>
             <TableCell className="flex items-center gap-2">

@@ -1,4 +1,4 @@
-import { TestCaseWithAllStatus } from '@/utils/types'
+import { TestCaseDetails } from '@/utils/types'
 import {
   NotFound,
   Select,
@@ -22,10 +22,12 @@ export default async function TestCases({
 }: TestCasesPageProps) {
   const token = await getSessionToken()
   let testCase = null
+  let nextTestCase = null
 
   try {
     const response = await api.getTestCaseById(token, parseInt(id))
-    testCase = response.data as TestCaseWithAllStatus
+    testCase = response.data as TestCaseDetails
+    nextTestCase = testCase.next_test_case
   } catch (error) {
     console.log(error)
   }
@@ -40,10 +42,10 @@ export default async function TestCases({
 
               <div
                 className={`py-1 px-2 rounded-md text-center font-semibold ${getStatusColor(
-                  testCase.status[0].status
+                  testCase.status.description
                 )}`}
               >
-                {testCase.status[0].status}
+                {testCase.status.description}
               </div>
             </div>
 

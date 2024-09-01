@@ -29,18 +29,20 @@ export type TestCase = {
   preconditions?: string
 }
 
-export type TestCaseWithAllStatus = {
+export type TestCaseDetails = {
   id: number
   title: string
   summary: string
-  status: Status[]
+  status: Status
+  history: Status[]
   preconditions?: string
+  next_test_case?: TestCase
 }
 
 export type Status = {
   note: string
   created_at: string
-  status: TestCaseStatus
+  description: TestCaseStatus
 }
 
 export type Content = {
