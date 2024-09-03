@@ -36,7 +36,9 @@ export type TestCaseDetails = {
   status: Status
   history: Status[]
   preconditions?: string
-  next_test_case?: TestCase
+  test_suite: Folder
+  previous_test_case_id?: number
+  next_test_case_id?: number
 }
 
 export type Status = {

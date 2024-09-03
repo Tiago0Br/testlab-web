@@ -2,7 +2,7 @@ interface LoadingProps {
   isLoading?: boolean
 }
 
-export function Loading({ isLoading }: LoadingProps) {
+export function Loading({ isLoading = true }: LoadingProps) {
   return (
     <>
       {isLoading && (
