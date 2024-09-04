@@ -45,6 +45,7 @@ export interface ApiProps {
   }) => Promise<AxiosResponse>
   deleteTestCase: (token: string, testCaseId: number) => Promise<AxiosResponse>
   getTestCaseById: (token: string, testCaseId: number) => Promise<AxiosResponse>
+  listTestCaseStatus: (token: string) => Promise<AxiosResponse>
 }
 
 export const apiService: ApiProps = {
@@ -149,6 +150,14 @@ export const apiService: ApiProps = {
 
   getTestCaseById(token, testCaseId) {
     return api.get(`/test_cases/${testCaseId}`, {
+      headers: {
+        Authorization: token,
+      },
+    })
+  },
+
+  listTestCaseStatus(token) {
+    return api.get('/test_cases/status', {
       headers: {
         Authorization: token,
       },

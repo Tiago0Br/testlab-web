@@ -14,6 +14,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
+  Button,
   Loading,
   NotFound,
   Select,
@@ -21,6 +22,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Textarea,
 } from '@/components'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -31,8 +33,16 @@ interface TestCasesPageProps {
   }
 }
 
+interface TestCaseStatus {
+  value: string
+  label: string
+  disabled?: boolean
+}
+
 export default function TestCases({ params: { id } }: TestCasesPageProps) {
   const [testCase, setTestCase] = useState<TestCaseDetails | null>(null)
+  const [statusOptions, setStatusOptions] = useState<TestCaseStatus[]>([])
+  const [statusSelected, setStatusSelected] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
@@ -40,11 +50,15 @@ export default function TestCases({ params: { id } }: TestCasesPageProps) {
     getSessionToken().then((token) => {
       setIsLoading(true)
 
-      api
-        .getTestCaseById(token, parseInt(id))
+      const getTestCaseById = api.getTestCaseById(token, +id)
+      const listTestCaseStatus = api.listTestCaseStatus(token)
+
+      Promise.all([getTestCaseById, listTestCaseStatus])
         .then((response) => {
-          const currentTestCase = response.data as TestCaseDetails
+          const currentTestCase = response[0].data as TestCaseDetails
           setTestCase(currentTestCase)
+
+          setStatusOptions(response[1].data)
         })
         .catch((error) => {
           let message = 'Erro ao buscar o caso de testes.'
@@ -140,38 +154,34 @@ export default function TestCases({ params: { id } }: TestCasesPageProps) {
 
                 <div className="mt-10 flex items-center gap-4">
                   <p className="text-xl font-semibold">Alterar status:</p>
-                  <Select>
+                  <Select onValueChange={setStatusSelected}>
                     <SelectTrigger className="w-60 bg-foreground">
-                      <SelectValue placeholder="Selecione um projeto" />
+                      <SelectValue placeholder="Selecione um status" />
                     </SelectTrigger>
                     <SelectContent className="bg-foreground">
-                      <SelectItem
-                        value={`passou`}
-                        className="text-white hover:cursor-pointer hover:bg-gray-600"
-                      >
-                        Passou
-                      </SelectItem>
-                      <SelectItem
-                        value={`falhou`}
-                        className="text-white hover:cursor-pointer hover:bg-gray-600"
-                      >
-                        Com falha
-                      </SelectItem>
-                      <SelectItem
-                        value={`bloqueado`}
-                        className="text-white hover:cursor-pointer hover:bg-gray-600"
-                      >
-                        Bloqueado
-                      </SelectItem>
-                      <SelectItem
-                        value={`cancelado`}
-                        className="text-white hover:cursor-pointer hover:bg-gray-600"
-                      >
-                        Cancelado
-                      </SelectItem>
+                      {statusOptions.map((status) => (
+                        <>
+                          {!status.disabled && (
+                            <SelectItem
+                              key={`status-${status.value}`}
+                              value={status.value}
+                              className="text-white hover:cursor-pointer hover:bg-gray-600"
+                            >
+                              {status.label}
+                            </SelectItem>
+                          )}
+                        </>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
+
+                {statusSelected && (
+                  <div className="w-full flex flex-col mt-6 gap-4">
+                    <Textarea placeholder="Observações" />
+                    <Button>Atualizar</Button>
+                  </div>
+                )}
               </div>
 
               <Link

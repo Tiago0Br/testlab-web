@@ -46,7 +46,6 @@ export default function Home() {
         })
         .catch((err) => {
           toast.error('Ocorreu um erro ao buscar os projetos')
-          console.log(err)
         })
         .finally(() => setIsLoading(false))
     })
@@ -91,7 +90,6 @@ export default function Home() {
         })
         .catch((err) => {
           toast.error('Ocorreu um erro ao buscar o conteúdo do projeto')
-          console.log(err)
         })
         .finally(() => setIsLoading(false))
     })
