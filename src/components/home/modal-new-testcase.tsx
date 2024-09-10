@@ -15,10 +15,10 @@ import {
   Textarea,
 } from '@/components'
 import { toast } from 'sonner'
-import { useApi } from '@/hooks/useApi'
+import { useApi } from '@/hooks/use-api'
 import { useRouter } from 'next/navigation'
 import { Folder } from '@/utils/types'
-import { getSessionToken } from '@/services/authService'
+import { getSessionToken } from '@/services/auth-service'
 
 interface ModalNewTestCaseProps {
   currentFolder: Folder

@@ -14,8 +14,8 @@ import {
   NotFound,
   ModalNewTestCase,
 } from '@/components'
-import { apiService as api } from '@/services/apiService'
-import { getSessionToken } from '@/services/authService'
+import { apiService as api } from '@/services/api-service'
+import { getSessionToken } from '@/services/auth-service'
 import { Folder, Content } from '@/utils/types'
 import { AxiosError } from 'axios'
 import { FolderIcon, CircleCheckBig } from 'lucide-react'

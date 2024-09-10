@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FormEvent, useState } from 'react'
 import { CustomInput, Button, Loading } from '@/components'
-import { useApi } from '@/hooks/useApi'
+import { useApi } from '@/hooks/use-api'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 

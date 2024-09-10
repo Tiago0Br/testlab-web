@@ -16,9 +16,9 @@ import {
   Textarea,
 } from '@/components'
 import { toast } from 'sonner'
-import { useApi } from '@/hooks/useApi'
+import { useApi } from '@/hooks/use-api'
 import { useRouter } from 'next/navigation'
-import { getSessionToken } from '@/services/authService'
+import { getSessionToken } from '@/services/auth-service'
 
 export function ModalNewProject() {
   const [projectName, setProjectName] = useState('')

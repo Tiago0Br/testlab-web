@@ -1,9 +1,9 @@
 'use client'
 
 import { TestCaseDetails } from '@/utils/types'
-import { getStatusColor } from '@/utils/testCasesStatusColor'
-import { getSessionToken } from '@/services/authService'
-import { apiService as api } from '@/services/apiService'
+import { getStatusColor } from '@/utils/test-cases-status-color'
+import { getSessionToken } from '@/services/auth-service'
+import { apiService as api } from '@/services/api-service'
 import { useEffect, useState, Fragment } from 'react'
 import { isAxiosError } from 'axios'
 import { ChevronRight, ChevronLeft } from 'lucide-react'

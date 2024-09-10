@@ -10,11 +10,11 @@ import {
 } from '@/components'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { useApi } from '@/hooks/useApi'
+import { useApi } from '@/hooks/use-api'
 import { toast } from 'sonner'
 import { Project, Content } from '@/utils/types'
 import { FolderIcon } from 'lucide-react'
-import { getSessionToken } from '@/services/authService'
+import { getSessionToken } from '@/services/auth-service'
 import { useRouter } from 'next/navigation'
 
 export default function Home() {

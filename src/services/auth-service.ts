@@ -2,7 +2,7 @@
 
 import { User } from '@/utils/types'
 import { cookies } from 'next/headers'
-import { apiService } from './apiService'
+import { apiService } from './api-service'
 import { AxiosError } from 'axios'
 
 const SESSION_TOKEN_KEY = 'testlab.token'

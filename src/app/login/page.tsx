@@ -7,7 +7,7 @@ import { Button, CustomInput, Loading } from '@/components'
 import { FormEvent, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
-import { signIn, logout } from '@/services/authService'
+import { signIn, logout } from '@/services/auth-service'
 
 export default function Login() {
   const [email, setEmail] = useState('')

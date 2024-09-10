@@ -9,13 +9,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components'
-import { useApi } from '@/hooks/useApi'
+import { useApi } from '@/hooks/use-api'
 import { TestCase } from '@/utils/types'
 import { Eye, Pencil, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
-import { getStatusColor } from '@/utils/testCasesStatusColor'
-import { getSessionToken } from '@/services/authService'
+import { getStatusColor } from '@/utils/test-cases-status-color'
+import { getSessionToken } from '@/services/auth-service'
 
 interface TestCasesProps {
   testCases: TestCase[]

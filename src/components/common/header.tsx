@@ -1,6 +1,6 @@
 import logo from '@/assets/logo.png'
 import Image from 'next/image'
-import { MenuItem } from './MenuItem'
+import { MenuItem } from './menu-item'
 import Link from 'next/link'
 
 type MenuOptions = 'home' | 'projects' | 'profile'
