@@ -2,8 +2,7 @@
 
 import { User } from '@/utils/types'
 import { cookies } from 'next/headers'
-import { apiService } from './api-service'
-import { AxiosError } from 'axios'
+import { login } from '@/api'
 
 const SESSION_TOKEN_KEY = 'testlab.token'
 const USER_KEY = 'testlab.user'
@@ -29,32 +28,15 @@ export async function createSession(token: string, user: User) {
 }
 
 export async function signIn(email: string, password: string) {
-  try {
-    const response = await apiService.login(email, password)
+  const response = await login(email, password)
+  if (response.data) {
     const user = response.data.user as User
     const token = response.data.token as string
 
     createSession(token, user)
-
-    return {
-      success: true,
-      user: user,
-      error: null,
-    }
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      const message = error.response?.data?.message as string
-      return {
-        success: false,
-        error: message,
-      }
-    }
-
-    return {
-      success: false,
-      error: 'Ocorreu um erro. Por favor, tente novamente mais tarde!',
-    }
   }
+
+  return response
 }
 
 export async function logout() {

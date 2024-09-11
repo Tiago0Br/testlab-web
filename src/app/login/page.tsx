@@ -23,17 +23,14 @@ export default function Login() {
     }
 
     setIsLoading(true)
-    signIn(email, password).then(({ success, error, user }) => {
-      if (success) {
+    signIn(email, password).then(({ error, data }) => {
+      if (data) {
         setIsLoading(false)
         router.push('/')
-        return toast.success(`Seja bem-vindo ${user?.name}!`)
+        return toast.success(`Seja bem-vindo ${data.user.name}!`)
       }
 
-      const defaultErrorMessage =
-        'Erro de conexão com o servidor. Por favor, tente novamente mais tarde.'
-
-      toast.error(error ?? defaultErrorMessage)
+      toast.error(error!)
       setIsLoading(false)
     })
   }
