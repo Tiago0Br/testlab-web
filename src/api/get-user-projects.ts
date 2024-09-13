@@ -2,12 +2,14 @@ import { api } from '@/lib/axios'
 import { ApiResponse } from './api-response'
 import { getResponseError } from '@/utils'
 
+export interface Project {
+  id: number
+  name: string
+  description: string
+}
+
 interface GetUserProjectsResponse extends ApiResponse {
-  data?: {
-    id: number
-    name: string
-    description: string
-  }[]
+  data?: Project[]
 }
 
 export async function getUserProjects(

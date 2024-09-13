@@ -15,10 +15,9 @@ import {
   Textarea,
 } from '@/components'
 import { toast } from 'sonner'
-import { useApi } from '@/hooks/use-api'
-import { useRouter } from 'next/navigation'
 import { Folder } from '@/utils/types'
 import { getSessionToken } from '@/services/auth-service'
+import { createTestCase } from '@/api'
 
 interface ModalNewTestCaseProps {
   currentFolder: Folder
@@ -33,11 +32,15 @@ export function ModalNewTestCase({
   const [testCaseSummary, setTestCaseSummary] = useState('')
   const [testCasePreconditions, setTestCasePreconditions] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
-  const api = useApi()
 
   function hasRequiredEmptyField() {
     return testCaseTitle.trim() === '' || testCaseSummary.trim() === ''
+  }
+
+  function clearFields() {
+    setTestCaseTitle('')
+    setTestCaseSummary('')
+    setTestCasePreconditions('')
   }
 
   function handleSubmit() {
@@ -48,36 +51,24 @@ export function ModalNewTestCase({
     setIsLoading(true)
 
     getSessionToken().then((token) => {
-      api
-        .createTestCase({
-          token,
-          title: testCaseTitle.trim(),
-          summary: testCaseSummary.trim(),
-          preconditions: testCasePreconditions.trim()
-            ? testCasePreconditions.trim()
-            : undefined,
-          test_suite_id: currentFolder.id,
-        })
-        .then(() => {
-          toast.success('Caso de testes criado com sucesso!')
-        })
-        .catch((err) => {
-          toast.error(
-            err.response?.data?.message ||
-              'Não foi possiível criar o caso de testes.'
-          )
-        })
-        .finally(() => {
-          setIsLoading(false)
+      createTestCase({
+        token,
+        title: testCaseTitle.trim(),
+        summary: testCaseSummary.trim(),
+        preconditions: testCasePreconditions.trim()
+          ? testCasePreconditions.trim()
+          : undefined,
+        test_suite_id: currentFolder.id,
+      }).then(({ error }) => {
+        setIsLoading(false)
+        if (error) {
+          toast.error(error)
+          return
+        }
 
-          setTestCaseTitle('')
-          setTestCaseSummary('')
-          setTestCasePreconditions('')
-
-          setTimeout(() => {
-            router.refresh()
-          }, 800)
-        })
+        clearFields()
+        toast.success('Caso de testes criado com sucesso!')
+      })
     })
   }
 

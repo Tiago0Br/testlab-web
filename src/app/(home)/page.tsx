@@ -10,18 +10,21 @@ import {
 } from '@/components'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { useApi } from '@/hooks/use-api'
 import { toast } from 'sonner'
-import { Project, Content } from '@/utils/types'
 import { FolderIcon } from 'lucide-react'
 import { getSessionToken } from '@/services/auth-service'
 import { useRouter } from 'next/navigation'
+import {
+  getProjectContent,
+  getUserProjects,
+  Project,
+  ProjectContent,
+} from '@/api'
 
 export default function Home() {
-  const api = useApi()
   const [projects, setProjects] = useState<Project[]>([])
   const [currentProject, setCurrentProject] = useState<Project | null>(null)
-  const [content, setContent] = useState<Content | null>(null)
+  const [content, setContent] = useState<ProjectContent | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
@@ -36,38 +39,37 @@ export default function Home() {
     getSessionToken().then((sessionToken) => {
       setIsLoading(true)
 
-      api
-        .getUserProjects(sessionToken)
-        .then((response) => {
-          const projectsResponse = response.data as Project[]
+      getUserProjects(sessionToken).then(({ data, error }) => {
+        setIsLoading(false)
+        if (error) {
+          toast.error(error)
+          return
+        }
 
-          setProjects(projectsResponse)
-          setCurrentProject(projectsResponse[0] ?? null)
-        })
-        .catch((err) => {
-          toast.error('Ocorreu um erro ao buscar os projetos')
-        })
-        .finally(() => setIsLoading(false))
+        const projectsResponse = data as Project[]
+        setProjects(projectsResponse)
+        setCurrentProject(projectsResponse[0] ?? null)
+      })
     })
-  }, []) //eslint-disable-line
+  }, [])
 
   useEffect(() => {
     if (currentProject) {
       setIsLoading(true)
 
       getSessionToken().then((token) => {
-        api
-          .getProjectContent(token, currentProject.id)
-          .then((response) => {
-            setContent(response.data)
-          })
-          .catch(() => {
-            toast.error('Ocorreu um erro ao buscar o conteúdo')
-          })
-          .finally(() => setIsLoading(false))
+        getProjectContent(token, currentProject.id).then(({ data, error }) => {
+          setIsLoading(false)
+          if (error) {
+            toast.error(error)
+            return
+          }
+
+          setContent(data!)
+        })
       })
     }
-  }, [currentProject]) //eslint-disable-line
+  }, [currentProject])
 
   const onProjectChange = (projectId: string) => {
     const project =
@@ -83,15 +85,15 @@ export default function Home() {
     setIsLoading(true)
 
     getSessionToken().then((token) => {
-      api
-        .getProjectContent(token, project.id)
-        .then((response) => {
-          setContent(response.data)
-        })
-        .catch((err) => {
-          toast.error('Ocorreu um erro ao buscar o conteúdo do projeto')
-        })
-        .finally(() => setIsLoading(false))
+      getProjectContent(token, currentProject!.id).then(({ data, error }) => {
+        setIsLoading(false)
+        if (error) {
+          toast.error(error)
+          return
+        }
+
+        setContent(data!)
+      })
     })
   }
 

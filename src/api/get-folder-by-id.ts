@@ -1,20 +1,25 @@
 import { api } from '@/lib/axios'
 import { ApiResponse } from './api-response'
 import { getResponseError } from '@/utils'
-interface GetFolderByIdResponse extends ApiResponse {
-  data?: {
+
+export interface ParentFolder {
+  id: number
+  title: string
+}
+
+export interface Folder {
+  id: number
+  title: string
+  project: {
     id: number
-    title: string
-    project: {
-      id: number
-      name: string
-      description: string
-    }
-    parent_folder?: {
-      id: number
-      title: string
-    }
+    name: string
+    description: string
   }
+  parent_folder?: ParentFolder
+}
+
+interface GetFolderByIdResponse extends ApiResponse {
+  data?: Folder
 }
 
 export async function getFolderById(

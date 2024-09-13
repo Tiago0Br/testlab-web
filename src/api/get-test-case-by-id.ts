@@ -9,21 +9,23 @@ interface TestCaseStatus {
   created_at: string
 }
 
-interface GetTestCaseByIdResponse extends ApiResponse {
-  data?: {
+export interface TestCaseDetails {
+  id: number
+  title: string
+  summary: string
+  status: TestCaseStatus
+  history: TestCaseStatus[]
+  preconditions?: string
+  test_suite: {
     id: number
     title: string
-    summary: string
-    preconditions?: string
-    test_suite: {
-      id: number
-      title: string
-    }
-    status: TestCaseStatus
-    history: TestCaseStatus[]
-    previous_test_case_id?: number
-    next_test_case_id?: number
   }
+  previous_test_case_id?: number
+  next_test_case_id?: number
+}
+
+interface GetTestCaseByIdResponse extends ApiResponse {
+  data?: TestCaseDetails
 }
 
 export async function getTestCaseById(

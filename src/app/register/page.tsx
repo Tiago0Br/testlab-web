@@ -5,9 +5,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FormEvent, useState } from 'react'
 import { CustomInput, Button, Loading } from '@/components'
-import { useApi } from '@/hooks/use-api'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { register } from '@/api'
 
 export default function Register() {
   const [name, setName] = useState('')
@@ -15,7 +15,6 @@ export default function Register() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const api = useApi()
   const router = useRouter()
 
   const clearFields = () => {
@@ -42,18 +41,19 @@ export default function Register() {
     }
 
     setIsLoading(true)
-    api
-      .register(name, email, password)
-      .then(() => {
-        setIsLoading(false)
-        toast.success('Cadastro realizado com sucesso!')
-        clearFields()
-        router.push('/login')
-      })
-      .catch((err) => {
-        setIsLoading(false)
-        toast.error(err?.response?.data?.message || 'Ocorreu um erro')
-      })
+
+    register({ name, email, password }).then(({ error }) => {
+      setIsLoading(false)
+
+      if (error) {
+        toast.error(error)
+        return
+      }
+
+      toast.success('Cadastro realizado com sucesso!')
+      clearFields()
+      router.push('/login')
+    })
   }
 
   return (

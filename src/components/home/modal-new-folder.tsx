@@ -14,10 +14,9 @@ import {
   Loading,
 } from '@/components'
 import { toast } from 'sonner'
-import { useApi } from '@/hooks/use-api'
-import { useRouter } from 'next/navigation'
 import { Folder, Project } from '@/utils/types'
 import { getSessionToken } from '@/services/auth-service'
+import { createFolder } from '@/api'
 
 interface ModalNewFolderProps {
   currentProject: Project
@@ -32,11 +31,13 @@ export function ModalNewFolder({
 }: ModalNewFolderProps) {
   const [folderName, setFolderName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
-  const api = useApi()
 
   function hasEmptyField() {
     return folderName.trim() === ''
+  }
+
+  function clearFields() {
+    setFolderName('')
   }
 
   function handleSubmit() {
@@ -47,30 +48,21 @@ export function ModalNewFolder({
     setIsLoading(true)
 
     getSessionToken().then((token) => {
-      api
-        .createNewFolder({
-          token,
-          title: folderName.trim(),
-          project_id: currentProject.id,
-          folder_id: currentFolder?.id,
-        })
-        .then(() => {
-          toast.success('Pasta criada com sucesso!')
+      createFolder({
+        title: folderName.trim(),
+        folder_id: currentFolder?.id,
+        project_id: currentProject.id,
+        token,
+      }).then(({ error }) => {
+        setIsLoading(false)
+        if (error) {
+          toast.error(error)
+          return
+        }
 
-          setTimeout(() => {
-            router.refresh()
-          }, 800)
-        })
-        .catch((err) => {
-          toast.error(
-            err.response?.data?.message || 'Não foi possiível criar a pasta.'
-          )
-        })
-        .finally(() => {
-          setIsLoading(false)
-
-          setFolderName('')
-        })
+        clearFields()
+        toast.success('Pasta criada com sucesso!')
+      })
     })
   }
 

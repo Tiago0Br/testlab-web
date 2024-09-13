@@ -9,40 +9,30 @@ import {
   TableHeader,
   TableRow,
 } from '@/components'
-import { useApi } from '@/hooks/use-api'
-import { TestCase } from '@/utils/types'
 import { Eye, Pencil, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { getStatusColor } from '@/utils/test-cases-status-color'
 import { getSessionToken } from '@/services/auth-service'
+import { deleteTestCase, TestCase } from '@/api'
 
 interface TestCasesProps {
   testCases: TestCase[]
 }
 
 export function TestCases({ testCases }: TestCasesProps) {
-  const api = useApi()
   const router = useRouter()
 
   function handleDeleteTestCase(testCaseId: number) {
     getSessionToken().then((token) => {
-      api
-        .deleteTestCase(token, testCaseId)
-        .then(() => {
-          toast.success('Caso de teste excluído com sucesso!')
-        })
-        .catch((err) => {
-          toast.error(
-            err.response?.data?.message ||
-              'Ocorreu um erro ao excluir o caso de teste'
-          )
-        })
-        .finally(() => {
-          setTimeout(() => {
-            router.refresh()
-          }, 800)
-        })
+      deleteTestCase(token, testCaseId).then(({ error }) => {
+        if (error) {
+          toast.error(error)
+          return
+        }
+
+        toast.success('Caso de teste excluído com sucesso!')
+      })
     })
   }
 

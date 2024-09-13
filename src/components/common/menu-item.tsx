@@ -9,10 +9,9 @@ interface MenuItemProps {
 export function MenuItem({ title, redirect, selected }: MenuItemProps) {
   return (
     <Link
-      className={`font-bold text-xl transition ${
-        selected && 'text-primary'
-      } hover:text-primary`}
-      href={redirect ? redirect : '#'}
+      data-selected={selected}
+      className="font-bold text-xl transition data-[selected=true]:text-primary hover:text-primary"
+      href={redirect ?? '#'}
     >
       {title}
     </Link>

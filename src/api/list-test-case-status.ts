@@ -2,12 +2,14 @@ import { api } from '@/lib/axios'
 import { ApiResponse } from './api-response'
 import { getResponseError } from '@/utils'
 
+export interface TestCaseStatusOption {
+  value: string
+  label: string
+  disabled?: boolean
+}
+
 interface ListTestCaseStatusResponse extends ApiResponse {
-  data?: {
-    value: string
-    label: string
-    disabled: boolean
-  }[]
+  data?: TestCaseStatusOption[]
 }
 
 export async function listTestCaseStatus(

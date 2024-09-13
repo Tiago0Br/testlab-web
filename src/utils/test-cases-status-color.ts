@@ -1,7 +1,7 @@
 import { TestCaseStatus } from '@/utils/types'
 
-export function getStatusColor(status: TestCaseStatus) {
-  switch (status) {
+export function getStatusColor(statusDescription: string) {
+  switch (statusDescription) {
     case TestCaseStatus.Available:
       return 'bg-cyan-500'
     case TestCaseStatus.Blocked:
@@ -17,4 +17,6 @@ export function getStatusColor(status: TestCaseStatus) {
     case TestCaseStatus.Pass:
       return 'bg-green-500'
   }
+
+  throw new Error('Status inválido!')
 }

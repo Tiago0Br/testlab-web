@@ -1,6 +1,13 @@
 'use client'
 
 import {
+  Folder,
+  getFolderById,
+  FolderContent,
+  getFolderContent,
+  ParentFolder,
+} from '@/api'
+import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
@@ -14,10 +21,7 @@ import {
   NotFound,
   ModalNewTestCase,
 } from '@/components'
-import { apiService as api } from '@/services/api-service'
 import { getSessionToken } from '@/services/auth-service'
-import { Folder, Content } from '@/utils/types'
-import { AxiosError } from 'axios'
 import { FolderIcon, CircleCheckBig } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -31,8 +35,8 @@ interface FoldersPageProps {
 
 export default function Folders({ params: { id } }: FoldersPageProps) {
   const [currentFolder, setCurrentFolder] = useState<Folder | null>(null)
-  const [parentFolder, setParentFolder] = useState<Folder | null>(null)
-  const [content, setContent] = useState<Content | null>(null)
+  const [parentFolder, setParentFolder] = useState<ParentFolder | null>(null)
+  const [content, setContent] = useState<FolderContent | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
   const router = useRouter()
@@ -45,32 +49,26 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
     setIsLoading(true)
 
     getSessionToken().then((token) => {
-      api
-        .getFolderById(token, parseInt(id))
-        .then((response) => {
-          const folder = response.data as Folder
+      getFolderById(token, parseInt(id)).then(({ data, error }) => {
+        if (error) {
+          setIsLoading(false)
+          toast.error(error)
+          return
+        }
 
-          setCurrentFolder(folder)
-          setParentFolder(folder.parent_folder ?? null)
+        setCurrentFolder(data!)
+        setParentFolder(data?.parent_folder ?? null)
 
-          api
-            .getFolderContent(token, folder.id)
-            .then((response) => {
-              const content = response.data as Content
-              setContent(content)
-            })
-            .catch((error) => {
-              let message =
-                'Erro ao buscar conteúdo da pasta. Tente novamente mais tarde.'
-              if (error instanceof AxiosError) {
-                message = error.response?.data?.message as string
-              }
+        getFolderContent(token, data!.id).then(({ data, error }) => {
+          setIsLoading(false)
+          if (error) {
+            toast.error(error)
+            return
+          }
 
-              toast.error(message)
-            })
+          setContent(data!)
         })
-        .catch(() => {})
-        .finally(() => setIsLoading(false))
+      })
     })
   }, [id])
 

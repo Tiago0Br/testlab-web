@@ -1,11 +1,8 @@
 'use client'
 
-import { TestCaseDetails } from '@/utils/types'
 import { getStatusColor } from '@/utils/test-cases-status-color'
 import { getSessionToken } from '@/services/auth-service'
-import { apiService as api } from '@/services/api-service'
 import { useEffect, useState, Fragment } from 'react'
-import { isAxiosError } from 'axios'
 import { ChevronRight, ChevronLeft } from 'lucide-react'
 import { toast } from 'sonner'
 import {
@@ -26,6 +23,13 @@ import {
 } from '@/components'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import {
+  changeTestCaseStatus,
+  getTestCaseById,
+  listTestCaseStatus,
+  TestCaseDetails,
+  TestCaseStatusOption,
+} from '@/api'
 
 interface TestCasesPageProps {
   params: {
@@ -33,41 +37,38 @@ interface TestCasesPageProps {
   }
 }
 
-interface TestCaseStatus {
-  value: string
-  label: string
-  disabled?: boolean
-}
-
 export default function TestCases({ params: { id } }: TestCasesPageProps) {
   const [testCase, setTestCase] = useState<TestCaseDetails | null>(null)
-  const [statusOptions, setStatusOptions] = useState<TestCaseStatus[]>([])
+  const [statusOptions, setStatusOptions] = useState<TestCaseStatusOption[]>([])
   const [statusSelected, setStatusSelected] = useState('')
   const [note, setNote] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
+  function clearFields() {
+    setStatusSelected('')
+    setNote('')
+  }
+
   useEffect(() => {
     getSessionToken().then((token) => {
       setIsLoading(true)
 
-      const getTestCaseById = api.getTestCaseById(token, +id)
-      const listTestCaseStatus = api.listTestCaseStatus(token)
+      const getTestCaseByIdRequest = getTestCaseById(token, +id)
+      const listTestCaseStatusRequest = listTestCaseStatus(token)
 
-      Promise.all([getTestCaseById, listTestCaseStatus])
+      Promise.all([getTestCaseByIdRequest, listTestCaseStatusRequest])
         .then((response) => {
-          const currentTestCase = response[0].data as TestCaseDetails
-          setTestCase(currentTestCase)
-
-          setStatusOptions(response[1].data)
-        })
-        .catch((error) => {
-          let message = 'Erro ao buscar o caso de testes.'
-          if (isAxiosError(error)) {
-            message = error.response?.data?.message as string
+          if (response[0].error || response[1].error) {
+            toast.error(response[0].error ?? response[1].error)
+            return
           }
 
-          toast.error(message)
+          setTestCase(response[0].data!)
+          setStatusOptions(response[1].data!)
+        })
+        .catch(() => {
+          toast.error('Erro ao buscar o caso de testes.')
         })
         .finally(() => {
           setIsLoading(false)
@@ -78,20 +79,23 @@ export default function TestCases({ params: { id } }: TestCasesPageProps) {
   function handleUpdateStatus() {
     getSessionToken().then((token) => {
       setIsLoading(true)
-      api
-        .changeTestCaseStatus(token, parseInt(id), statusSelected, note)
-        .then(() => {
-          toast.success('Caso de teste atualizado com sucesso')
-        })
-        .catch((err) => {
-          toast.error(
-            err.response?.data?.message ||
-              'Erro ao atualizar o caso de teste. Tente novamente'
-          )
-        })
-        .finally(() => {
-          setIsLoading(false)
-        })
+
+      changeTestCaseStatus({
+        status: statusSelected,
+        note,
+        testCaseId: parseInt(id),
+        token,
+      }).then(({ data, error }) => {
+        setIsLoading(false)
+        if (error) {
+          toast.error(error)
+          return
+        }
+
+        setTestCase(data!)
+        clearFields()
+        toast.success('Caso de teste atualizado com sucesso')
+      })
     })
   }
 

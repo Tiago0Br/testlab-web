@@ -16,19 +16,21 @@ import {
   Textarea,
 } from '@/components'
 import { toast } from 'sonner'
-import { useApi } from '@/hooks/use-api'
-import { useRouter } from 'next/navigation'
 import { getSessionToken } from '@/services/auth-service'
+import { createProject } from '@/api'
 
 export function ModalNewProject() {
   const [projectName, setProjectName] = useState('')
   const [projectDescription, setProjectDescription] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
-  const api = useApi()
 
   function hasEmptyField() {
     return projectName.trim() === '' || projectDescription.trim() === ''
+  }
+
+  function clearFields() {
+    setProjectName('')
+    setProjectDescription('')
   }
 
   function handleSubmit() {
@@ -39,26 +41,20 @@ export function ModalNewProject() {
     setIsLoading(true)
 
     getSessionToken().then((token) => {
-      api
-        .createNewProject(token, projectName.trim(), projectDescription)
-        .then(() => {
-          toast.success('Projeto criado com sucesso!')
-        })
-        .catch((err) => {
-          toast.error(
-            err.response?.data?.message || 'Não foi possiível criar o projeto.'
-          )
-        })
-        .finally(() => {
-          setIsLoading(false)
+      createProject({
+        name: projectName.trim(),
+        description: projectDescription.trim(),
+        token,
+      }).then(({ error }) => {
+        setIsLoading(false)
+        if (error) {
+          toast.error(error)
+          return
+        }
 
-          setProjectName('')
-          setProjectDescription('')
-
-          setTimeout(() => {
-            router.refresh()
-          }, 800)
-        })
+        clearFields()
+        toast.success('Projeto criado com sucesso!')
+      })
     })
   }
 

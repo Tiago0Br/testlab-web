@@ -10,7 +10,7 @@ interface DeleteTestCaseResponse extends ApiResponse {
 
 export async function deleteTestCase(
   token: string,
-  testCaseId: string
+  testCaseId: number
 ): Promise<DeleteTestCaseResponse> {
   try {
     const response = await api.delete(`/test_cases/${testCaseId}`, {
