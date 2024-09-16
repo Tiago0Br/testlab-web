@@ -21,7 +21,7 @@ export function TestCaseHistory({ history }: TestCaseHistoryProps) {
     <Accordion type="single" collapsible className="w-[400px]">
       <AccordionItem value="history">
         <AccordionTrigger>Histórico de alterações</AccordionTrigger>
-        <AccordionContent>
+        <AccordionContent className="max-h-[500px] overflow-y-scroll">
           <Table className="bg-foreground rounded-lg mt-6 w-[400px]">
             <TableHeader>
               <TableRow>
