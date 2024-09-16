@@ -19,10 +19,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  TestCaseHistory,
   Textarea,
 } from '@/components'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 import {
   changeTestCaseStatus,
   getTestCaseById,
@@ -104,6 +104,14 @@ export default function TestCases({ params: { id } }: TestCasesPageProps) {
     setNote('')
   }
 
+  function redirectToPreviousTestCase() {
+    router.push(`/testcases/${testCase?.previous_test_case_id}`)
+  }
+
+  function redirectToNextTestCase() {
+    router.push(`/testcases/${testCase?.next_test_case_id}`)
+  }
+
   return (
     <>
       {isLoading ? (
@@ -141,55 +149,34 @@ export default function TestCases({ params: { id } }: TestCasesPageProps) {
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
+              <div className="mt-8">
+                <div className="flex justify-center items-center gap-4">
+                  <h1 className="text-2xl font-semibold">{testCase.title}</h1>
 
-              <div className="flex items-center gap-20">
-                <Link
-                  data-visible={!!testCase.previous_test_case_id}
-                  href={`/testcases/${testCase.previous_test_case_id}`}
-                  className="data-[visible=false]:invisible"
-                >
-                  <ChevronLeft
-                    className="text-primary hover:text-secondary transition-colors"
-                    size={60}
-                  />
-                </Link>
-
-                <div className="mt-20">
-                  <div className="flex justify-center items-center gap-4">
-                    <h1 className="text-2xl font-semibold">{testCase.title}</h1>
-
-                    <div
-                      className={`py-1 px-2 rounded-md text-center font-semibold ${getStatusColor(
-                        testCase.status.description
-                      )}`}
-                    >
-                      {testCase.status.description}
-                    </div>
+                  <div
+                    className={`py-1 px-2 rounded-md text-center font-semibold ${getStatusColor(
+                      testCase.status.description
+                    )}`}
+                  >
+                    {testCase.status.description}
                   </div>
-
-                  <div className="mt-10">
-                    <h3 className="text-xl font-semibold">Sumário:</h3>
-                    <p>{testCase.summary}</p>
-                  </div>
-
-                  {testCase.preconditions && (
-                    <div className="mt-10">
-                      <h3 className="text-xl font-semibold">Precondições:</h3>
-                      <p>{testCase.preconditions}</p>
-                    </div>
-                  )}
                 </div>
 
-                <Link
-                  data-visible={!!testCase.next_test_case_id}
-                  href={`/testcases/${testCase.next_test_case_id}`}
-                  className="data-[visible=false]:invisible"
-                >
-                  <ChevronRight
-                    className="text-primary hover:text-secondary transition-colors"
-                    size={60}
-                  />
-                </Link>
+                <div className="mt-4">
+                  <TestCaseHistory history={testCase.history} />
+                </div>
+
+                <div className="mt-10">
+                  <h3 className="text-xl font-semibold">Sumário:</h3>
+                  <p>{testCase.summary}</p>
+                </div>
+
+                {testCase.preconditions && (
+                  <div className="mt-10">
+                    <h3 className="text-xl font-semibold">Precondições:</h3>
+                    <p>{testCase.preconditions}</p>
+                  </div>
+                )}
               </div>
 
               <div className="mt-10 flex items-center gap-4">
@@ -241,6 +228,32 @@ export default function TestCases({ params: { id } }: TestCasesPageProps) {
                   </div>
                 </div>
               )}
+
+              <div className="mt-8 flex justify-center gap-4">
+                <Button
+                  data-visible={!!testCase.previous_test_case_id}
+                  onClick={redirectToPreviousTestCase}
+                  className="
+                    data-[visible=false]:hidden w-40 border border-primary text-primary bg-transparent uppercase font-bold 
+                    hover:bg-primary hover:text-white flex justify-center items-center gap-2
+                  "
+                >
+                  <ChevronLeft size={24} />
+                  Anterior
+                </Button>
+
+                <Button
+                  data-visible={!!testCase.next_test_case_id}
+                  onClick={redirectToNextTestCase}
+                  className="
+                    data-[visible=false]:hidden w-40 border border-primary text-primary bg-transparent uppercase font-bold 
+                    hover:bg-primary hover:text-white flex justify-center items-center gap-2
+                  "
+                >
+                  Próximo
+                  <ChevronRight size={24} />
+                </Button>
+              </div>
             </div>
           ) : (
             <NotFound />

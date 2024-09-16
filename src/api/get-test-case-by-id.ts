@@ -2,7 +2,7 @@ import { api } from '@/lib/axios'
 import { ApiResponse } from './api-response'
 import { getResponseError } from '@/utils'
 
-interface TestCaseStatus {
+export interface TestCaseStatus {
   id: number
   description: string
   note?: string
