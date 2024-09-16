@@ -18,11 +18,11 @@ interface TestCaseHistoryProps {
 
 export function TestCaseHistory({ history }: TestCaseHistoryProps) {
   return (
-    <Accordion type="single" collapsible className="w-full">
+    <Accordion type="single" collapsible className="w-[400px]">
       <AccordionItem value="history">
         <AccordionTrigger>Histórico de alterações</AccordionTrigger>
         <AccordionContent>
-          <Table className="bg-foreground rounded-lg mt-6 min-w-[300px]">
+          <Table className="bg-foreground rounded-lg mt-6 w-[400px]">
             <TableHeader>
               <TableRow>
                 <TableHead>Status</TableHead>
