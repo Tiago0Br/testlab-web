@@ -97,9 +97,12 @@ export default function Home() {
     })
   }
 
+  if (isLoading) {
+    return <Loading />
+  }
+
   return (
     <>
-      <Loading isLoading={isLoading} />
       <div className="pb-6">
         <div className="flex flex-col items-center">
           <div className="flex justify-center items-center mt-6 gap-2">
