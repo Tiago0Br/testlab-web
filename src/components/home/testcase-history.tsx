@@ -18,15 +18,16 @@ interface TestCaseHistoryProps {
 
 export function TestCaseHistory({ history }: TestCaseHistoryProps) {
   return (
-    <Accordion type="single" collapsible className="w-[400px]">
+    <Accordion type="single" collapsible className="w-[600px]">
       <AccordionItem value="history">
         <AccordionTrigger>Histórico de alterações</AccordionTrigger>
-        <AccordionContent className="max-h-[500px] overflow-y-scroll">
-          <Table className="bg-foreground rounded-lg mt-6 w-[400px]">
+        <AccordionContent className="max-h-[500px] overflow-y-scroll overflow-x-hidden">
+          <Table className="bg-foreground rounded-lg mt-6 w-[600px]">
             <TableHeader>
               <TableRow>
                 <TableHead>Status</TableHead>
                 <TableHead>Data/Hora</TableHead>
+                <TableHead>Autor</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -40,6 +41,7 @@ export function TestCaseHistory({ history }: TestCaseHistoryProps) {
                       .toLocaleString()
                       .replace(',', ' ')}
                   </TableCell>
+                  <TableCell>{status.created_by ?? ''}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

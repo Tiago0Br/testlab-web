@@ -7,6 +7,7 @@ export interface TestCaseStatus {
   description: string
   note?: string
   created_at: string
+  created_by?: string
 }
 
 export interface TestCaseDetails {
