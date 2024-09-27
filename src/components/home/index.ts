@@ -1,4 +1,3 @@
-export * from './button-and-content'
 export * from './folder'
 export * from './modal-new-folder'
 export * from './modal-new-project'
