@@ -7,6 +7,7 @@ import {
   DialogTrigger,
   Button,
   DialogContent,
+  DialogClose,
   DialogHeader,
   DialogTitle,
   DialogDescription,
@@ -16,10 +17,12 @@ import {
   Textarea,
 } from '@/components'
 import { toast } from 'sonner'
-import { getSessionToken } from '@/services/auth-service'
-import { createProject } from '@/api'
 
-export function ModalNewProject() {
+interface ModalNewProjectProps {
+  onCreateProject: (name: string, description: string) => Promise<void>
+}
+
+export function ModalNewProject({ onCreateProject }: ModalNewProjectProps) {
   const [projectName, setProjectName] = useState('')
   const [projectDescription, setProjectDescription] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -33,6 +36,10 @@ export function ModalNewProject() {
     setProjectDescription('')
   }
 
+  function closeModal() {
+    document.getElementById('close-modal-new-project')!.click()
+  }
+
   function handleSubmit() {
     if (hasEmptyField()) {
       return toast.error('Preencha todos os campos')
@@ -40,21 +47,10 @@ export function ModalNewProject() {
 
     setIsLoading(true)
 
-    getSessionToken().then((token) => {
-      createProject({
-        name: projectName.trim(),
-        description: projectDescription.trim(),
-        token,
-      }).then(({ error }) => {
-        setIsLoading(false)
-        if (error) {
-          toast.error(error)
-          return
-        }
-
-        clearFields()
-        toast.success('Projeto criado com sucesso!')
-      })
+    onCreateProject(projectName.trim(), projectDescription.trim()).then(() => {
+      setIsLoading(false)
+      closeModal()
+      clearFields()
     })
   }
 
@@ -74,6 +70,7 @@ export function ModalNewProject() {
             <DialogDescription>
               Cadastro de um novo projeto de testes
             </DialogDescription>
+            <DialogClose id="close-modal-new-project" />
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">

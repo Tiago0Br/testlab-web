@@ -6,6 +6,7 @@ import {
   DialogTrigger,
   Button,
   DialogContent,
+  DialogClose,
   DialogHeader,
   DialogTitle,
   DialogDescription,
@@ -14,20 +15,15 @@ import {
   Loading,
 } from '@/components'
 import { toast } from 'sonner'
-import { Folder, Project } from '@/utils/types'
-import { getSessionToken } from '@/services/auth-service'
-import { createFolder } from '@/api'
 
 interface ModalNewFolderProps {
-  currentProject: Project
-  currentFolder?: Folder | null
+  onCreateFolder: (folderName: string) => Promise<void>
   children: ReactNode
 }
 
 export function ModalNewFolder({
-  currentProject,
-  currentFolder,
   children,
+  onCreateFolder,
 }: ModalNewFolderProps) {
   const [folderName, setFolderName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -40,6 +36,10 @@ export function ModalNewFolder({
     setFolderName('')
   }
 
+  function closeModal() {
+    document.getElementById('close-modal-new-folder')!.click()
+  }
+
   function handleSubmit() {
     if (hasEmptyField()) {
       return toast.error('Preencha todos os campos')
@@ -47,22 +47,10 @@ export function ModalNewFolder({
 
     setIsLoading(true)
 
-    getSessionToken().then((token) => {
-      createFolder({
-        title: folderName.trim(),
-        folder_id: currentFolder?.id,
-        project_id: currentProject.id,
-        token,
-      }).then(({ error }) => {
-        setIsLoading(false)
-        if (error) {
-          toast.error(error)
-          return
-        }
-
-        clearFields()
-        toast.success('Pasta criada com sucesso!')
-      })
+    onCreateFolder(folderName.trim()).then(() => {
+      closeModal()
+      setIsLoading(false)
+      clearFields()
     })
   }
 
@@ -75,6 +63,7 @@ export function ModalNewFolder({
           <DialogHeader>
             <DialogTitle>Nova pasta</DialogTitle>
             <DialogDescription>Cadastro de uma nova pasta</DialogDescription>
+            <DialogClose id="close-modal-new-folder" />
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">

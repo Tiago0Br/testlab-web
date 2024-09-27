@@ -6,6 +6,8 @@ import {
   FolderContent,
   getFolderContent,
   ParentFolder,
+  createFolder,
+  createTestCase,
 } from '@/api'
 import {
   Breadcrumb,
@@ -76,6 +78,82 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
     })
   }, [id])
 
+  async function onCreateFolder(folderName: string) {
+    const token = await getSessionToken()
+    createFolder({
+      title: folderName,
+      folder_id: currentFolder!.id,
+      project_id: currentFolder!.project.id,
+      token,
+    }).then(({ error, data }) => {
+      if (error || !data) {
+        toast.error(error)
+        return
+      }
+
+      setContent((state) => {
+        if (!state) {
+          return state
+        }
+
+        return {
+          ...state,
+          folders: [
+            ...state.folders,
+            {
+              id: data.id,
+              title: data.title,
+            },
+          ],
+          test_cases: [...state.test_cases],
+        }
+      })
+      toast.success('Pasta criada com sucesso!')
+    })
+  }
+
+  async function onCreateTestCase(
+    title: string,
+    summary: string,
+    preconditions: string
+  ) {
+    const token = await getSessionToken()
+    const { error, data } = await createTestCase({
+      title,
+      summary,
+      preconditions: preconditions !== '' ? preconditions : undefined,
+      test_suite_id: currentFolder!.id,
+      token,
+    })
+
+    if (error || !data) {
+      toast.error(error)
+      return
+    }
+
+    setContent((state) => {
+      if (!state) {
+        return state
+      }
+
+      return {
+        ...state,
+        folders: [...state.folders],
+        test_cases: [
+          ...state.test_cases,
+          {
+            id: data.id,
+            title: data.title,
+            summary: data.summary,
+            preconditions: data.preconditions,
+            status: data.status,
+          },
+        ],
+      }
+    })
+    toast.success('Caso de testes criado com sucesso!')
+  }
+
   if (isLoading || currentFolder === undefined || content === undefined) {
     return <Loading />
   }
@@ -128,10 +206,7 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
               />
               <h1>Sem conteúdo D:</h1>
               <div className="mt-4 flex gap-2">
-                <ModalNewFolder
-                  currentProject={currentFolder.project!}
-                  currentFolder={currentFolder}
-                >
+                <ModalNewFolder onCreateFolder={onCreateFolder}>
                   <Button
                     className="
                       flex gap-2 w-44 border border-primary text-primary bg-transparent uppercase font-bold 
@@ -143,7 +218,7 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
                   </Button>
                 </ModalNewFolder>
 
-                <ModalNewTestCase currentFolder={currentFolder}>
+                <ModalNewTestCase onCreateTestCase={onCreateTestCase}>
                   <Button
                     className="
                       flex gap-2 w-44 border border-primary text-primary bg-transparent uppercase font-bold 
@@ -158,10 +233,7 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
             </div>
           ) : (
             <div className="mt-4 flex gap-2">
-              <ModalNewFolder
-                currentProject={currentFolder.project!}
-                currentFolder={currentFolder}
-              >
+              <ModalNewFolder onCreateFolder={onCreateFolder}>
                 <Button
                   className="
                     flex gap-2 w-44 border border-primary text-primary bg-transparent uppercase font-bold 
@@ -173,7 +245,7 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
                 </Button>
               </ModalNewFolder>
 
-              <ModalNewTestCase currentFolder={currentFolder}>
+              <ModalNewTestCase onCreateTestCase={onCreateTestCase}>
                 <Button
                   className="
                     flex gap-2 w-44 border border-primary text-primary bg-transparent uppercase font-bold 

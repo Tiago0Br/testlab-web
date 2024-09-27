@@ -15,6 +15,8 @@ import { FolderIcon } from 'lucide-react'
 import { getSessionToken } from '@/services/auth-service'
 import { useRouter } from 'next/navigation'
 import {
+  createFolder,
+  createProject,
   getProjectContent,
   getUserProjects,
   Project,
@@ -97,6 +99,59 @@ export default function Home() {
     })
   }
 
+  async function onCreateProject(
+    projectName: string,
+    projectDescription: string
+  ) {
+    const token = await getSessionToken()
+    const { error, data } = await createProject({
+      name: projectName,
+      description: projectDescription,
+      token,
+    })
+
+    if (error || !data) {
+      toast.error(error)
+      return
+    }
+
+    setProjects((state) => [...state, data])
+    toast.success('Projeto criado com sucesso!')
+  }
+
+  async function onCreateFolder(folderName: string) {
+    const token = await getSessionToken()
+    createFolder({
+      title: folderName,
+      project_id: currentProject!.id,
+      token,
+    }).then(({ error, data }) => {
+      setIsLoading(false)
+      if (error || !data) {
+        toast.error(error)
+        return
+      }
+
+      setContent((state) => {
+        if (!state) {
+          return state
+        }
+
+        return {
+          ...state,
+          folders: [
+            ...state.folders,
+            {
+              id: data.id,
+              title: data.title,
+            },
+          ],
+        }
+      })
+      toast.success('Pasta criada com sucesso!')
+    })
+  }
+
   if (isLoading) {
     return <Loading />
   }
@@ -112,7 +167,7 @@ export default function Home() {
               projects={projects}
               onProjectChange={onProjectChange}
             />
-            <ModalNewProject />
+            <ModalNewProject onCreateProject={onCreateProject} />
           </div>
 
           {currentProject && (
@@ -127,7 +182,7 @@ export default function Home() {
                   />
                   <h1>Sem conteúdo D:</h1>
                   <div className="mt-4 flex gap-2">
-                    <ModalNewFolder currentProject={currentProject}>
+                    <ModalNewFolder onCreateFolder={onCreateFolder}>
                       <Button
                         className="w-44 border border-primary text-primary bg-transparent uppercase font-bold 
                           hover:bg-primary hover:text-white flex gap-2"
@@ -144,7 +199,7 @@ export default function Home() {
                 <div className="mt-6 flex flex-col items-center gap-4">
                   <h1 className="font-semibold text-lg">Pastas do projeto</h1>
 
-                  <ModalNewFolder currentProject={currentProject}>
+                  <ModalNewFolder onCreateFolder={onCreateFolder}>
                     <Button
                       className="w-44 border border-primary text-primary bg-transparent uppercase font-bold 
                           hover:bg-primary hover:text-white flex gap-2"

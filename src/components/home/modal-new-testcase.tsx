@@ -6,6 +6,7 @@ import {
   DialogTrigger,
   Button,
   DialogContent,
+  DialogClose,
   DialogHeader,
   DialogTitle,
   DialogDescription,
@@ -15,18 +16,19 @@ import {
   Textarea,
 } from '@/components'
 import { toast } from 'sonner'
-import { Folder } from '@/utils/types'
-import { getSessionToken } from '@/services/auth-service'
-import { createTestCase } from '@/api'
 
 interface ModalNewTestCaseProps {
-  currentFolder: Folder
   children: ReactNode
+  onCreateTestCase: (
+    title: string,
+    summary: string,
+    preconditions: string
+  ) => Promise<void>
 }
 
 export function ModalNewTestCase({
-  currentFolder,
   children,
+  onCreateTestCase,
 }: ModalNewTestCaseProps) {
   const [testCaseTitle, setTestCaseTitle] = useState('')
   const [testCaseSummary, setTestCaseSummary] = useState('')
@@ -43,6 +45,10 @@ export function ModalNewTestCase({
     setTestCasePreconditions('')
   }
 
+  function closeModal() {
+    document.getElementById('close-modal-new-testcase')!.click()
+  }
+
   function handleSubmit() {
     if (hasRequiredEmptyField()) {
       return toast.error('Preencha todos os campos')
@@ -50,25 +56,14 @@ export function ModalNewTestCase({
 
     setIsLoading(true)
 
-    getSessionToken().then((token) => {
-      createTestCase({
-        token,
-        title: testCaseTitle.trim(),
-        summary: testCaseSummary.trim(),
-        preconditions: testCasePreconditions.trim()
-          ? testCasePreconditions.trim()
-          : undefined,
-        test_suite_id: currentFolder.id,
-      }).then(({ error }) => {
-        setIsLoading(false)
-        if (error) {
-          toast.error(error)
-          return
-        }
-
-        clearFields()
-        toast.success('Caso de testes criado com sucesso!')
-      })
+    onCreateTestCase(
+      testCaseTitle.trim(),
+      testCaseSummary.trim(),
+      testCasePreconditions.trim()
+    ).then(() => {
+      setIsLoading(false)
+      closeModal()
+      clearFields()
     })
   }
 
@@ -83,6 +78,7 @@ export function ModalNewTestCase({
             <DialogDescription>
               Cadastro de um novo caso de testes
             </DialogDescription>
+            <DialogClose id="close-modal-new-testcase" />
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
