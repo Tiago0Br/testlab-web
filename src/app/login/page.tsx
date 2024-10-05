@@ -8,10 +8,12 @@ import { FormEvent, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { signIn, logout } from '@/services/auth-service'
+import { EyeIcon, EyeOffIcon } from 'lucide-react'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
@@ -67,12 +69,25 @@ export default function Login() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <CustomInput
-            type="password"
-            placeholder="Senha"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="w-full relative">
+            <CustomInput
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((state) => !state)}
+              className="absolute top-2 right-2"
+            >
+              {showPassword ? (
+                <EyeOffIcon className="text-primary" size={20} />
+              ) : (
+                <EyeIcon className="text-primary" size={20} />
+              )}
+            </button>
+          </div>
           <Button
             className="w-full border border-primary text-primary bg-transparent uppercase font-bold 
             hover:bg-primary hover:text-white"

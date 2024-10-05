@@ -8,12 +8,15 @@ import { CustomInput, Button, Loading } from '@/components'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { register } from '@/api'
+import { EyeIcon, EyeOffIcon } from 'lucide-react'
 
 export default function Register() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
@@ -91,18 +94,44 @@ export default function Register() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <CustomInput
-              type="password"
-              placeholder="Senha"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <CustomInput
-              type="password"
-              placeholder="Confirmar senha"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
+            <div className="w-full relative">
+              <CustomInput
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Senha"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((state) => !state)}
+                className="absolute top-2 right-2"
+              >
+                {showPassword ? (
+                  <EyeOffIcon className="text-primary" size={20} />
+                ) : (
+                  <EyeIcon className="text-primary" size={20} />
+                )}
+              </button>
+            </div>
+            <div className="w-full relative">
+              <CustomInput
+                type={showConfirmPassword ? 'text' : 'password'}
+                placeholder="Confirmar senha"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword((state) => !state)}
+                className="absolute top-2 right-2"
+              >
+                {showConfirmPassword ? (
+                  <EyeOffIcon className="text-primary" size={20} />
+                ) : (
+                  <EyeIcon className="text-primary" size={20} />
+                )}
+              </button>
+            </div>
             <Button
               className="w-full border border-primary text-primary bg-transparent uppercase font-bold 
             hover:bg-primary hover:text-white"
