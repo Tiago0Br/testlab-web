@@ -1,6 +1,7 @@
 import { api } from '@/lib/axios'
 import { ApiResponse } from './api-response'
 import { getResponseError } from '@/utils'
+import { getSessionToken } from '@/services/auth-service'
 
 export interface ParentFolder {
   id: number
@@ -23,10 +24,10 @@ interface GetFolderByIdResponse extends ApiResponse {
 }
 
 export async function getFolderById(
-  token: string,
   folderId: number
 ): Promise<GetFolderByIdResponse> {
   try {
+    const token = await getSessionToken()
     const response = await api.get(`/folders/${folderId}`, {
       headers: {
         Authorization: token,

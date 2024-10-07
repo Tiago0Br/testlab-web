@@ -8,7 +8,6 @@ import { CustomInput, Button, Loading, ShowPasswordButton } from '@/components'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { register } from '@/api'
-import { EyeIcon, EyeOffIcon } from 'lucide-react'
 
 export default function Register() {
   const [name, setName] = useState('')
