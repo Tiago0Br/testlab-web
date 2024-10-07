@@ -1,6 +1,7 @@
 import { api } from '@/lib/axios'
 import { ApiResponse } from './api-response'
 import { getResponseError } from '@/utils'
+import { getSessionToken } from '@/services/auth-service'
 
 export interface TestCaseStatus {
   id: number
@@ -30,9 +31,9 @@ interface GetTestCaseByIdResponse extends ApiResponse {
 }
 
 export async function getTestCaseById(
-  token: string,
   testCaseId: number
 ): Promise<GetTestCaseByIdResponse> {
+  const token = await getSessionToken()
   try {
     const response = await api.get(`/test_cases/${testCaseId}`, {
       headers: {

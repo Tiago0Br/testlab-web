@@ -1,12 +1,12 @@
 import { api } from '@/lib/axios'
 import { ApiResponse } from './api-response'
 import { getResponseError } from '@/utils'
+import { getSessionToken } from '@/services/auth-service'
 
 interface ChangeTestCaseStatusRequest {
   status: string
   note?: string
   testCaseId: number
-  token: string
 }
 
 interface TestCaseStatus {
@@ -35,9 +35,9 @@ export async function changeTestCaseStatus({
   status,
   note,
   testCaseId,
-  token,
 }: ChangeTestCaseStatusRequest): Promise<ChangeTestCaseStatusResponse> {
   try {
+    const token = await getSessionToken()
     const response = await api.put(
       `/test_cases/${testCaseId}/status`,
       {

@@ -4,7 +4,7 @@ import logo from '@/assets/logo.png'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FormEvent, useState } from 'react'
-import { CustomInput, Button, Loading } from '@/components'
+import { CustomInput, Button, Loading, ShowPasswordButton } from '@/components'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { register } from '@/api'
@@ -101,17 +101,10 @@ export default function Register() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <button
-                type="button"
+              <ShowPasswordButton
                 onClick={() => setShowPassword((state) => !state)}
-                className="absolute top-2 right-2"
-              >
-                {showPassword ? (
-                  <EyeOffIcon className="text-primary" size={20} />
-                ) : (
-                  <EyeIcon className="text-primary" size={20} />
-                )}
-              </button>
+                showPassword={showPassword}
+              />
             </div>
             <div className="w-full relative">
               <CustomInput
@@ -120,17 +113,10 @@ export default function Register() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
-              <button
-                type="button"
+              <ShowPasswordButton
                 onClick={() => setShowConfirmPassword((state) => !state)}
-                className="absolute top-2 right-2"
-              >
-                {showConfirmPassword ? (
-                  <EyeOffIcon className="text-primary" size={20} />
-                ) : (
-                  <EyeIcon className="text-primary" size={20} />
-                )}
-              </button>
+                showPassword={showConfirmPassword}
+              />
             </div>
             <Button
               className="w-full border border-primary text-primary bg-transparent uppercase font-bold 

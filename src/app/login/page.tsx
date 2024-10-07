@@ -3,12 +3,11 @@
 import logo from '@/assets/logo.png'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Button, CustomInput, Loading } from '@/components'
+import { Button, CustomInput, Loading, ShowPasswordButton } from '@/components'
 import { FormEvent, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { signIn, logout } from '@/services/auth-service'
-import { EyeIcon, EyeOffIcon } from 'lucide-react'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -76,17 +75,10 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <button
-              type="button"
+            <ShowPasswordButton
               onClick={() => setShowPassword((state) => !state)}
-              className="absolute top-2 right-2"
-            >
-              {showPassword ? (
-                <EyeOffIcon className="text-primary" size={20} />
-              ) : (
-                <EyeIcon className="text-primary" size={20} />
-              )}
-            </button>
+              showPassword={showPassword}
+            />
           </div>
           <Button
             className="w-full border border-primary text-primary bg-transparent uppercase font-bold 
