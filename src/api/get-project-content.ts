@@ -1,6 +1,7 @@
 import { api } from '@/lib/axios'
 import { ApiResponse } from './api-response'
 import { getResponseError } from '@/utils'
+import { getSessionToken } from '@/services/auth-service'
 
 export interface ProjectContent {
   folders: {
@@ -14,10 +15,10 @@ interface GetProjectContentResponse extends ApiResponse {
 }
 
 export async function getProjectContent(
-  token: string,
   projectId: number
 ): Promise<GetProjectContentResponse> {
   try {
+    const token = await getSessionToken()
     const response = await api.get(`/projects/${projectId}/content`, {
       headers: {
         Authorization: token,

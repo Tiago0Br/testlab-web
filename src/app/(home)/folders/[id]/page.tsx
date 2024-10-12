@@ -55,12 +55,10 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
   const hasAnyTestCase = content && content.test_cases.length > 0
 
   async function onCreateFolder(folderName: string) {
-    const token = await getSessionToken()
     createFolder({
       title: folderName,
       folder_id: currentFolder!.id,
       project_id: currentFolder!.project.id,
-      token,
     }).then(({ error, data }) => {
       if (error || !data) {
         toast.error(error)

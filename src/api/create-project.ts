@@ -1,11 +1,11 @@
 import { api } from '@/lib/axios'
 import { ApiResponse } from './api-response'
 import { getResponseError } from '@/utils'
+import { getSessionToken } from '@/services/auth-service'
 
 interface CreateProjectRequest {
   name: string
   description: string
-  token: string
 }
 
 interface CreateProjectResponse extends ApiResponse {
@@ -24,9 +24,9 @@ interface CreateProjectResponse extends ApiResponse {
 export async function createProject({
   name,
   description,
-  token,
 }: CreateProjectRequest): Promise<CreateProjectResponse> {
   try {
+    const token = await getSessionToken()
     const response = await api.post(
       '/projects/new',
       { name, description },

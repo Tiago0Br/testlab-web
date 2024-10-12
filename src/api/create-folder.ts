@@ -1,12 +1,12 @@
 import { api } from '@/lib/axios'
 import { ApiResponse } from './api-response'
 import { getResponseError } from '@/utils'
+import { getSessionToken } from '@/services/auth-service'
 
 interface CreateFolderRequest {
   title: string
   folder_id?: number
   project_id: number
-  token: string
 }
 
 interface CreateFolderResponse extends ApiResponse {
@@ -29,9 +29,9 @@ export async function createFolder({
   title,
   folder_id,
   project_id,
-  token,
 }: CreateFolderRequest): Promise<CreateFolderResponse> {
   try {
+    const token = await getSessionToken()
     const response = await api.post(
       `/folders/new`,
       {
