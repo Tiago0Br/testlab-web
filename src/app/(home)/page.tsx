@@ -1,5 +1,11 @@
 'use client'
 
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { FolderIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   Folder as FolderComponent,
   Loading,
@@ -8,27 +14,18 @@ import {
   ModalNewFolder,
   Button,
 } from '@/components'
-import Image from 'next/image'
-import { useEffect, useState } from 'react'
-import { toast } from 'sonner'
-import { FolderIcon } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import {
   createFolder,
   createProject,
   getProjectContent,
   getUserProjects,
   Project,
-  ProjectContent,
 } from '@/api'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 export default function Home() {
   const queryClient = useQueryClient()
 
   const [currentProject, setCurrentProject] = useState<Project | null>(null)
-  const [content, setContent] = useState<ProjectContent | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
   const { data: projectsResponse, isLoading: isProjectsLoading } = useQuery({
@@ -37,6 +34,14 @@ export default function Home() {
   })
 
   const projects = projectsResponse?.data ?? []
+
+  const { data: contentResponse, isLoading: isContentLoading } = useQuery({
+    queryKey: ['get-project-content'],
+    queryFn: () => getProjectContent(currentProject!.id),
+    enabled: !!currentProject,
+  })
+
+  const content = contentResponse?.data ?? null
 
   const hasContent = content !== null
   const hasAnyFolder = hasContent && content.folders.length > 0
@@ -51,41 +56,16 @@ export default function Home() {
 
   useEffect(() => {
     if (currentProject) {
-      setIsLoading(true)
-
-      getProjectContent(currentProject.id).then(({ data, error }) => {
-        setIsLoading(false)
-        if (error || !data) {
-          toast.error(error)
-          return
-        }
-
-        setContent(data)
-      })
+      queryClient.invalidateQueries({ queryKey: ['get-project-content'] })
     }
-  }, [currentProject])
+  }, [currentProject, queryClient])
 
   const onProjectChange = (projectId: string) => {
     const project = projects.find(({ id }) => id === Number(projectId)) ?? null
 
     setCurrentProject(project)
 
-    if (!project) {
-      setContent(null)
-      return
-    }
-
-    setIsLoading(true)
-
-    getProjectContent(currentProject!.id).then(({ data, error }) => {
-      setIsLoading(false)
-      if (error || !data) {
-        toast.error(error)
-        return
-      }
-
-      setContent(data)
-    })
+    queryClient.invalidateQueries({ queryKey: ['get-project-content'] })
   }
 
   async function onCreateProject(
@@ -111,33 +91,17 @@ export default function Home() {
       title: folderName,
       project_id: currentProject!.id,
     }).then(({ error, data }) => {
-      setIsLoading(false)
       if (error || !data) {
         toast.error(error)
         return
       }
 
-      setContent((state) => {
-        if (!state) {
-          return state
-        }
-
-        return {
-          ...state,
-          folders: [
-            ...state.folders,
-            {
-              id: data.id,
-              title: data.title,
-            },
-          ],
-        }
-      })
+      queryClient.invalidateQueries({ queryKey: ['get-project-content'] })
       toast.success('Pasta criada com sucesso!')
     })
   }
 
-  if (isLoading || isProjectsLoading) {
+  if (isProjectsLoading || isContentLoading) {
     return <Loading />
   }
 
@@ -167,10 +131,7 @@ export default function Home() {
                 <h1>Sem conteúdo D:</h1>
                 <div className="mt-4 flex gap-2">
                   <ModalNewFolder onCreateFolder={onCreateFolder}>
-                    <Button
-                      className="w-44 border border-primary text-primary bg-transparent uppercase font-bold 
-                          hover:bg-primary hover:text-white flex gap-2"
-                    >
+                    <Button className="w-44 border border-primary text-primary bg-transparent uppercase font-bold hover:bg-primary hover:text-white flex gap-2">
                       <FolderIcon size={24} />
                       Nova Pasta
                     </Button>
@@ -184,10 +145,7 @@ export default function Home() {
                 <h1 className="font-semibold text-lg">Pastas do projeto</h1>
 
                 <ModalNewFolder onCreateFolder={onCreateFolder}>
-                  <Button
-                    className="w-44 border border-primary text-primary bg-transparent uppercase font-bold 
-                          hover:bg-primary hover:text-white flex gap-2"
-                  >
+                  <Button className="w-44 border border-primary text-primary bg-transparent uppercase font-bold hover:bg-primary hover:text-white flex gap-2">
                     <FolderIcon size={24} />
                     Nova Pasta
                   </Button>

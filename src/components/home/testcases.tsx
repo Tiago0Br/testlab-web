@@ -1,5 +1,11 @@
 'use client'
 
+import { Eye, Pencil, Trash2 } from 'lucide-react'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
+import { useQueryClient } from '@tanstack/react-query'
+import { getStatusColor } from '@/utils/test-cases-status-color'
+import { deleteTestCase, TestCase } from '@/api'
 import {
   ConfirmationModal,
   Table,
@@ -9,12 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components'
-import { Eye, Pencil, Trash2 } from 'lucide-react'
-import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
-import { getStatusColor } from '@/utils/test-cases-status-color'
-import { getSessionToken } from '@/services/auth-service'
-import { deleteTestCase, TestCase } from '@/api'
 
 interface TestCasesProps {
   testCases: TestCase[]
@@ -22,17 +22,17 @@ interface TestCasesProps {
 
 export function TestCases({ testCases }: TestCasesProps) {
   const router = useRouter()
+  const queryClient = useQueryClient()
 
   function handleDeleteTestCase(testCaseId: number) {
-    getSessionToken().then((token) => {
-      deleteTestCase(token, testCaseId).then(({ error }) => {
-        if (error) {
-          toast.error(error)
-          return
-        }
+    deleteTestCase(testCaseId).then(({ error }) => {
+      if (error) {
+        toast.error(error)
+        return
+      }
 
-        toast.success('Caso de teste excluído com sucesso!')
-      })
+      queryClient.invalidateQueries({ queryKey: ['get-folder-content'] })
+      toast.success('Caso de teste excluído com sucesso!')
     })
   }
 
