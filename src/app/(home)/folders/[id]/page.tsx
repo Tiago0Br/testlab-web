@@ -1,6 +1,5 @@
 'use client'
 
-import { getSessionToken } from '@/services/auth-service'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { FolderIcon, CircleCheckBig } from 'lucide-react'
 import Image from 'next/image'
@@ -25,6 +24,7 @@ import {
   TestCases,
   NotFound,
   ModalNewTestCase,
+  OnSaveTestCaseProps,
 } from '@/components'
 
 interface FoldersPageProps {
@@ -70,18 +70,16 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
     })
   }
 
-  async function onCreateTestCase(
-    title: string,
-    summary: string,
-    preconditions: string
-  ) {
-    const token = await getSessionToken()
+  async function onCreateTestCase({
+    title,
+    summary,
+    preconditions,
+  }: OnSaveTestCaseProps) {
     const { error, data } = await createTestCase({
       title,
       summary,
       preconditions: preconditions !== '' ? preconditions : undefined,
       test_suite_id: currentFolder!.id,
-      token,
     })
 
     if (error || !data) {
@@ -159,7 +157,7 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
               </Button>
             </ModalNewFolder>
 
-            <ModalNewTestCase onCreateTestCase={onCreateTestCase}>
+            <ModalNewTestCase onSaveTestCase={onCreateTestCase}>
               <Button
                 className="
                   flex gap-2 w-44 border border-primary text-primary bg-transparent uppercase font-bold 
@@ -186,7 +184,7 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
             </Button>
           </ModalNewFolder>
 
-          <ModalNewTestCase onCreateTestCase={onCreateTestCase}>
+          <ModalNewTestCase onSaveTestCase={onCreateTestCase}>
             <Button
               className="
                 flex gap-2 w-44 border border-primary text-primary bg-transparent uppercase font-bold 

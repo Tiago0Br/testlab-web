@@ -13,7 +13,7 @@ export function Folder({ folder, onFolderSelect }: FolderProps) {
     <Alert
       key={folder.id}
       id={`${folder.id}-${folder.title}`}
-      className="flex items-center gap-2 bg-foreground border-none hover:cursor-pointer"
+      className="flex items-center gap-2 bg-foreground border-none hover:cursor-pointer hover:bg-zinc-800"
       onClick={onFolderSelect}
     >
       <div>

@@ -7,6 +7,7 @@ export interface TestCase {
   id: number
   title: string
   summary: string
+  preconditions?: string
   status: {
     id: number
     description: string

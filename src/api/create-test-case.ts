@@ -1,13 +1,13 @@
 import { api } from '@/lib/axios'
 import { ApiResponse } from './api-response'
 import { getResponseError } from '@/utils'
+import { getSessionToken } from '@/services/auth-service'
 
 interface CreateTestCaseRequest {
   title: string
   summary: string
   preconditions?: string
   test_suite_id: number
-  token: string
 }
 
 interface TestCaseStatus {
@@ -37,9 +37,9 @@ export async function createTestCase({
   summary,
   preconditions,
   test_suite_id,
-  token,
 }: CreateTestCaseRequest): Promise<CreateTestCaseResponse> {
   try {
+    const token = await getSessionToken()
     const response = await api.post(
       `/test_cases/new`,
       {

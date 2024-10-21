@@ -8,6 +8,8 @@ import { getStatusColor } from '@/utils/test-cases-status-color'
 import { deleteTestCase, TestCase } from '@/api'
 import {
   ConfirmationModal,
+  ModalNewTestCase,
+  OnSaveTestCaseProps,
   Table,
   TableBody,
   TableCell,
@@ -40,6 +42,8 @@ export function TestCases({ testCases }: TestCasesProps) {
     router.push(`/testcases/${testCaseId}`)
   }
 
+  async function onUpdateTestCase(props: OnSaveTestCaseProps) {}
+
   return (
     <Table className="bg-foreground rounded-lg mt-6 min-w-[600px]">
       <TableHeader>
@@ -70,12 +74,17 @@ export function TestCases({ testCases }: TestCasesProps) {
               >
                 <Eye size={24} className="text-white" />
               </button>
-              <button
-                title="Editar"
-                className="p-1 bg-orange-400 rounded-md hover:bg-orange-300 transition-colors"
+              <ModalNewTestCase
+                testCase={testCase}
+                onSaveTestCase={onUpdateTestCase}
               >
-                <Pencil size={24} className="text-white" />
-              </button>
+                <button
+                  title="Editar"
+                  className="p-1 bg-orange-400 rounded-md hover:bg-orange-300 transition-colors"
+                >
+                  <Pencil size={24} className="text-white" />
+                </button>
+              </ModalNewTestCase>
               <ConfirmationModal
                 title="Deseja excluir o caso de teste?"
                 description="Essa operação não pode ser desfeita."

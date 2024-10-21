@@ -1,6 +1,7 @@
 'use client'
 
 import { ReactNode, useState } from 'react'
+import { toast } from 'sonner'
 import {
   Dialog,
   DialogTrigger,
@@ -12,27 +13,35 @@ import {
   DialogDescription,
   Input,
   DialogFooter,
-  Loading,
   Textarea,
 } from '@/components'
-import { toast } from 'sonner'
+import { TestCase } from '@/api'
 
-interface ModalNewTestCaseProps {
+export interface OnSaveTestCaseProps {
+  title: string
+  summary: string
+  preconditions: string
+  id?: number
+}
+
+interface ModalSaveTestCaseProps {
   children: ReactNode
-  onCreateTestCase: (
-    title: string,
-    summary: string,
-    preconditions: string
-  ) => Promise<void>
+  onSaveTestCase: (props: OnSaveTestCaseProps) => Promise<void>
+  testCase?: TestCase
 }
 
 export function ModalNewTestCase({
   children,
-  onCreateTestCase,
-}: ModalNewTestCaseProps) {
-  const [testCaseTitle, setTestCaseTitle] = useState('')
-  const [testCaseSummary, setTestCaseSummary] = useState('')
-  const [testCasePreconditions, setTestCasePreconditions] = useState('')
+  onSaveTestCase,
+  testCase,
+}: ModalSaveTestCaseProps) {
+  const [testCaseTitle, setTestCaseTitle] = useState(testCase?.title ?? '')
+  const [testCaseSummary, setTestCaseSummary] = useState(
+    testCase?.summary ?? ''
+  )
+  const [testCasePreconditions, setTestCasePreconditions] = useState(
+    testCase?.preconditions ?? ''
+  )
 
   function hasRequiredEmptyField() {
     return testCaseTitle.trim() === '' || testCaseSummary.trim() === ''
@@ -53,11 +62,11 @@ export function ModalNewTestCase({
       return toast.error('Preencha todos os campos')
     }
 
-    onCreateTestCase(
-      testCaseTitle.trim(),
-      testCaseSummary.trim(),
-      testCasePreconditions.trim()
-    ).then(() => {
+    onSaveTestCase({
+      title: testCaseTitle.trim(),
+      summary: testCaseSummary.trim(),
+      preconditions: testCasePreconditions.trim(),
+    }).then(() => {
       closeModal()
       clearFields()
     })
@@ -118,7 +127,7 @@ export function ModalNewTestCase({
             onClick={handleSubmit}
             disabled={hasRequiredEmptyField()}
           >
-            Cadastrar
+            {testCase ? 'Atualizar' : 'Cadastrar'}
           </Button>
         </DialogFooter>
       </DialogContent>
