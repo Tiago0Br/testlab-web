@@ -9,7 +9,7 @@ import {
   getFolderById,
   getFolderContent,
   createFolder,
-  createTestCase,
+  saveTestCase,
 } from '@/api'
 import {
   Breadcrumb,
@@ -23,7 +23,7 @@ import {
   ModalNewFolder,
   TestCases,
   NotFound,
-  ModalNewTestCase,
+  ModalSaveTestCase,
   OnSaveTestCaseProps,
 } from '@/components'
 
@@ -75,14 +75,14 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
     summary,
     preconditions,
   }: OnSaveTestCaseProps) {
-    const { error, data } = await createTestCase({
+    const { error } = await saveTestCase({
       title,
       summary,
       preconditions: preconditions !== '' ? preconditions : undefined,
       test_suite_id: currentFolder!.id,
     })
 
-    if (error || !data) {
+    if (error) {
       toast.error(error)
       return
     }
@@ -100,8 +100,9 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
   }
 
   return (
-    <div className="flex flex-col items-center">
-      <Breadcrumb className="mt-6">
+    <div className="flex flex-col items-center py-6">
+      <input type="hidden" id="folder-id" value={currentFolder.id} />
+      <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbItem
@@ -157,7 +158,7 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
               </Button>
             </ModalNewFolder>
 
-            <ModalNewTestCase onSaveTestCase={onCreateTestCase}>
+            <ModalSaveTestCase onSaveTestCase={onCreateTestCase}>
               <Button
                 className="
                   flex gap-2 w-44 border border-primary text-primary bg-transparent uppercase font-bold 
@@ -167,7 +168,7 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
                 <CircleCheckBig size={24} />
                 Novo Teste
               </Button>
-            </ModalNewTestCase>
+            </ModalSaveTestCase>
           </div>
         </div>
       ) : (
@@ -184,7 +185,7 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
             </Button>
           </ModalNewFolder>
 
-          <ModalNewTestCase onSaveTestCase={onCreateTestCase}>
+          <ModalSaveTestCase onSaveTestCase={onCreateTestCase}>
             <Button
               className="
                 flex gap-2 w-44 border border-primary text-primary bg-transparent uppercase font-bold 
@@ -194,7 +195,7 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
               <CircleCheckBig size={24} />
               Novo Teste
             </Button>
-          </ModalNewTestCase>
+          </ModalSaveTestCase>
         </div>
       )}
 

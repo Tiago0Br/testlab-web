@@ -3,7 +3,8 @@ import { ApiResponse } from './api-response'
 import { getResponseError } from '@/utils'
 import { getSessionToken } from '@/services/auth-service'
 
-interface CreateTestCaseRequest {
+interface SaveTestCaseRequest {
+  id?: number
   title: string
   summary: string
   preconditions?: string
@@ -17,7 +18,7 @@ interface TestCaseStatus {
   created_at: string
 }
 
-interface CreateTestCaseResponse extends ApiResponse {
+interface SaveTestCaseResponse extends ApiResponse {
   data?: {
     id: number
     title: string
@@ -32,17 +33,22 @@ interface CreateTestCaseResponse extends ApiResponse {
   }
 }
 
-export async function createTestCase({
+export async function saveTestCase({
+  id,
   title,
   summary,
   preconditions,
   test_suite_id,
-}: CreateTestCaseRequest): Promise<CreateTestCaseResponse> {
+}: SaveTestCaseRequest): Promise<SaveTestCaseResponse> {
   try {
     const token = await getSessionToken()
-    const response = await api.post(
-      `/test_cases/new`,
+
+    const path = id ? `/test_cases/${id}` : `/test_cases/new`
+    const method = id ? 'put' : 'post'
+    const response = await api[method](
+      path,
       {
+        id,
         title,
         summary,
         preconditions,

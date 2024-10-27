@@ -5,10 +5,10 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
 import { getStatusColor } from '@/utils/test-cases-status-color'
-import { deleteTestCase, TestCase } from '@/api'
+import { deleteTestCase, saveTestCase, TestCase } from '@/api'
 import {
   ConfirmationModal,
-  ModalNewTestCase,
+  ModalSaveTestCase,
   OnSaveTestCaseProps,
   Table,
   TableBody,
@@ -42,7 +42,32 @@ export function TestCases({ testCases }: TestCasesProps) {
     router.push(`/testcases/${testCaseId}`)
   }
 
-  async function onUpdateTestCase(props: OnSaveTestCaseProps) {}
+  async function onUpdateTestCase({
+    id,
+    title,
+    summary,
+    preconditions,
+  }: OnSaveTestCaseProps) {
+    const testSuiteId = parseInt(
+      document.getElementById('folder-id')!.nodeValue!
+    )
+
+    const { error } = await saveTestCase({
+      id,
+      title,
+      summary,
+      preconditions: preconditions !== '' ? preconditions : undefined,
+      test_suite_id: testSuiteId,
+    })
+
+    if (error) {
+      toast.error(error)
+      return
+    }
+
+    queryClient.invalidateQueries({ queryKey: ['get-folder-content'] })
+    toast.success('Caso de testes atualizado com sucesso!')
+  }
 
   return (
     <Table className="bg-foreground rounded-lg mt-6 min-w-[600px]">
@@ -74,7 +99,7 @@ export function TestCases({ testCases }: TestCasesProps) {
               >
                 <Eye size={24} className="text-white" />
               </button>
-              <ModalNewTestCase
+              <ModalSaveTestCase
                 testCase={testCase}
                 onSaveTestCase={onUpdateTestCase}
               >
@@ -84,7 +109,7 @@ export function TestCases({ testCases }: TestCasesProps) {
                 >
                   <Pencil size={24} className="text-white" />
                 </button>
-              </ModalNewTestCase>
+              </ModalSaveTestCase>
               <ConfirmationModal
                 title="Deseja excluir o caso de teste?"
                 description="Essa operação não pode ser desfeita."

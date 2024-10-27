@@ -30,18 +30,20 @@ interface ModalSaveTestCaseProps {
   testCase?: TestCase
 }
 
-export function ModalNewTestCase({
+export function ModalSaveTestCase({
   children,
   onSaveTestCase,
   testCase,
 }: ModalSaveTestCaseProps) {
-  const [testCaseTitle, setTestCaseTitle] = useState(testCase?.title ?? '')
+  const [testCaseTitle, setTestCaseTitle] = useState(testCase?.title || '')
   const [testCaseSummary, setTestCaseSummary] = useState(
-    testCase?.summary ?? ''
+    testCase?.summary || ''
   )
   const [testCasePreconditions, setTestCasePreconditions] = useState(
-    testCase?.preconditions ?? ''
+    testCase?.preconditions || ''
   )
+
+  const isUpdate = testCase !== undefined
 
   function hasRequiredEmptyField() {
     return testCaseTitle.trim() === '' || testCaseSummary.trim() === ''
@@ -63,12 +65,13 @@ export function ModalNewTestCase({
     }
 
     onSaveTestCase({
+      id: testCase?.id,
       title: testCaseTitle.trim(),
       summary: testCaseSummary.trim(),
       preconditions: testCasePreconditions.trim(),
     }).then(() => {
       closeModal()
-      clearFields()
+      if (!isUpdate) clearFields()
     })
   }
 
@@ -127,7 +130,7 @@ export function ModalNewTestCase({
             onClick={handleSubmit}
             disabled={hasRequiredEmptyField()}
           >
-            {testCase ? 'Atualizar' : 'Cadastrar'}
+            {isUpdate ? 'Atualizar' : 'Cadastrar'}
           </Button>
         </DialogFooter>
       </DialogContent>
