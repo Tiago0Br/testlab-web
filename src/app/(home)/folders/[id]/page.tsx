@@ -43,7 +43,7 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
   })
 
   const { data: contentResponse, isLoading: isContentLoading } = useQuery({
-    queryKey: ['get-folder-content'],
+    queryKey: ['get-folder-content', id],
     queryFn: () => getFolderContent(parseInt(id)),
   })
 
@@ -65,7 +65,7 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
         return
       }
 
-      queryClient.invalidateQueries({ queryKey: ['get-folder-content'] })
+      queryClient.invalidateQueries({ queryKey: ['get-folder-content', id] })
       toast.success('Pasta criada com sucesso!')
     })
   }
@@ -87,7 +87,7 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
       return
     }
 
-    queryClient.invalidateQueries({ queryKey: ['get-folder-content'] })
+    queryClient.invalidateQueries({ queryKey: ['get-folder-content', id] })
     toast.success('Caso de testes criado com sucesso!')
   }
 
