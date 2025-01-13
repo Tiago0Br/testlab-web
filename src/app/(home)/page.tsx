@@ -3,20 +3,18 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { FolderIcon } from 'lucide-react'
+import { CirclePlus, FolderIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   Folder as FolderComponent,
   Loading,
   ProjectDropdown,
-  ModalNewProject,
   ModalNewFolder,
   Button,
 } from '@/components'
 import {
   createFolder,
-  createProject,
   getProjectContent,
   getUserProjects,
   Project,
@@ -68,24 +66,6 @@ export default function Home() {
     queryClient.invalidateQueries({ queryKey: ['get-project-content'] })
   }
 
-  async function onCreateProject(
-    projectName: string,
-    projectDescription: string
-  ) {
-    const { error, data } = await createProject({
-      name: projectName,
-      description: projectDescription,
-    })
-
-    if (error || !data) {
-      toast.error(error)
-      return
-    }
-
-    queryClient.invalidateQueries({ queryKey: ['get-user-projects'] })
-    toast.success('Projeto criado com sucesso!')
-  }
-
   async function onCreateFolder(folderName: string) {
     createFolder({
       title: folderName,
@@ -115,7 +95,9 @@ export default function Home() {
             projects={projects}
             onProjectChange={onProjectChange}
           />
-          <ModalNewProject onCreateProject={onCreateProject} />
+          <a href="/projects/new" className="text-primary">
+            <CirclePlus size={40} />
+          </a>
         </div>
 
         {currentProject && (

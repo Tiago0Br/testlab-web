@@ -1,6 +1,5 @@
 export * from './folder'
 export * from './modal-new-folder'
-export * from './modal-new-project'
 export * from './modal-save-testcase'
 export * from './project-dropdown'
 export * from './testcases'
