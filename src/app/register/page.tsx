@@ -1,13 +1,14 @@
 'use client'
 
-import logo from '@/assets/logo.png'
-import Image from 'next/image'
-import Link from 'next/link'
 import { FormEvent, useState } from 'react'
-import { CustomInput, Button, Loading, ShowPasswordButton } from '@/components'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import Link from 'next/link'
+
+import { Button, Loading, ShowPasswordButton, Input } from '@/components'
 import { register } from '@/api'
+import logo from '@/assets/logo.png'
 
 export default function Register() {
   const [name, setName] = useState('')
@@ -56,11 +57,8 @@ export default function Register() {
   return (
     <>
       <Loading isLoading={isLoading} />
-      <div className="w-screen min-h-screen flex flex-col items-center justify-center">
-        <div
-          className="bg-foreground w-[390px] h-[512px] rounded-xl 
-        flex flex-col gap-5 items-center py-5"
-        >
+      <div className="w-screen min-h-screen flex flex-col items-center justify-center bg-background">
+        <div className="bg-zinc-900 border w-[390px] h-[512px] rounded-xl flex flex-col gap-5 items-center py-5">
           <div className="flex flex-col items-center gap-3">
             <Image
               src={logo}
@@ -72,21 +70,21 @@ export default function Register() {
             />
             <h1 className="text-2xl">Bora testar!</h1>
           </div>
-          <form className="flex flex-col items-center gap-6 w-72" onSubmit={handleRegister}>
-            <CustomInput
+          <form className="flex flex-col items-center gap-3 w-72" onSubmit={handleRegister}>
+            <Input
               type="text"
               placeholder="Nome"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            <CustomInput
+            <Input
               type="email"
               placeholder="E-mail"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <div className="w-full relative">
-              <CustomInput
+              <Input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Senha"
                 value={password}
@@ -98,7 +96,7 @@ export default function Register() {
               />
             </div>
             <div className="w-full relative">
-              <CustomInput
+              <Input
                 type={showConfirmPassword ? 'text' : 'password'}
                 placeholder="Confirmar senha"
                 value={confirmPassword}

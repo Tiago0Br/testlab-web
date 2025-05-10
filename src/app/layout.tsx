@@ -21,7 +21,7 @@ export default function RootLayout({
       <head>
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
       </head>
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.className} dark antialiased`}>
         <Toaster richColors closeButton position="top-center" />
         <ReactQueryProvider>{children}</ReactQueryProvider>
       </body>

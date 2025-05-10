@@ -1,13 +1,14 @@
 'use client'
 
-import logo from '@/assets/logo.png'
+import { FormEvent, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Button, CustomInput, Loading, ShowPasswordButton } from '@/components'
-import { FormEvent, useEffect, useState } from 'react'
-import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
+
+import { Button, Input, Loading, ShowPasswordButton } from '@/components'
 import { signIn, logout } from '@/services/auth-service'
+import logo from '@/assets/logo.png'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -45,8 +46,8 @@ export default function Login() {
   }
 
   return (
-    <div className="w-screen min-h-screen flex flex-col items-center justify-center">
-      <div className="bg-foreground w-[390px] h-[512px] rounded-xl flex flex-col gap-10 items-center py-20">
+    <div className="w-screen min-h-screen flex flex-col items-center justify-center bg-background">
+      <div className="bg-zinc-900 border rounded-xl flex flex-col items-center gap-10 py-20 px-10">
         <div className="flex flex-col items-center gap-3">
           <Image
             src={logo}
@@ -58,15 +59,15 @@ export default function Login() {
           />
           <h1 className="text-2xl">Bora testar!</h1>
         </div>
-        <form className="flex flex-col items-center gap-6 w-72" onSubmit={handleLogin}>
-          <CustomInput
+        <form className="flex flex-col items-center gap-3 w-72" onSubmit={handleLogin}>
+          <Input
             type="email"
             placeholder="E-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <div className="w-full relative">
-            <CustomInput
+            <Input
               type={showPassword ? 'text' : 'password'}
               placeholder="Senha"
               value={password}
@@ -77,10 +78,7 @@ export default function Login() {
               showPassword={showPassword}
             />
           </div>
-          <Button
-            className="w-full border border-primary text-primary bg-transparent uppercase font-bold 
-            hover:bg-primary hover:text-white"
-          >
+          <Button className="w-full border border-primary text-primary bg-transparent uppercase font-bold hover:bg-primary hover:text-white">
             Login
           </Button>
         </form>
