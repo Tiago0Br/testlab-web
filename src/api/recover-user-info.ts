@@ -10,22 +10,20 @@ interface RecoverUserInfoResponse extends ApiResponse {
   }
 }
 
-export async function recoverUserInfo(
-  token: string
-): Promise<RecoverUserInfoResponse> {
+export async function recoverUserInfo(token: string): Promise<RecoverUserInfoResponse> {
   try {
     const response = await api.get('/users/info', {
       headers: {
-        Authorization: token,
-      },
+        Authorization: token
+      }
     })
 
     return {
-      data: response.data,
+      data: response.data
     }
   } catch (error) {
     return {
-      error: getResponseError(error),
+      error: getResponseError(error)
     }
   }
 }

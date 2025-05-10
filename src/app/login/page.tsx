@@ -58,10 +58,7 @@ export default function Login() {
           />
           <h1 className="text-2xl">Bora testar!</h1>
         </div>
-        <form
-          className="flex flex-col items-center gap-6 w-72"
-          onSubmit={handleLogin}
-        >
+        <form className="flex flex-col items-center gap-6 w-72" onSubmit={handleLogin}>
           <CustomInput
             type="email"
             placeholder="E-mail"

@@ -8,11 +8,11 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Testlab - Início',
-  description: 'Um gerenciador de casos de testes moderno',
+  description: 'Um gerenciador de casos de testes moderno'
 }
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode
 }>) {
@@ -21,7 +21,7 @@ export default function RootLayout({
       <head>
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
       </head>
-      <body className={`${inter.className}`}>
+      <body className={`${inter.className} antialiased`}>
         <Toaster richColors closeButton position="top-center" />
         <ReactQueryProvider>{children}</ReactQueryProvider>
       </body>

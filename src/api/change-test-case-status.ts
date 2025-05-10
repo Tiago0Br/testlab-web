@@ -34,7 +34,7 @@ interface ChangeTestCaseStatusResponse extends ApiResponse {
 export async function changeTestCaseStatus({
   status,
   note,
-  testCaseId,
+  testCaseId
 }: ChangeTestCaseStatusRequest): Promise<ChangeTestCaseStatusResponse> {
   try {
     const token = await getSessionToken()
@@ -42,21 +42,21 @@ export async function changeTestCaseStatus({
       `/test_cases/${testCaseId}/status`,
       {
         status,
-        note: note || null,
+        note: note || null
       },
       {
         headers: {
-          Authorization: token,
-        },
+          Authorization: token
+        }
       }
     )
 
     return {
-      data: response.data,
+      data: response.data
     }
   } catch (error) {
     return {
-      error: getResponseError(error),
+      error: getResponseError(error)
     }
   }
 }

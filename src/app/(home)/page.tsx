@@ -11,14 +11,9 @@ import {
   Loading,
   ProjectDropdown,
   ModalNewFolder,
-  Button,
+  Button
 } from '@/components'
-import {
-  createFolder,
-  getProjectContent,
-  getUserProjects,
-  Project,
-} from '@/api'
+import { createFolder, getProjectContent, getUserProjects, Project } from '@/api'
 
 export default function Home() {
   const queryClient = useQueryClient()
@@ -28,7 +23,7 @@ export default function Home() {
 
   const { data: projectsResponse, isLoading: isProjectsLoading } = useQuery({
     queryKey: ['get-user-projects'],
-    queryFn: getUserProjects,
+    queryFn: getUserProjects
   })
 
   const projects = projectsResponse?.data ?? []
@@ -36,7 +31,7 @@ export default function Home() {
   const { data: contentResponse, isLoading: isContentLoading } = useQuery({
     queryKey: ['get-project-content'],
     queryFn: () => getProjectContent(currentProject!.id),
-    enabled: !!currentProject,
+    enabled: !!currentProject
   })
 
   const content = contentResponse?.data ?? null
@@ -69,7 +64,7 @@ export default function Home() {
   async function onCreateFolder(folderName: string) {
     createFolder({
       title: folderName,
-      project_id: currentProject!.id,
+      project_id: currentProject!.id
     }).then(({ error, data }) => {
       if (error || !data) {
         toast.error(error)
@@ -104,12 +99,7 @@ export default function Home() {
           <>
             {!hasAnyFolder && (
               <div className="flex flex-col items-center">
-                <Image
-                  src="/no-content.png"
-                  alt="empty folder"
-                  width={300}
-                  height={300}
-                />
+                <Image src="/no-content.png" alt="empty folder" width={300} height={300} />
                 <h1>Sem conteúdo D:</h1>
                 <div className="mt-4 flex gap-2">
                   <ModalNewFolder onCreateFolder={onCreateFolder}>

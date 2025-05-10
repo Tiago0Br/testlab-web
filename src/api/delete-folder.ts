@@ -9,23 +9,21 @@ interface DeleteFolderResponse extends ApiResponse {
   }
 }
 
-export async function deleteFolder(
-  folderId: number
-): Promise<DeleteFolderResponse> {
+export async function deleteFolder(folderId: number): Promise<DeleteFolderResponse> {
   try {
     const token = await getSessionToken()
     const response = await api.delete(`/folders/${folderId}`, {
       headers: {
-        Authorization: token,
-      },
+        Authorization: token
+      }
     })
 
     return {
-      data: response.data,
+      data: response.data
     }
   } catch (error) {
     return {
-      error: getResponseError(error),
+      error: getResponseError(error)
     }
   }
 }

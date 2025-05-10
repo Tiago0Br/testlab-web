@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogDescription,
   Input,
-  DialogFooter,
+  DialogFooter
 } from '@/components'
 
 interface ModalNewFolderProps {
@@ -19,10 +19,7 @@ interface ModalNewFolderProps {
   children: ReactNode
 }
 
-export function ModalNewFolder({
-  children,
-  onCreateFolder,
-}: ModalNewFolderProps) {
+export function ModalNewFolder({ children, onCreateFolder }: ModalNewFolderProps) {
   const [folderName, setFolderName] = useState('')
 
   function hasEmptyField() {

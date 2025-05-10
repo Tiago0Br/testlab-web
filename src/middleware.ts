@@ -2,7 +2,7 @@ import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const config = {
-  matcher: '/((?!_next/static|_next/image|favicon.ico).*)',
+  matcher: '/((?!_next/static|_next/image|favicon.ico).*)'
 }
 
 const publicRoutes = ['/login', '/register']

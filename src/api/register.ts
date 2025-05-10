@@ -19,17 +19,17 @@ interface RegisterResponse extends ApiResponse {
 export async function register({
   name,
   email,
-  password,
+  password
 }: RegisterRequest): Promise<RegisterResponse> {
   try {
     const response = await api.post('/users/new', { name, email, password })
 
     return {
-      data: response.data,
+      data: response.data
     }
   } catch (error) {
     return {
-      error: getResponseError(error),
+      error: getResponseError(error)
     }
   }
 }

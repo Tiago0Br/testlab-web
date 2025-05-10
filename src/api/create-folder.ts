@@ -28,7 +28,7 @@ interface CreateFolderResponse extends ApiResponse {
 export async function createFolder({
   title,
   folder_id,
-  project_id,
+  project_id
 }: CreateFolderRequest): Promise<CreateFolderResponse> {
   try {
     const token = await getSessionToken()
@@ -38,21 +38,21 @@ export async function createFolder({
         title,
         folder_id: folder_id ?? null,
         project_id,
-        is_test_suite: 1,
+        is_test_suite: 1
       },
       {
         headers: {
-          Authorization: token,
-        },
+          Authorization: token
+        }
       }
     )
 
     return {
-      data: response.data,
+      data: response.data
     }
   } catch (error) {
     return {
-      error: getResponseError(error),
+      error: getResponseError(error)
     }
   }
 }

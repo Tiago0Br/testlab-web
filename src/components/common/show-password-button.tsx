@@ -5,10 +5,7 @@ interface ShowPasswordButtonProps {
   onClick: () => void
 }
 
-export function ShowPasswordButton({
-  showPassword,
-  onClick,
-}: ShowPasswordButtonProps) {
+export function ShowPasswordButton({ showPassword, onClick }: ShowPasswordButtonProps) {
   return (
     <button type="button" onClick={onClick} className="absolute top-2 right-2">
       {showPassword ? (

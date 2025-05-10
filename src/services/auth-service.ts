@@ -15,7 +15,7 @@ export async function createSession(token: string, user: User) {
     value: token,
     expires: oneDay,
     path: '/',
-    httpOnly: true,
+    httpOnly: true
   })
 
   cookies().set({
@@ -23,7 +23,7 @@ export async function createSession(token: string, user: User) {
     value: JSON.stringify(user),
     expires: oneDay,
     path: '/',
-    httpOnly: true,
+    httpOnly: true
   })
 }
 

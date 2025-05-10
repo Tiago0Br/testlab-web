@@ -13,7 +13,7 @@ import {
   DialogDescription,
   Input,
   DialogFooter,
-  Textarea,
+  Textarea
 } from '@/components'
 import { TestCase } from '@/api'
 
@@ -33,12 +33,10 @@ interface ModalSaveTestCaseProps {
 export function ModalSaveTestCase({
   children,
   onSaveTestCase,
-  testCase,
+  testCase
 }: ModalSaveTestCaseProps) {
   const [testCaseTitle, setTestCaseTitle] = useState(testCase?.title || '')
-  const [testCaseSummary, setTestCaseSummary] = useState(
-    testCase?.summary || ''
-  )
+  const [testCaseSummary, setTestCaseSummary] = useState(testCase?.summary || '')
   const [testCasePreconditions, setTestCasePreconditions] = useState(
     testCase?.preconditions || ''
   )
@@ -68,7 +66,7 @@ export function ModalSaveTestCase({
       id: testCase?.id,
       title: testCaseTitle.trim(),
       summary: testCaseSummary.trim(),
-      preconditions: testCasePreconditions.trim(),
+      preconditions: testCasePreconditions.trim()
     }).then(() => {
       closeModal()
       if (!isUpdate) clearFields()
@@ -81,9 +79,7 @@ export function ModalSaveTestCase({
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Caso de testes</DialogTitle>
-          <DialogDescription>
-            Cadastro de um novo caso de testes
-          </DialogDescription>
+          <DialogDescription>Cadastro de um novo caso de testes</DialogDescription>
           <DialogClose id="close-modal-new-testcase" />
         </DialogHeader>
         <div className="grid gap-4 py-4">

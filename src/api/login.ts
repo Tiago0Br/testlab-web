@@ -15,19 +15,16 @@ interface LoginResponse extends ApiResponse {
   }
 }
 
-export async function login(
-  email: string,
-  password: string
-): Promise<LoginResponse> {
+export async function login(email: string, password: string): Promise<LoginResponse> {
   try {
     const response = await api.post('/login', { email, password })
 
     return {
-      data: response.data,
+      data: response.data
     }
   } catch (error) {
     return {
-      error: getResponseError(error),
+      error: getResponseError(error)
     }
   }
 }

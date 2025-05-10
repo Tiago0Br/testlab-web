@@ -4,11 +4,7 @@ import { useState, Fragment } from 'react'
 import { ChevronRight, ChevronLeft } from 'lucide-react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
-import {
-  changeTestCaseStatus,
-  getTestCaseById,
-  listTestCaseStatus,
-} from '@/api'
+import { changeTestCaseStatus, getTestCaseById, listTestCaseStatus } from '@/api'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getStatusColor } from '@/utils/test-cases-status-color'
 import {
@@ -26,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
   TestCaseHistory,
-  Textarea,
+  Textarea
 } from '@/components'
 
 interface TestCasesPageProps {
@@ -40,12 +36,12 @@ export default function TestCases({ params: { id } }: TestCasesPageProps) {
 
   const { data: testCaseResponse, isLoading: isTestCaseLoading } = useQuery({
     queryKey: ['get-test-case'],
-    queryFn: () => getTestCaseById(parseInt(id)),
+    queryFn: () => getTestCaseById(parseInt(id))
   })
 
   const { data: statusOptionsResponse, isLoading: isStatusLoading } = useQuery({
     queryKey: ['list-test-case-status'],
-    queryFn: listTestCaseStatus,
+    queryFn: listTestCaseStatus
   })
 
   const [statusSelected, setStatusSelected] = useState('')
@@ -63,7 +59,7 @@ export default function TestCases({ params: { id } }: TestCasesPageProps) {
     changeTestCaseStatus({
       status: statusSelected,
       note,
-      testCaseId: parseInt(id),
+      testCaseId: parseInt(id)
     }).then(({ error }) => {
       setIsLoading(false)
       if (error) {
@@ -124,9 +120,7 @@ export default function TestCases({ params: { id } }: TestCasesPageProps) {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage className="text-primary">
-              {testCase.title}
-            </BreadcrumbPage>
+            <BreadcrumbPage className="text-primary">{testCase.title}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -191,16 +185,10 @@ export default function TestCases({ params: { id } }: TestCasesPageProps) {
             onChange={(e) => setNote(e.target.value)}
           />
           <div className="w-full flex gap-2">
-            <Button
-              className="flex-1 bg-red-700 hover:bg-red-500"
-              onClick={handleCancel}
-            >
+            <Button className="flex-1 bg-red-700 hover:bg-red-500" onClick={handleCancel}>
               Cancelar
             </Button>
-            <Button
-              className="flex-1 hover:bg-secondary"
-              onClick={handleUpdateStatus}
-            >
+            <Button className="flex-1 hover:bg-secondary" onClick={handleUpdateStatus}>
               Atualizar
             </Button>
           </div>

@@ -5,12 +5,7 @@ import { FolderIcon, CircleCheckBig } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-import {
-  getFolderById,
-  getFolderContent,
-  createFolder,
-  saveTestCase,
-} from '@/api'
+import { getFolderById, getFolderContent, createFolder, saveTestCase } from '@/api'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -24,7 +19,7 @@ import {
   TestCases,
   NotFound,
   ModalSaveTestCase,
-  OnSaveTestCaseProps,
+  OnSaveTestCaseProps
 } from '@/components'
 
 interface FoldersPageProps {
@@ -39,12 +34,12 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
 
   const { data: folderResponse, isLoading: isFolderLoading } = useQuery({
     queryKey: ['get-folder'],
-    queryFn: () => getFolderById(parseInt(id)),
+    queryFn: () => getFolderById(parseInt(id))
   })
 
   const { data: contentResponse, isLoading: isContentLoading } = useQuery({
     queryKey: ['get-folder-content', id],
-    queryFn: () => getFolderContent(parseInt(id)),
+    queryFn: () => getFolderContent(parseInt(id))
   })
 
   const currentFolder = folderResponse?.data
@@ -58,7 +53,7 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
     createFolder({
       title: folderName,
       folder_id: currentFolder!.id,
-      project_id: currentFolder!.project.id,
+      project_id: currentFolder!.project.id
     }).then(({ error, data }) => {
       if (error || !data) {
         toast.error(error)
@@ -70,16 +65,12 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
     })
   }
 
-  async function onCreateTestCase({
-    title,
-    summary,
-    preconditions,
-  }: OnSaveTestCaseProps) {
+  async function onCreateTestCase({ title, summary, preconditions }: OnSaveTestCaseProps) {
     const { error } = await saveTestCase({
       title,
       summary,
       preconditions: preconditions !== '' ? preconditions : undefined,
-      test_suite_id: currentFolder!.id,
+      test_suite_id: currentFolder!.id
     })
 
     if (error) {
@@ -129,21 +120,14 @@ export default function Folders({ params: { id } }: FoldersPageProps) {
             </>
           )}
           <BreadcrumbItem>
-            <BreadcrumbPage className="text-primary">
-              {currentFolder.title}
-            </BreadcrumbPage>
+            <BreadcrumbPage className="text-primary">{currentFolder.title}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
       {!hasAnyFolder && !hasAnyTestCase ? (
         <div className="flex flex-col items-center">
-          <Image
-            src="/no-content.png"
-            alt="empty folder"
-            width={300}
-            height={300}
-          />
+          <Image src="/no-content.png" alt="empty folder" width={300} height={300} />
           <h1>Sem conteúdo D:</h1>
           <div className="mt-4 flex gap-2">
             <ModalNewFolder onCreateFolder={onCreateFolder}>

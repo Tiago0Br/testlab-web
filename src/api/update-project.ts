@@ -25,7 +25,7 @@ interface UpdateProjectResponse extends ApiResponse {
 export async function updateProject({
   id,
   name,
-  description,
+  description
 }: UpdateProjectRequest): Promise<UpdateProjectResponse> {
   try {
     const token = await getSessionToken()
@@ -34,17 +34,17 @@ export async function updateProject({
       { name, description },
       {
         headers: {
-          Authorization: token,
-        },
+          Authorization: token
+        }
       }
     )
 
     return {
-      data: response.data,
+      data: response.data
     }
   } catch (error) {
     return {
-      error: getResponseError(error),
+      error: getResponseError(error)
     }
   }
 }

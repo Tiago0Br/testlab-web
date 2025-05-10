@@ -24,7 +24,7 @@ export function Folder({ folder, onFolderSelect }: FolderProps) {
 
     toast.success('Pasta excluída com sucesso!')
     queryClient.invalidateQueries({
-      queryKey: ['get-folder-content', folder.id.toString()],
+      queryKey: ['get-folder-content', folder.id.toString()]
     })
     queryClient.invalidateQueries({ queryKey: ['get-project-content'] })
   }
@@ -40,9 +40,7 @@ export function Folder({ folder, onFolderSelect }: FolderProps) {
         <div>
           <FolderIcon size={24} className="fill-gray-400" />
         </div>
-        <AlertTitle className="text-white leading-normal mb-0">
-          {folder.title}
-        </AlertTitle>
+        <AlertTitle className="text-white leading-normal mb-0">{folder.title}</AlertTitle>
       </div>
       <div className="invisible group-hover:visible flex gap-1">
         <button

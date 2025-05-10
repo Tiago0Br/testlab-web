@@ -18,7 +18,7 @@ export enum TestCaseStatus {
   Blocked = 'BLOQUEADO',
   Executing = 'EM EXECUÇÃO',
   Cancelled = 'CANCELADO',
-  Available = 'LIBERADO',
+  Available = 'LIBERADO'
 }
 
 export type TestCase = {

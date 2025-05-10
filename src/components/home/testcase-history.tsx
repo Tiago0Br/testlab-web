@@ -9,7 +9,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from '..'
 
 interface TestCaseHistoryProps {
@@ -33,13 +33,9 @@ export function TestCaseHistory({ history }: TestCaseHistoryProps) {
             <TableBody>
               {history.map((status) => (
                 <TableRow key={status.id}>
-                  <TableCell className="max-w-[400px]">
-                    {status.description}
-                  </TableCell>
+                  <TableCell className="max-w-[400px]">{status.description}</TableCell>
                   <TableCell>
-                    {new Date(status.created_at)
-                      .toLocaleString()
-                      .replace(',', ' ')}
+                    {new Date(status.created_at).toLocaleString().replace(',', ' ')}
                   </TableCell>
                   <TableCell>{status.created_by ?? ''}</TableCell>
                 </TableRow>

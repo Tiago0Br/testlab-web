@@ -30,23 +30,21 @@ interface GetTestCaseByIdResponse extends ApiResponse {
   data?: TestCaseDetails
 }
 
-export async function getTestCaseById(
-  testCaseId: number
-): Promise<GetTestCaseByIdResponse> {
+export async function getTestCaseById(testCaseId: number): Promise<GetTestCaseByIdResponse> {
   const token = await getSessionToken()
   try {
     const response = await api.get(`/test_cases/${testCaseId}`, {
       headers: {
-        Authorization: token,
-      },
+        Authorization: token
+      }
     })
 
     return {
-      data: response.data,
+      data: response.data
     }
   } catch (error) {
     return {
-      error: getResponseError(error),
+      error: getResponseError(error)
     }
   }
 }

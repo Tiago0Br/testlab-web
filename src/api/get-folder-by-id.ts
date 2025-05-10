@@ -23,23 +23,21 @@ interface GetFolderByIdResponse extends ApiResponse {
   data?: Folder
 }
 
-export async function getFolderById(
-  folderId: number
-): Promise<GetFolderByIdResponse> {
+export async function getFolderById(folderId: number): Promise<GetFolderByIdResponse> {
   try {
     const token = await getSessionToken()
     const response = await api.get(`/folders/${folderId}`, {
       headers: {
-        Authorization: token,
-      },
+        Authorization: token
+      }
     })
 
     return {
-      data: response.data,
+      data: response.data
     }
   } catch (error) {
     return {
-      error: getResponseError(error),
+      error: getResponseError(error)
     }
   }
 }

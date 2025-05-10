@@ -23,7 +23,7 @@ interface CreateProjectResponse extends ApiResponse {
 
 export async function createProject({
   name,
-  description,
+  description
 }: CreateProjectRequest): Promise<CreateProjectResponse> {
   try {
     const token = await getSessionToken()
@@ -32,17 +32,17 @@ export async function createProject({
       { name, description },
       {
         headers: {
-          Authorization: token,
-        },
+          Authorization: token
+        }
       }
     )
 
     return {
-      data: response.data,
+      data: response.data
     }
   } catch (error) {
     return {
-      error: getResponseError(error),
+      error: getResponseError(error)
     }
   }
 }

@@ -9,23 +9,21 @@ interface DeleteTestCaseResponse extends ApiResponse {
   }
 }
 
-export async function deleteTestCase(
-  testCaseId: number
-): Promise<DeleteTestCaseResponse> {
+export async function deleteTestCase(testCaseId: number): Promise<DeleteTestCaseResponse> {
   try {
     const token = await getSessionToken()
     const response = await api.delete(`/test_cases/${testCaseId}`, {
       headers: {
-        Authorization: token,
-      },
+        Authorization: token
+      }
     })
 
     return {
-      data: response.data,
+      data: response.data
     }
   } catch (error) {
     return {
-      error: getResponseError(error),
+      error: getResponseError(error)
     }
   }
 }

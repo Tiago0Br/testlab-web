@@ -1,7 +1,7 @@
 import { Header } from '@/components'
 
 export default function Layout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode
 }>) {

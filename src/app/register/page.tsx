@@ -28,12 +28,7 @@ export default function Register() {
 
   const handleRegister = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (
-      !name.trim() ||
-      !email.trim() ||
-      !password.trim() ||
-      !confirmPassword.trim()
-    ) {
+    if (!name.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
       toast.error('Preencha todos os campos')
       return
     }
@@ -77,10 +72,7 @@ export default function Register() {
             />
             <h1 className="text-2xl">Bora testar!</h1>
           </div>
-          <form
-            className="flex flex-col items-center gap-6 w-72"
-            onSubmit={handleRegister}
-          >
+          <form className="flex flex-col items-center gap-6 w-72" onSubmit={handleRegister}>
             <CustomInput
               type="text"
               placeholder="Nome"

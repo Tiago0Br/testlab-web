@@ -18,16 +18,16 @@ export async function getUserProjects(): Promise<GetUserProjectsResponse> {
     const token = await getSessionToken()
     const response = await api.get('/users/projects', {
       headers: {
-        Authorization: token,
-      },
+        Authorization: token
+      }
     })
 
     return {
-      data: response.data,
+      data: response.data
     }
   } catch (error) {
     return {
-      error: getResponseError(error),
+      error: getResponseError(error)
     }
   }
 }

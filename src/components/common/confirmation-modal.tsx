@@ -7,7 +7,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
+  AlertDialogTrigger
 } from '@/components'
 
 interface ConfirmationModalProps {
@@ -21,7 +21,7 @@ export function ConfirmationModal({
   children,
   title,
   description,
-  onConfirm,
+  onConfirm
 }: ConfirmationModalProps) {
   return (
     <AlertDialog>
@@ -35,10 +35,7 @@ export function ConfirmationModal({
           <AlertDialogCancel className="bg-primary hover:bg-secondary">
             Cancelar
           </AlertDialogCancel>
-          <AlertDialogAction
-            className="bg-red-700 hover:bg-red-500"
-            onClick={onConfirm}
-          >
+          <AlertDialogAction className="bg-red-700 hover:bg-red-500" onClick={onConfirm}>
             Confirmar
           </AlertDialogAction>
         </AlertDialogFooter>

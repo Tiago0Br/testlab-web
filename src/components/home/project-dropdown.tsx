@@ -1,11 +1,5 @@
 import { Project } from '@/utils/types'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components'
 
 interface ProjectDropdownProps {
   projects: Project[]
@@ -16,7 +10,7 @@ interface ProjectDropdownProps {
 export function ProjectDropdown({
   projects,
   currentProject,
-  onProjectChange,
+  onProjectChange
 }: ProjectDropdownProps) {
   return (
     <Select

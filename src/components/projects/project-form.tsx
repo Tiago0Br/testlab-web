@@ -13,9 +13,7 @@ interface ProjectFormProps {
 
 export function ProjectForm({ project }: ProjectFormProps) {
   const [projectName, setProjectName] = useState(project?.name ?? '')
-  const [projectDescription, setProjectDescription] = useState(
-    project?.description ?? ''
-  )
+  const [projectDescription, setProjectDescription] = useState(project?.description ?? '')
 
   const queryClient = useQueryClient()
 
@@ -24,7 +22,7 @@ export function ProjectForm({ project }: ProjectFormProps) {
 
     const { error, data } = await createProject({
       name: projectName,
-      description: projectDescription,
+      description: projectDescription
     })
 
     if (error || !data) {
@@ -45,7 +43,7 @@ export function ProjectForm({ project }: ProjectFormProps) {
     const { error, data } = await updateProject({
       id: project!.id,
       name: projectName,
-      description: projectDescription,
+      description: projectDescription
     })
 
     if (error || !data) {

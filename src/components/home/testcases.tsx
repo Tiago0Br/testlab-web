@@ -15,7 +15,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from '@/components'
 
 interface TestCasesProps {
@@ -42,22 +42,15 @@ export function TestCases({ testCases }: TestCasesProps) {
     router.push(`/testcases/${testCaseId}`)
   }
 
-  async function onUpdateTestCase({
-    id,
-    title,
-    summary,
-    preconditions,
-  }: OnSaveTestCaseProps) {
-    const testSuiteId = parseInt(
-      document.getElementById('folder-id')!.nodeValue!
-    )
+  async function onUpdateTestCase({ id, title, summary, preconditions }: OnSaveTestCaseProps) {
+    const testSuiteId = parseInt(document.getElementById('folder-id')!.nodeValue!)
 
     const { error } = await saveTestCase({
       id,
       title,
       summary,
       preconditions: preconditions !== '' ? preconditions : undefined,
-      test_suite_id: testSuiteId,
+      test_suite_id: testSuiteId
     })
 
     if (error) {
@@ -99,10 +92,7 @@ export function TestCases({ testCases }: TestCasesProps) {
               >
                 <Eye size={24} className="text-white" />
               </button>
-              <ModalSaveTestCase
-                testCase={testCase}
-                onSaveTestCase={onUpdateTestCase}
-              >
+              <ModalSaveTestCase testCase={testCase} onSaveTestCase={onUpdateTestCase}>
                 <button
                   title="Editar"
                   className="p-1 bg-orange-400 rounded-md hover:bg-orange-300 transition-colors"

@@ -21,16 +21,16 @@ export async function getProjectContent(
     const token = await getSessionToken()
     const response = await api.get(`/projects/${projectId}/content`, {
       headers: {
-        Authorization: token,
-      },
+        Authorization: token
+      }
     })
 
     return {
-      data: response.data,
+      data: response.data
     }
   } catch (error) {
     return {
-      error: getResponseError(error),
+      error: getResponseError(error)
     }
   }
 }

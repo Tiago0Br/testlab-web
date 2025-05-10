@@ -28,23 +28,21 @@ interface GetFolderContentResponse extends ApiResponse {
   data?: FolderContent
 }
 
-export async function getFolderContent(
-  folderId: number
-): Promise<GetFolderContentResponse> {
+export async function getFolderContent(folderId: number): Promise<GetFolderContentResponse> {
   try {
     const token = await getSessionToken()
     const response = await api.get(`/folders/${folderId}/content`, {
       headers: {
-        Authorization: token,
-      },
+        Authorization: token
+      }
     })
 
     return {
-      data: response.data,
+      data: response.data
     }
   } catch (error) {
     return {
-      error: getResponseError(error),
+      error: getResponseError(error)
     }
   }
 }
