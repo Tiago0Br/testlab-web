@@ -7,8 +7,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { Button, Loading, ShowPasswordButton, Input } from '@/components'
-import { register } from '@/api'
 import logo from '@/assets/logo.png'
+import { register } from '@/actions/register'
 
 export default function Register() {
   const [name, setName] = useState('')
@@ -40,18 +40,18 @@ export default function Register() {
 
     setIsLoading(true)
 
-    register({ name, email, password }).then(({ error }) => {
-      setIsLoading(false)
-
-      if (error) {
-        toast.error(error)
-        return
-      }
-
-      toast.success('Cadastro realizado com sucesso!')
-      clearFields()
-      router.push('/login')
-    })
+    register({ name, email, password })
+      .then(() => {
+        toast.success('Cadastro realizado com sucesso!')
+        clearFields()
+        router.push('/login')
+      })
+      .catch((error) => {
+        toast.error(error?.message ?? 'Erro ao realizar o cadastro.')
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
 
   return (
@@ -107,10 +107,7 @@ export default function Register() {
                 showPassword={showConfirmPassword}
               />
             </div>
-            <Button
-              className="w-full border border-primary text-primary bg-transparent uppercase font-bold 
-            hover:bg-primary hover:text-white"
-            >
+            <Button className="w-full border border-primary text-primary bg-transparent uppercase font-bold hover:bg-primary hover:text-white">
               Cadastrar
             </Button>
           </form>
