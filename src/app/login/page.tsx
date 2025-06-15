@@ -10,7 +10,6 @@ import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { login } from '@/actions/login'
 
 const loginSchema = z.object({
   email: z.string().nonempty('Informe o e-mail').email('E-mail inválido'),
@@ -30,18 +29,23 @@ export default function LoginPage() {
   })
 
   function handleLogin({ email, password }: LoginSchema) {
-    login({ email, password })
-      .then(({ name }) => {
-        toast.success(`Seja bem-vindo ${name}!`)
+    fetch('/api/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password })
+    }).then((response) => {
+      if (response.status === 401) {
+        toast.error('Email ou senha incorretos')
+      }
+
+      if (response.status === 500) {
+        toast.error('Ocorreu um erro ao realizar o login.')
+      }
+
+      if (response.ok) {
+        toast.success('Login realizado com sucesso!')
         router.push('/')
-      })
-      .catch((error) => {
-        if (error instanceof Error) {
-          toast.error(error.message)
-        } else {
-          toast.error('Ocorreu um erro ao realizar o login.')
-        }
-      })
+      }
+    })
   }
 
   return (
