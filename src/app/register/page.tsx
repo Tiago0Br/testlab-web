@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -9,8 +10,6 @@ import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { registerUser } from '@/actions/register-user'
-import { useRouter } from 'next/navigation'
 
 const registerSchema = z.object({
   name: z.string().nonempty('O nome é obrigatório'),
@@ -43,14 +42,20 @@ export default function RegisterPage() {
       return
     }
 
-    registerUser({ name, email, password })
-      .then(() => {
+    fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, email, password })
+    }).then((response) => {
+      if (response.ok) {
         toast.success('Cadastro realizado com sucesso!')
         router.push('/login')
-      })
-      .catch(() => {
+      } else {
         toast.error('Ocorreu um erro ao realizar o cadastro.')
-      })
+      }
+    })
   }
 
   return (
