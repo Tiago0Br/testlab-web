@@ -1,11 +1,11 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Testlab - Login',
-  description: 'Faça login para começar seus testes!'
+  description: 'Faça seu login para começar a testar!!!'
 }
 
-export default function Layout({
+export default function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode

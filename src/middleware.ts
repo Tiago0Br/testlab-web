@@ -1,24 +1,23 @@
-import { cookies } from 'next/headers'
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
+import { jwtVerify } from 'jose'
 
-export const config = {
-  matcher: '/((?!_next/static|_next/image|favicon.ico).*)'
-}
-
-const publicRoutes = ['/login', '/register']
-
-export async function middleware(req: NextRequest) {
-  const pathname = req.nextUrl.pathname
-
-  if (publicRoutes.includes(pathname)) {
-    return NextResponse.next()
-  }
-
-  const token = cookies().get('testlab.token')?.value
+export async function middleware(request: NextRequest) {
+  const token = request.cookies.get('testlab-user-token')?.value
 
   if (!token) {
-    return NextResponse.redirect(new URL('/login', req.url))
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  try {
+    await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET!))
+  } catch (error) {
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
   return NextResponse.next()
+}
+
+export const config = {
+  matcher:
+    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|login|register).*)'
 }

@@ -1,11 +1,11 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Testlab - Cadastro',
-  description: 'Cadastre para começar a criar seus testes!'
+  description: 'Cadastre-se para começar a testar!!!'
 }
 
-export default function Layout({
+export default function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode

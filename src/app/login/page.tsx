@@ -1,96 +1,96 @@
 'use client'
 
-import { FormEvent, useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
 import Image from 'next/image'
 import Link from 'next/link'
+import { z } from 'zod'
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { toast } from 'sonner'
 
-import { Button, Input, Loading, ShowPasswordButton } from '@/components'
-import { signIn, logout } from '@/services/auth-service'
-import logo from '@/assets/logo.png'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
-export default function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+const loginSchema = z.object({
+  email: z.string().nonempty('Informe o e-mail').email('E-mail inválido'),
+  password: z.string().nonempty('Informe a senha')
+})
+
+type LoginSchema = z.infer<typeof loginSchema>
+
+export default function LoginPage() {
   const router = useRouter()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema)
+  })
 
-  const handleLogin = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    if (!email.trim() || !password.trim()) {
-      toast.error('Preencha todos os campos')
-      return
-    }
-
-    setIsLoading(true)
-    signIn(email, password).then(({ error, data }) => {
-      setIsLoading(false)
-      if (data) {
-        setIsLoading(false)
-        router.push('/')
-        return toast.success(`Seja bem-vindo ${data.user.name}!`)
+  function handleLogin({ email, password }: LoginSchema) {
+    fetch('/api/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password })
+    }).then((response) => {
+      if (response.status === 401) {
+        toast.error('Email ou senha incorretos')
       }
 
-      toast.error(error!)
+      if (response.status === 500) {
+        toast.error('Ocorreu um erro ao realizar o login.')
+      }
+
+      if (response.ok) {
+        toast.success('Login realizado com sucesso!')
+        router.push('/')
+      }
     })
   }
 
-  useEffect(() => {
-    logout()
-  }, [])
-
-  if (isLoading) {
-    return <Loading />
-  }
-
   return (
-    <div className="w-screen min-h-screen flex flex-col items-center justify-center bg-background">
-      <div className="bg-zinc-900 border rounded-xl flex flex-col items-center gap-10 py-20 px-10">
-        <div className="flex flex-col items-center gap-3">
+    <div className="min-h-screen flex flex-col justify-center items-center">
+      <form
+        method="POST"
+        onSubmit={handleSubmit(handleLogin)}
+        className="w-[390px] flex flex-col items-center bg-zinc-900 rounded-lg border py-8 px-12 gap-6"
+      >
+        <div className="flex flex-col items-center gap-4">
           <Image
-            src={logo}
-            alt="Logo Testlab"
-            width={0}
-            height={0}
-            className="w-[70px] h-[70px]"
+            src="/testlab-logo.png"
+            width={80}
+            height={80}
+            alt="Logo do projeto Testlab"
             draggable={false}
           />
-          <h1 className="text-2xl">Bora testar!</h1>
+          <h1 className="text-2xl">Login</h1>
         </div>
-        <form className="flex flex-col items-center gap-3 w-72" onSubmit={handleLogin}>
-          <Input
-            type="email"
-            placeholder="E-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <div className="w-full relative">
-            <Input
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Senha"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <ShowPasswordButton
-              onClick={() => setShowPassword((state) => !state)}
-              showPassword={showPassword}
-            />
+        <div className="w-full flex flex-col gap-3">
+          <div>
+            <Input type="email" placeholder="Email" {...register('email')} />
+            {errors.email && (
+              <span className="text-xs text-red-500">{errors.email.message}</span>
+            )}
           </div>
-          <Button className="w-full border border-primary text-primary bg-transparent uppercase font-bold hover:bg-primary hover:text-white">
-            Login
-          </Button>
-        </form>
-        <div>
-          <span className="text-xs">
-            Não possui conta?{' '}
-            <Link href="/register" className="underline">
-              Criar conta
-            </Link>
-          </span>
+          <div>
+            <Input type="password" placeholder="Senha" {...register('password')} />
+            {errors.password && (
+              <span className="text-xs text-red-500">{errors.password.message}</span>
+            )}
+          </div>
         </div>
-      </div>
+
+        <Button type="submit" className="w-full uppercase">
+          Entrar
+        </Button>
+
+        <span className="text-sm">
+          Não possui conta?{' '}
+          <Link className="underline" href="/register">
+            Cadastre-se
+          </Link>
+        </span>
+      </form>
     </div>
   )
 }

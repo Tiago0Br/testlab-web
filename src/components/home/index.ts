@@ -1,6 +1,0 @@
-export * from './folder'
-export * from './modal-new-folder'
-export * from './modal-save-testcase'
-export * from './project-dropdown'
-export * from './testcases'
-export * from './testcase-history'
