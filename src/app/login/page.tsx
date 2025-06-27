@@ -57,7 +57,7 @@ export default function LoginPage() {
       >
         <div className="flex flex-col items-center gap-4">
           <Image
-            src="/testlab-logo.png"
+            src="/images/testlab-logo.png"
             width={80}
             height={80}
             alt="Logo do projeto Testlab"
